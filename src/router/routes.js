@@ -4,40 +4,50 @@ const routes = [
     path: '/',
     component: () => import('layouts/Layout.vue'),
     children: [
+      // Эти роуты открыть для авторизованных
+      {
+        path: 'signUp',
+        component: () => import('pages/SignUp')
+      },
+      {
+        path: 'signIn', //  все заказы список
+        component: () => import('pages/SignIn')
+      },
+      // Эти нижние роуты закрыть для тех кто не авторизован
       {
         path: '',
         component: () => import('pages/PageIndex.vue')
       },
       {
-        path: 'orders',
+        path: 'orders', //  все заказы список
         component: () => import('pages/PageOrders.vue')
       },
       {
-        path: 'order',
+        path: 'order', // создание заказа
         component: () => import('pages/PageOrderCreate'),
       },
       {
-        path: 'order/:slug',
+        path: 'order/:slug', // описание одного заказа
         component: () => import('pages/PageOrder.vue'),
       },
       {
-        path: 'order/:slug/edit',
+        path: 'order/:slug/edit', // редактирование заказа автором
         component: () => import('pages/PageOrderEdit'),
       },
       {
-        path: 'customers',
+        path: 'customers', // список заказчиков
         component: () => import('pages/PageCustomers.vue')
       },
       {
-        path: 'customer/:slug',
+        path: 'customer/:slug', // страница с отзывами и рейтингом заказчика
         component: () => import('pages/PageCustomer.vue')
       },
       {
-        path: 'performers',
+        path: 'performers', // список мастеров исполнителей
         component: () => import('pages/PagePerformers.vue')
       },
       {
-        path: 'performer/:slug',
+        path: 'performer/:slug', // индивидуальная страница с отзывами и рейтингом мастера
         component: () => import('pages/PagePerformer.vue')
       },
     ]

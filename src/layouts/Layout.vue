@@ -1,6 +1,11 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout
+    view="hhh lpR fFf"
+  >
+    <q-header
+      elevated
+      bordered
+    >
       <q-toolbar>
         <q-btn
           flat
@@ -11,15 +16,8 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
 
-        <q-toolbar-title>
-         <q-item
-           clickable
-           to="/"
-         >
-           <span class="bannerMenu">
-             05 Мастер
-           </span>
-         </q-item>
+        <q-toolbar-title class="absolute-center">
+           05 Мастер
         </q-toolbar-title>
 
       </q-toolbar>
@@ -28,9 +26,10 @@
     <q-drawer
       v-model="leftDrawerOpen"
       :breakpoint="767"
+      :width="220"
       show-if-above
       bordered
-      content-class="bg-grey-1"
+      content-class="bg-grey-3"
     >
       <q-list>
 
@@ -88,7 +87,10 @@
       <router-view />
     </q-page-container>
 
-    <q-footer>
+    <q-footer
+      elevated
+      bordered
+    >
       <template v-if="isLoggedIn">
         <q-tabs>
           <q-route-tab
@@ -167,9 +169,6 @@
 </script>
 
 <style scoped>
-  .bannerMenu {
-    color: white;
-  }
 
   @media screen and (min-width: 768px){
     .q-footer {

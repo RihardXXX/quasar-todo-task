@@ -1,68 +1,50 @@
 <template>
   <q-page class="q-pa-md">
-    дропдаун с выбором категорий
+    тут поисковвый инпут с дебоунсом на сервер
     <br>
-    <ListOrder
-      :orders="orders"
-    />
+    плюс тут будет фильтр по свободным и выполненным заявкам
+    <br>
+    а также поиск по дате
+    <q-list
+      bordered
+      padding
+      separator
+    >
+      <q-item-label header>
+        Общий список заказов
+      </q-item-label>
+
+      <template
+        v-if="orders.length"
+      >
+
+        <Order
+          v-for="order in orders"
+          :key="order.id"
+          :slug="order.id"
+          :title="order.title"
+          :description="order.description"
+          :price="order.price"
+          :selected-performer="order.selectedPerformer"
+        />
+
+      </template>
+
+    </q-list>
   </q-page>
 </template>
 
 <script>
-  import ListOrder from "components/ListOrder";
+import { mapGetters } from 'vuex'
+  import Order from "components/orders/Order";
 
   export default {
     name: 'PageOrders',
     components: {
-      ListOrder
+      Order
     },
-    data() {
-      return {
-        orders: [
-          {
-            id: 0,
-            title: 'Починить котёл',
-            description: 'Описание000000000 00000000000 000000000 00000000000000 0000000000000',
-            body: 'В общем котёл сам по себе выключается',
-            price: '1000 рублей',
-            address: 'Гагаринский дом 3',
-            category: 'сантехника',
-            dueDate: '01.01.2021г.',
-            dueTime: '15:44',
-            listOfPerformers: [],
-            selectedPerformer: false,
-            customer: 'Rihard',
-          },
-          {
-            id: 1,
-            title: 'Поклеить обои',
-            description: 'Описание',
-            body: 'Поклеить обои в одной комнате',
-            price: '1500 рублей',
-            address: 'Гагаринский дом 3',
-            category: 'общий ремонт',
-            dueDate: '01.01.2021г.',
-            dueTime: '15:44',
-            listOfPerformers: [],
-            selectedPerformer: true,
-            customer: 'Rihard',
-          },
-          {
-            id: 2,
-            title: 'Установить люстру',
-            description: 'Описание',
-            body: 'В общем котёл сам по себе выключается',
-            price: '2000 рублей',
-            address: 'Гагаринский дом 3',
-            category: 'сантехника',
-            dueDate: '01.01.2021г.',
-            dueTime: '15:44',
-            listOfPerformers: [],
-            selectedPerformer: false,
-            customer: 'Rihard',
-          },
-        ]
-      }
+    computed: {
+      ...mapGetters('orders', ['orders'])
     }
   }
 </script>

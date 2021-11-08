@@ -128,7 +128,7 @@
     data () {
       return {
         leftDrawerOpen: false,
-        isLoggedIn: false,
+        isLoggedIn: true,
         menuBar: [
           {
             id: 0,

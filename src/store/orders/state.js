@@ -19,7 +19,8 @@ export default function () {
         listOfPerformers: [],
         selectedPerformer: false,
         customer: 'Rihard',
-        status: 'filed'
+        status: 'свободен',
+        victory: []
       },
       {
         id: 1,
@@ -34,7 +35,11 @@ export default function () {
         listOfPerformers: [],
         selectedPerformer: true,
         customer: 'Rihard',
-        status: 'inWork'
+        status: 'в работе',
+        victory: [{
+          id: '123',
+          name: ''
+        }]
       },
       {
         id: 2,
@@ -49,7 +54,8 @@ export default function () {
         listOfPerformers: [],
         selectedPerformer: false,
         customer: 'Rihard',
-        status: 'done'
+        status: 'свободен',
+        victory: []
       },
     ]
   }

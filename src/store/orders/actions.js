@@ -7,3 +7,9 @@ export const getCurrentOrder =  ({state, commit}, slug) => {
   // console.log('11: ', currentOrder)
   commit('getCurrentOrderSuccess', currentOrder)
 }
+
+// подача заявки перформера на заказ кастомера кладём в массив
+
+export const addProposal = ({state, commit}, {performer, idCurrentOrder}) => {
+
+}

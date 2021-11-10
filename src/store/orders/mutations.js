@@ -15,6 +15,17 @@ export const getCurrentOrderFailure = (state, payload) => {
 }
 
 // кладём новый текущий заказ в котором в массив заявок от перформеров лежит предложение
-export const setProposalCurrentOrder = (state, payload) => {
+export const setProposalCurrentOrder = (state, currentOrder) => {
+  state.currentOrder = currentOrder
+}
 
+// обновление состояние заказов
+export const updateOrders = (state, currentOrder) => {
+  // текущий заказ у которого в с массивом заполненных перформеров
+  state.orders = state.orders.map(order => {
+    if(order.id === currentOrder.id){
+      order = currentOrder
+    }
+    return order
+  })
 }

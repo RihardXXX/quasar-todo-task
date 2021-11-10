@@ -28,7 +28,20 @@
           :selected-performer="order.selectedPerformer"
         />
 
+
       </template>
+      <div
+        class="flex justify-center"
+        v-else
+      >
+        <q-spinner-hourglass
+          color="purple"
+          size="4em"
+        />
+      </div>
+<!--      <pre>-->
+<!--        {{orders}}-->
+<!--      </pre>-->
 
     </q-list>
   </q-page>

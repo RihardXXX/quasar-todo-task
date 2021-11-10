@@ -3,10 +3,12 @@
     <q-banner class="bg-primary text-white text-center">
       {{ currentOrder.title }}
     </q-banner>
-
+<!--{{currentOrder.listOfPerformers}}-->
     <q-card class="my-card">
 
-      <q-list>
+      <q-list
+        v-if="!isLoading"
+      >
 
         <q-item>
           <q-item-section avatar>
@@ -145,15 +147,27 @@
         </q-item>
 
       </q-list>
+
+      <div
+        class="flex justify-center"
+        v-else
+      >
+        <q-spinner-hourglass
+          color="purple"
+          size="4em"
+        />
+      </div>
+
     </q-card>
 
 
     <q-card
-      v-if="!currentOrder.selectedPerformer"
+      v-if="isShowButton"
       class="my-card q-mt-md"
     >
       <q-item-section>
         <q-btn
+          v-if="!currentOrder.selectedPerformer"
           color="purple"
           label="подать заявку на выволнение работы"
           @click="sendProposal"
@@ -170,15 +184,17 @@
     name: 'PageOrder',
     data() {
       return {
-        iconsList: [
-          'description',
-        ]
+        isLoading: false
       }
     },
     computed: {
       ...mapState('orders', ['currentOrder']),
       slug() {
         return this.$route.params.slug
+      },
+      isShowButton() {
+        // тут сделать доп проверку, если текущий юзер уже подавал заявку то кнопку дизейблидь
+        return !this.currentOrder.selectedPerformer
       },
       statusCurrentOrder() {
         const statusObject = {
@@ -196,18 +212,26 @@
       ...mapActions('orders', ['getCurrentOrder', 'addProposal']),
       sendProposal() {
         console.log('подать заявку')
+
         const performer = {
           id: 2323232,
           name: 'Roberto'
         }
-        const idCurrentOrder = this.currentOrder.id
 
-        this.addProposal({performer, idCurrentOrder})
+        this.isLoading = true
+        setTimeout(() => {
+          this.addProposal({performer, currentOrder: this.currentOrder})
+          this.isLoading = false
+        }, 2000)
       }
     },
     mounted() {
       const { slug } = this.$route.params
-      this.getCurrentOrder(slug)
+      this.isLoading = true
+      setTimeout(() => {
+        this.getCurrentOrder(slug)
+        this.isLoading = false
+      }, 2000)
     }
   }
 </script>

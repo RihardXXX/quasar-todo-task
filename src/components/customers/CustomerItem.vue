@@ -24,11 +24,31 @@
           />
         </div>
       </div>
-      <q-icon name="reviews" />
-      отзывы
+      <div class="flex justify-start">
+        <span>отзывы</span>
+        <div
+          class="q-ml-md"
+        >
+          <q-icon
+            name="reviews"
+          />
+        </div>
+        <q-badge
+          v-if="reviews.length"
+          rounded
+          color="primary"
+          class="q-ml-md"
+          :label="reviews.length"
+        />
+      </div>
 
-      <br>
-      подробнее
+      <q-btn
+        class="q-mt-md"
+        color="primary"
+        label="Подробнее о клиенте"
+        :to="{ path: `customer/${slug}`}"
+        exact
+      />
     </q-card-actions>
   </q-card>
 </template>
@@ -37,6 +57,10 @@
   export default {
     name: 'CustomerItem',
     props: {
+      slug: {
+        type: Number,
+        required: true
+      },
       username: {
         type: String,
         required: true,
@@ -44,6 +68,10 @@
       rating: {
         type: Number,
         required: true
+      },
+      reviews: {
+        type: Array,
+        required: true,
       }
     },
     computed: {

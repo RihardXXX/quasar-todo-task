@@ -148,6 +148,12 @@
             icon: 'engineering',
             path: '/performers'
           },
+          {
+            id: 3,
+            title: 'Чат',
+            icon: 'chat',
+            path: '/chats'
+          },
         ],
         menuNotAuthorization: [
           {

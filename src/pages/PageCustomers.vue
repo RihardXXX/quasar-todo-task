@@ -20,8 +20,10 @@
       <CustomerItem
         v-for="customer in customers"
         :key="customer.id"
+        :slug="customer.id"
         :rating="customer.rating"
         :username="customer.username"
+        :reviews="customer.reviews"
       />
 
 

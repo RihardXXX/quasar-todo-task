@@ -50,6 +50,14 @@ const routes = [
         path: 'performer/:slug', // индивидуальная страница с отзывами и рейтингом мастера
         component: () => import('pages/PagePerformer.vue')
       },
+      {
+        path: 'chats', // список чатов
+        component: () => import('pages/PageChats.vue')
+      },
+      {
+        path: 'chat/:slug', // чат с определенным челом
+        component: () => import('pages/PageChat.vue')
+      },
     ]
   },
 

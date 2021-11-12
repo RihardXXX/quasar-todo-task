@@ -9,7 +9,7 @@ export default function () {
         username: 'Rihard',
         payment: 'наличка',
         rating: 9,
-        reviews: ['хороший клиент'],
+        reviews: ['хороший клиент', 'буду еще делать заказы ему'],
         orders: [
           {
             id: 0,

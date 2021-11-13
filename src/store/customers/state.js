@@ -9,7 +9,23 @@ export default function () {
         username: 'Rihard',
         payment: 'наличка',
         rating: 9,
-        reviews: ['хороший клиент', 'буду еще делать заказы ему'],
+        reviews: [
+          {
+            id: Math.random(),
+            name: 'John',
+            body: 'Клиент очень хороший платит как договорились'
+          },
+          {
+            id: Math.random(),
+            name: 'Irina',
+            body: 'Крутой чувак'
+          },
+          {
+            id: Math.random(),
+            name: 'Robert',
+            body: 'нервный немного'
+          },
+        ],
         orders: [
           {
             id: 0,
@@ -69,7 +85,13 @@ export default function () {
         username: 'Roman',
         payment: 'карта',
         rating: 6,
-        reviews: ['клиент крыса'],
+        reviews: [
+          {
+            id: Math.random(),
+            name: 'John',
+            body: 'Жадничает'
+          }
+        ],
         orders: [],
       },
       {
@@ -77,7 +99,18 @@ export default function () {
         username: 'Ivan',
         payment: 'карта',
         rating: 3,
-        reviews: ['хороший клиент'],
+        reviews: [
+          {
+            id: Math.random(),
+            name: 'John',
+            body: 'клиент крыса'
+          },
+          {
+            id: Math.random(),
+            name: 'Irina',
+            body: 'Так себе'
+          },
+        ],
         orders: [],
       },
     ]

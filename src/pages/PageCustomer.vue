@@ -10,15 +10,15 @@
           <q-item-section avatar>
             <q-icon
               color="primary"
-              name="subtitles"
+              name="person"
             />
           </q-item-section>
           <q-item-section>
             <q-item-label>
-              Клиент
+              Имя клиента
             </q-item-label>
             <q-item-label caption>
-              {{ currentOrder.customer }}
+              {{ currentCustomer.username }}
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -27,15 +27,15 @@
           <q-item-section avatar>
             <q-icon
               color="primary"
-              name="subtitles"
+              name="payment"
             />
           </q-item-section>
           <q-item-section>
             <q-item-label>
-              краткое описание
+             форма оплаты
             </q-item-label>
             <q-item-label caption>
-              {{ currentOrder.description }}
+              {{ currentCustomer.payment }}
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -44,106 +44,28 @@
           <q-item-section avatar>
             <q-icon
               color="primary"
-              name="description"
+              name="star_rate"
             />
           </q-item-section>
           <q-item-section>
             <q-item-label>
-              что нужно сделать
+              Рейтинг клиента
             </q-item-label>
             <q-item-label caption>
-              {{ currentOrder.body }}
+              <div
+                :class="colorStar"
+              >
+                <q-icon
+                  v-for="i in currentCustomer.rating"
+                  :key="i"
+                  name="star"
+                />
+              </div>
             </q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-item>
-          <q-item-section avatar>
-            <q-icon
-              color="primary"
-              name="price_change"
-            />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>
-              стоимость работ
-            </q-item-label>
-            <q-badge
-              color="positive"
-              outline
-              style="max-width: fit-content"
-              :label="`цена: ${currentOrder.price}`"
-            />
-          </q-item-section>
-        </q-item>
-
-        <q-item>
-          <q-item-section avatar>
-            <q-icon
-              color="primary"
-              name="event"
-            />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>
-              дата и время начала работ
-            </q-item-label>
-            <div class="flex justify-start">
-              <q-badge
-                outline
-                color="primary"
-                style="max-width: fit-content"
-                :label="currentOrder.dueDate"
-              />
-              <q-badge
-                outline
-                color="primary"
-                style="max-width: fit-content"
-                class="q-ml-md"
-                :label="currentOrder.dueTime"
-              />
-            </div>
-          </q-item-section>
-        </q-item>
-
-        <q-item>
-          <q-item-section avatar>
-            <q-icon
-              color="primary"
-              name="home"
-            />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>
-              адрес
-            </q-item-label>
-            <q-item-label caption>
-              {{ currentOrder.address }}
-            </q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-item>
-          <q-item-section avatar>
-            <q-icon
-              color="primary"
-              name="timeline"
-            />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>
-              статус
-            </q-item-label>
-            <q-badge
-              :color="statusCurrentOrder"
-              style="max-width: fit-content"
-              :label="currentOrder.status"
-            />
           </q-item-section>
         </q-item>
 
       </q-list>
-
       <div
         class="flex justify-center"
         v-else
@@ -156,17 +78,65 @@
 
     </q-card>
 
-
     <q-card
       class="my-card q-mt-md"
     >
-      в чат с клиентом
+      <div class="q-pa-md">
+        <q-toolbar class="bg-primary text-white shadow-2">
+          <q-toolbar-title>Отзывы</q-toolbar-title>
+        </q-toolbar>
+
+        <q-list bordered>
+          <q-item
+            v-for="review in reviews"
+            :key="review.id"
+            class="q-my-sm"
+            v-ripple
+          >
+            <q-item-section avatar>
+              <q-avatar
+                color="primary"
+                text-color="white"
+              >
+<!--                {{ review.letter }}-->
+                {{ review.name }}
+              </q-avatar>
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>
+                {{ review.name }}
+              </q-item-label>
+              <q-item-label
+                caption
+                lines="1"
+              >
+                {{ review.body }}
+              </q-item-label>
+            </q-item-section>
+
+            <q-item-section side>
+              <q-icon
+                name="chat_bubble"
+                color="gray"
+              />
+            </q-item-section>
+          </q-item>
+
+        </q-list>
+      </div>
     </q-card>
 
     <q-card
       class="my-card q-mt-md"
     >
-      отзывы
+      заказы
+    </q-card>
+
+    <q-card
+      class="my-card q-mt-md"
+    >
+      в чат с клиентом
     </q-card>
 
 
@@ -178,56 +148,31 @@ import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'PageCustomer',
-  data() {
-    return {
-      isLoading: false
-    }
-  },
   computed: {
-    ...mapState('customers', ['currentCustomer']),
+    ...mapState('customers', ['currentCustomer', 'isLoading']),
     slug() {
       return this.$route.params.slug
     },
-    // isShowButton() {
-    //   // тут сделать доп проверку, если текущий юзер уже подавал заявку то кнопку дизейблидь
-    //   return !this.currentOrder.selectedPerformer
-    // },
-    // statusCurrentOrder() {
-    //   const statusObject = {
-    //     positive: 'свободен',
-    //     info: 'в работе',
-    //     warning: 'выполнено'
-    //   }
-    //   // выбор цвета в зависимости от статуса заявки, берём ключ объекта
-    //   return this.currentOrder.status
-    //     ? Object.keys(statusObject).find(key => statusObject[key] === this.currentOrder.status)
-    //     : null
-    // }
+    colorStar() {
+      const { rating } = this.currentCustomer
+      if(rating > 7) {
+        return 'text-positive'
+      }else if(rating < 7 && rating > 4) {
+        return 'text-warning'
+      } else {
+        return 'text-red'
+      }
+    },
+    reviews() {
+      return this.currentCustomer.reviews
+    }
   },
   methods: {
     ...mapActions('customers', ['getCurrentCustomer']),
-    sendProposal() {
-      console.log('подать заявку')
-
-      // const performer = {
-      //   id: 2323232,
-      //   name: 'Roberto'
-      // }
-
-      this.isLoading = true
-      setTimeout(() => {
-        this.addProposal({performer, currentOrder: this.currentOrder})
-        this.isLoading = false
-      }, 2000)
-    }
   },
   mounted() {
     const { slug } = this.$route.params
-    this.isLoading = true
-    setTimeout(() => {
-      this.getCurrentOrder(slug)
-      this.isLoading = false
-    }, 2000)
+    this.getCurrentCustomer(slug)
   }
 }
 </script>

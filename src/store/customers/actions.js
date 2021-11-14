@@ -11,6 +11,8 @@ export const getCurrentCustomer =  ({state, commit}, slug) => {
       const currentCustomer = state.customers.find(customer => customer.id === +slug)
       resolve(currentCustomer)
     }, 2000)
+    // const currentCustomer = state.customers.find(customer => customer.id === +slug)
+    // resolve(currentCustomer)
 
   })
     .then((currentCustomer) => {

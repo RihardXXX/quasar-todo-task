@@ -160,7 +160,6 @@
 
     </q-card>
 
-
     <q-card
       v-if="isShowButton"
       class="my-card q-mt-md"
@@ -174,17 +173,55 @@
         />
       </q-item-section>
     </q-card>
+    <q-card class="my-card q-mt-md">
+      <h6 class="no-margin text-center">
+        заявки поданные на текущий заказ
+      </h6>
+      <q-separator/>
+      <template v-if="!isLoading">
+        <template v-if="countPerformers">
+            <PerformerInfoBlock
+              v-for="performer in currentOrder.listOfPerformers"
+              :key="performer.id"
+              :name="performer.name"
+              :slug="performer.id"
+            />
+        </template>
+        <q-banner
+          v-else
+          rounded
+          class="bg-secondary text-white text-center"
+        >
+          пока никто не подал заявок
+        </q-banner>
+      </template>
+      <div
+        class="flex justify-center"
+        v-else
+      >
+        <q-spinner-hourglass
+          color="purple"
+          size="4em"
+        />
+      </div>
+
+    </q-card>
   </q-page>
 </template>
 
 <script>
   import { mapActions, mapState } from 'vuex'
+  import PerformerInfoBlock from "components/customers/PerformerInfoBlock";
 
   export default {
     name: 'PageOrder',
+    components: {
+      PerformerInfoBlock
+    },
     data() {
       return {
-        isLoading: false
+        isLoading: false,
+        idPerformer: 0
       }
     },
     computed: {
@@ -206,6 +243,9 @@
         return this.currentOrder.status
           ? Object.keys(statusObject).find(key => statusObject[key] === this.currentOrder.status)
           : null
+      },
+      countPerformers() {
+        return this.currentOrder.listOfPerformers ? this.currentOrder.listOfPerformers.length : 0
       }
     },
     methods: {
@@ -214,9 +254,11 @@
         console.log('подать заявку')
 
         const performer = {
-          id: 2323232,
+          id: this.idPerformer,
           name: 'Roberto'
         }
+
+        this.idPerformer += 1
 
         this.isLoading = true
         setTimeout(() => {

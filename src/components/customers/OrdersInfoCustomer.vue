@@ -1,6 +1,11 @@
 <template>
   <q-list bordered class="rounded-borders">
-    <q-item-label header>Заказы</q-item-label>
+    <h6
+      class="text-center q-pt-md no-margin"
+    >
+      Заказы
+    </h6>
+    <q-separator />
 
     <q-item
       clickable

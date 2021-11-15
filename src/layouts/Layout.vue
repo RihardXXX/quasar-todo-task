@@ -122,40 +122,62 @@
 
 <script>
 
+  const menu = [
+    {
+      id: 0,
+      title: 'Заказы на работу',
+      icon: 'work',
+      path: '/orders'
+    },
+    {
+      id: 1,
+      title: 'Клиенты',
+      icon: 'people',
+      path: '/customers'
+    },
+    {
+      id: 2,
+      title: 'Мастера',
+      icon: 'engineering',
+      path: '/performers'
+    },
+    {
+      id: 3,
+      title: 'Чат',
+      icon: 'chat',
+      path: '/chats'
+    },
+  ]
+
   export default {
     name: 'MainLayout',
 
     data () {
       return {
         leftDrawerOpen: false,
-        isLoggedIn: true,
-        menuBar: [
-          {
-            id: 0,
-            title: 'Заказы на работу',
-            icon: 'work',
-            path: '/orders'
-          },
-          {
-            id: 1,
-            title: 'Клиенты',
-            icon: 'people',
-            path: '/customers'
-          },
-          {
-            id: 2,
-            title: 'Мастера',
-            icon: 'engineering',
-            path: '/performers'
-          },
-          {
-            id: 3,
-            title: 'Чат',
-            icon: 'chat',
-            path: '/chats'
-          },
-        ],
-        menuNotAuthorization: [
+        isLoggedIn: true
+      }
+    },
+    computed: {
+      isCustomer() {
+        return false
+      },
+      isPerformer() {
+        return 0
+      },
+      menuBar() {
+        return !this.isCustomer
+            ? menu
+            : [
+                {
+                  id: Math.random(),
+                  title: 'Мои заказы',
+                  icon: 'work',
+                  path: '/myOrders'
+                },...menu]
+      },
+      menuNotAuthorization() {
+        return [
           {
             id: 0,
             title: 'Регистрация',

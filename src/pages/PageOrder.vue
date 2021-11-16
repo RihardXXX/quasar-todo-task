@@ -1,5 +1,14 @@
 <template>
   <q-page class="q-pa-md">
+
+    <ConfirmModal
+      label="вы действительно хотите подать заявку"
+      :show="showModal"
+      button-cancel="не хочу"
+      button-ok="подать"
+      @onOk="sendProposal"
+    />
+
     <q-banner class="bg-primary text-white text-center">
       {{ currentOrder.title }}
     </q-banner>
@@ -169,7 +178,8 @@
           v-if="!currentOrder.selectedPerformer"
           color="purple"
           label="подать заявку на выволнение работы"
-          @click="sendProposal"
+          :disable="isLoading"
+          @click="showModal = !showModal"
         />
       </q-item-section>
     </q-card>
@@ -212,16 +222,19 @@
 <script>
   import { mapActions, mapState } from 'vuex'
   import PerformerInfoBlock from "components/customers/PerformerInfoBlock";
+  import ConfirmModal from "components/modals/ConfirmModal";
 
   export default {
     name: 'PageOrder',
     components: {
-      PerformerInfoBlock
+      PerformerInfoBlock,
+      ConfirmModal
     },
     data() {
       return {
         isLoading: false,
-        idPerformer: 0
+        idPerformer: 0,
+        showModal: false
       }
     },
     computed: {
@@ -252,6 +265,9 @@
       ...mapActions('orders', ['getCurrentOrder', 'addProposal']),
       sendProposal() {
         console.log('подать заявку')
+
+        // закрываем модалку модалку
+        this.showModal = false
 
         const performer = {
           id: this.idPerformer,

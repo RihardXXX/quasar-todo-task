@@ -1,8 +1,5 @@
 <template>
   <q-item
-    clickable
-    v-ripple
-    :to="{ path: `/performer/${slug}`}"
   >
     <q-item-section side>
       <q-avatar rounded size="48px">
@@ -16,12 +13,24 @@
       <q-item-label>
         {{name}}
       </q-item-label>
-      <q-item-label caption>
+      <q-item-label
+        caption
+      >
         кликни чтобы перейти на страницу мастера
       </q-item-label>
     </q-item-section>
-    <q-item-section side>
-      заявка поданна 15:45
+    <q-item-section>
+      <q-btn
+        color="purple"
+        label="принять"
+        @click="okPerformer"
+      />
+      <q-btn
+        color="deep-orange"
+        label="отклонить"
+        class="q-mt-md"
+        @click="cancelPerformer"
+      />
     </q-item-section>
   </q-item>
 </template>
@@ -38,6 +47,14 @@
       name: {
         type: String,
         required: true
+      }
+    },
+    methods: {
+      okPerformer() {
+        console.log('ok performer')
+      },
+      cancelPerformer() {
+        console.log('cancel performer')
       }
     }
   }

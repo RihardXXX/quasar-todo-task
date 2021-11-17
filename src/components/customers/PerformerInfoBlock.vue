@@ -13,11 +13,18 @@
       <q-item-label>
         {{name}}
       </q-item-label>
-      <q-item-label
-        caption
+      <q-item
+        clickable
+        v-ripple
+        bordered
+        class="q-bg-secondary"
+        :to="{ path: `/performer/${slug}` }"
       >
-        кликни чтобы перейти на страницу мастера
-      </q-item-label>
+        <q-btn
+          icon="send"
+          label="на страницу мастера"
+        />
+      </q-item>
     </q-item-section>
     <q-item-section>
       <q-btn
@@ -51,10 +58,12 @@
     },
     methods: {
       okPerformer() {
-        console.log('ok performer')
+        // console.log('ok performer');
+        this.$emit('acceptApplication', this.slug)
       },
       cancelPerformer() {
-        console.log('cancel performer')
+        // console.log('cancel performer')
+        this.$emit('rejectApplication', this.slug)
       }
     }
   }

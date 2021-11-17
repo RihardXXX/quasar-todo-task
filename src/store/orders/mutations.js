@@ -29,3 +29,29 @@ export const updateOrders = (state, currentOrder) => {
     return order
   })
 }
+
+// отклонить предложение мастера и удалить его из списка
+export const rejectPerformerStart = (state, slug) => {
+
+}
+
+export const rejectPerformerSuccess = (state, slug) => {
+
+}
+
+export const rejectPerformerFailure = (state, slug) => {
+
+}
+
+// выбрать предложение мастера и сделать его победителем
+export const selectPerformerStart = (state, slug) => {
+
+}
+
+export const selectPerformerSuccess = (state, slug) => {
+
+}
+
+export const selectPerformerFailure = (state, slug) => {
+
+}

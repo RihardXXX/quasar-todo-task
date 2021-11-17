@@ -195,6 +195,8 @@
               :key="performer.id"
               :name="performer.name"
               :slug="performer.id"
+              @acceptApplication="acceptApplication"
+              @rejectApplication="rejectApplication"
             />
         </template>
         <q-banner
@@ -263,6 +265,34 @@
     },
     methods: {
       ...mapActions('orders', ['getCurrentOrder', 'addProposal']),
+      acceptApplication(slug) {
+        console.log('slug: acceptApplication', slug)
+        this.$q.dialog({
+          title: 'Подтверждение',
+          message: 'Вы дествительно хотите выбрать этого мастера для работы',
+          cancel: 'нет',
+          ok: 'да',
+          persistent: true
+        }).onOk(() => {
+          console.log('>>>> OK, received', slug)
+        }).onCancel(() => {
+          console.log('>>>> Cancel')
+        })
+      },
+      rejectApplication(slug) {
+        console.log('slug: rejectApplication', slug);
+        this.$q.dialog({
+          title: 'Подтверждение',
+          message: 'Вы дествительно хотите отклонить мастера и удалить из желающих',
+          cancel: 'нет',
+          ok: 'да',
+          persistent: true
+        }).onOk(() => {
+          console.log('>>>> OK, received', slug)
+        }).onCancel(() => {
+          console.log('>>>> Cancel')
+        })
+      },
       sendProposal() {
         console.log('подать заявку')
 

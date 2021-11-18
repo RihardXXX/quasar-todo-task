@@ -26,7 +26,9 @@
         />
       </q-item>
     </q-item-section>
-    <q-item-section>
+    <q-item-section
+      v-if="isCustomer"
+    >
       <q-btn
         color="purple"
         label="принять"
@@ -43,6 +45,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex'
 
   export default {
     name: 'PerformerInfoBlock',
@@ -54,6 +57,11 @@
       name: {
         type: String,
         required: true
+      }
+    },
+    computed: {
+      isCustomer() {
+        return true
       }
     },
     methods: {

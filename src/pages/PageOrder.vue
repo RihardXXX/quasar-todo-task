@@ -225,6 +225,7 @@
   import { mapActions, mapState } from 'vuex'
   import PerformerInfoBlock from "components/customers/PerformerInfoBlock";
   import ConfirmModal from "components/modals/ConfirmModal";
+  import {rejectPerformer} from "src/store/orders/actions";
 
   export default {
     name: 'PageOrder',
@@ -234,13 +235,13 @@
     },
     data() {
       return {
-        isLoading: false,
+        namePerformer: 'Roberto',
         idPerformer: 0,
         showModal: false
       }
     },
     computed: {
-      ...mapState('orders', ['currentOrder']),
+      ...mapState('orders', ['currentOrder', 'isLoading']),
       slug() {
         return this.$route.params.slug
       },
@@ -264,7 +265,8 @@
       }
     },
     methods: {
-      ...mapActions('orders', ['getCurrentOrder', 'addProposal']),
+      ...mapActions('orders', ['getCurrentOrder', 'addProposal', 'rejectPerformer']),
+      // принятие заявки мастера
       acceptApplication(slug) {
         console.log('slug: acceptApplication', slug)
         this.$q.dialog({
@@ -279,6 +281,7 @@
           console.log('>>>> Cancel')
         })
       },
+      // отклонение заявки определённого мастера
       rejectApplication(slug) {
         console.log('slug: rejectApplication', slug);
         this.$q.dialog({
@@ -289,6 +292,7 @@
           persistent: true
         }).onOk(() => {
           console.log('>>>> OK, received', slug)
+          this.rejectPerformer(slug)
         }).onCancel(() => {
           console.log('>>>> Cancel')
         })
@@ -301,25 +305,18 @@
 
         const performer = {
           id: this.idPerformer,
-          name: 'Roberto'
+          name: this.namePerformer
         }
 
         this.idPerformer += 1
+        this.namePerformer = this.namePerformer + 'q'
 
-        this.isLoading = true
-        setTimeout(() => {
-          this.addProposal({performer, currentOrder: this.currentOrder})
-          this.isLoading = false
-        }, 2000)
+        this.addProposal({performer, currentOrder: this.currentOrder})
       }
     },
     mounted() {
       const { slug } = this.$route.params
-      this.isLoading = true
-      setTimeout(() => {
-        this.getCurrentOrder(slug)
-        this.isLoading = false
-      }, 2000)
+      this.getCurrentOrder(slug)
     }
   }
 </script>

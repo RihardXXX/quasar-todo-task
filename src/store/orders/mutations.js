@@ -64,14 +64,32 @@ export const rejectPerformerFailure = (state, error) => {
 }
 
 // выбрать предложение мастера и сделать его победителем
-export const selectPerformerStart = (state, slug) => {
-
+export const selectPerformerStart = (state) => {
+  state.isLoading = true
+  state.error = null
 }
 
-export const selectPerformerSuccess = (state, slug) => {
+export const selectPerformerSuccess = (state, idPerformer) => {
+  state.isLoading = false
+  state.error = null
+  console.log('idPerformer', idPerformer)
+  const victoryPerformer = state.currentOrder
+    .listOfPerformers.find(performer => performer.id === idPerformer)
 
+  state.currentOrder = {
+    ...state.currentOrder,
+    listOfPerformers: [],
+    selectedPerformer: true,
+    status: 'в работе',
+    victory: [victoryPerformer]
+  }
+
+  // state.currentOrder = {}
+
+  console.log(state)
 }
 
-export const selectPerformerFailure = (state, slug) => {
-
+export const selectPerformerFailure = (state, error) => {
+  state.isLoading = false
+  state.error = error
 }

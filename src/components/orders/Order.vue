@@ -26,10 +26,10 @@
     </q-item-section>
 
     <q-item-section side top>
+
       <q-badge
-        v-if="selectedPerformer"
-        color="warning"
-        label="в работе"
+        :color="colorBadge"
+        :label="status"
         class="q-mb-sm"
         rounded
       />
@@ -76,6 +76,15 @@
       price: {
         type: String,
         required: true
+      },
+      status: {
+        type: String,
+        required: true
+      }
+    },
+    computed: {
+      colorBadge() {
+        return this.selectedPerformer ? 'positive' : 'purple'
       }
     }
   }

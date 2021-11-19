@@ -26,6 +26,7 @@
           :description="order.description"
           :price="order.price"
           :selected-performer="order.selectedPerformer"
+          :status="order.status"
         />
 
 

@@ -28,15 +28,23 @@
         v-if="isShowButton"
         class="my-card q-mt-md"
       >
-        <q-item-section>
+        <div class="flex justify-center q-pt-md q-pb-md ">
           <q-btn
             v-if="!currentOrder.selectedPerformer"
             color="purple"
-            label="подать заявку на выволнение работы"
+            label="взять заказ"
             :disable="isLoading"
+            :style="{ width: '50%' }"
             @click="showModal = !showModal"
-          />
-        </q-item-section>
+          >
+            &nbsp;
+            <q-icon
+              right
+              size="2em"
+              name="schedule_send"
+            />
+          </q-btn>
+        </div>
       </q-card>
 
       <q-card
@@ -79,6 +87,29 @@
 
     </template>
 
+    <template v-if="victoryShow">
+      <q-card
+        class="my-card q-mt-md"
+      >
+        <q-banner class="bg-grey-3">
+          <template v-slot:avatar>
+            <q-icon
+              name="emoji_events"
+              color="primary"
+            />
+          </template>
+          Ваш заказ выполняет
+          <q-chip square class="q-ml-md">
+            <q-avatar>
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+            </q-avatar>
+            {{victoryName}}
+          </q-chip>
+        </q-banner>
+      </q-card>
+
+    </template>
+
 <!--    <pre>-->
 <!--      {{currentOrder}}-->
 <!--    </pre>-->
@@ -111,6 +142,13 @@
       ...mapState('orders', ['currentOrder', 'isLoading']),
       slug() {
         return this.$route.params.slug
+      },
+      victoryShow() {
+        return this.currentOrder.victory?.length
+      },
+      victoryName() {
+        console.log('112: ', this.currentOrder.victory[0]['name'])
+        return this.currentOrder.victory ? this.currentOrder.victory[0]['name'] : null
       },
       isShowInfoBlock() {
         // тут делать проверку ещё является ли пользователь перформером

@@ -86,7 +86,7 @@ export const selectPerformerSuccess = (state, idPerformer) => {
 
   // state.currentOrder = {}
 
-  console.log(state)
+  // console.log(state)
 }
 
 export const selectPerformerFailure = (state, error) => {

@@ -160,7 +160,7 @@
     },
     computed: {
       isCustomer() {
-        return false
+        return true
       },
       isPerformer() {
         return 0
@@ -173,8 +173,16 @@
                   id: Math.random(),
                   title: 'Мои заказы',
                   icon: 'work',
-                  path: '/myOrders'
-                },...menu]
+                  path: '/'
+                },
+                {
+                  id: Math.random(),
+                  title: 'Создать заказ',
+                  icon: 'add',
+                  path: '/order'
+                },
+            ...menu
+          ]
       },
       menuNotAuthorization() {
         return [

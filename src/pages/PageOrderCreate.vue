@@ -41,6 +41,25 @@
             :rules="[fnValidateTitle, fnValidateLength]"
           />
 
+          <q-select
+            v-model="order.category"
+            :options="category"
+            label="категория"
+          />
+
+          <q-date
+            v-model="order.dueDate"
+            title="дата выполнения"
+            subtitle="какого числа придти мастеру"
+          />
+          <br>
+
+          <q-time
+            v-model="order.dueTime"
+            format24h
+          />
+          <br>
+
           <q-input
             type="number"
             filled
@@ -67,12 +86,15 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex'
+  import { uid } from 'quasar'
+
   export default {
     name: 'OrderCreate',
     data() {
       return {
+        category: ['сантехника', 'электрика', 'общестроительные'],
         order: {
-          id: '',
           title: '',
           description: '',
           body: '',
@@ -90,6 +112,7 @@
       }
     },
     methods: {
+      ...mapActions('orders', ['createOrder']),
       fnValidateTitle(val) {
          return val !== null && val !== '' || 'заполните поле пожалуйста'
       },
@@ -109,27 +132,31 @@
 
         console.log(111)
 
+        // const order = {
+        //   id: Math.random(),
+        //   title: this.order.title,
+        //   description: this.order.description,
+        //   body: this.order.body,
+        //   price: this.order.price,
+        //   address: this.order.address,
+        //   category: this.order.category,
+        //   dueDate: this.order.dueDate,
+        //   dueTime: this.order.dueTime,
+        //   listOfPerformers: this.order.listOfPerformers,
+        //   selectedPerformer: this.order.selectedPerformer,
+        //   customer: this.order.customer,
+        //   status: this.order.status,
+        //   victory: this.order.victory
+        // }
         const order = {
-          id: Math.random(),
-          title: this.order.title,
-          description: this.order.description,
-          body: this.order.body,
-          price: this.order.price,
-          address: this.order.address,
-          category: this.order.category,
-          dueDate: this.order.dueDate,
-          dueTime: this.order.dueTime,
-          listOfPerformers: this.order.listOfPerformers,
-          selectedPerformer: this.order.selectedPerformer,
-          customer: this.order.customer,
-          status: this.order.status,
-          victory: this.order.victory
+          id: uid(),
+          ...this.order
         }
         console.log('onSubmit')
+        console.log('order: ', order)
+        this.createOrder(order)
+        this.$router.push('/orders')
       },
-      onReset() {
-        console.log('onReset')
-      }
     }
   }
 </script>

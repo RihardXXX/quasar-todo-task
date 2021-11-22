@@ -93,3 +93,20 @@ export const selectPerformerFailure = (state, error) => {
   state.isLoading = false
   state.error = error
 }
+
+// создаём новый заказ
+export const createOrderStart = (state) => {
+  state.isLoading = true
+  state.error = null
+}
+
+export const createOrderSuccess = (state, order) => {
+  state.isLoading = false
+  state.error = null
+  state.orders = [order, ... state.orders]
+}
+
+export const createOrderFailure = (state, error) => {
+  state.isLoading = false
+  state.error = error
+}

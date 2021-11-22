@@ -32,11 +32,11 @@ export const addProposal = ({state, commit}, {performer, currentOrder}) => {
 
   // кнопку подать заявку сделать меньше +
 
-  // Сделать страницу создания заявки кастомером
+  // Сделать страницу создания заявки кастомером +
 
-  // выбрать одного участника и когда он выбран положить его в победители
-  // поставить галочку выбран и победители и галочку в работе
-  // сделать проверку на кастомера, чтобы два раза один и тот же не могу подавать
+  // создать мастера страницу
+
+
   // добавить чат общий
   // индивидуальные чаты
 
@@ -84,6 +84,7 @@ export const rejectPerformer = ({ commit }, idPerformer) => {
     })
 }
 
+// выбрать исполнителя
 export const selectPerformer = ({ commit }, idPerformer) => {
   commit('selectPerformerStart')
   return new Promise((resolve) => {
@@ -98,3 +99,20 @@ export const selectPerformer = ({ commit }, idPerformer) => {
       commit('selectPerformerFailure', err)
     })
 }
+
+// создать заказ
+export const createOrder = ({ commit }, order) => {
+  commit('createOrderStart')
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(order)
+    }, 2000)
+  })
+    .then((order) => {
+      commit('createOrderSuccess', order)
+    })
+    .catch((error) => {
+      commit('createOrderFailure', error)
+    })
+}
+

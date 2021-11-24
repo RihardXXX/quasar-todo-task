@@ -2,7 +2,6 @@
   <q-page class="container">
     <h5 class="text-center q-mb-none">Создать заказ</h5>
       <div class="q-pa-md text-center">
-
         <q-form
           @submit="onSubmit"
           class="q-gutter-md"
@@ -74,7 +73,14 @@
 
           <div>
             <q-btn
+              v-if="create"
               label="создать заказ"
+              type="submit"
+              color="primary"
+            />
+            <q-btn
+              v-else-if="edit"
+              label="редактировать заказ"
               type="submit"
               color="primary"
             />
@@ -86,7 +92,7 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
+  import { mapActions, mapState } from 'vuex'
   import { uid } from 'quasar'
 
   export default {
@@ -94,6 +100,8 @@
     data() {
       return {
         category: ['сантехника', 'электрика', 'общестроительные'],
+        create: true,
+        edit: false,
         order: {
           title: '',
           description: '',
@@ -111,6 +119,9 @@
         },
       }
     },
+    computed: {
+      ...mapState('orders', ['currentOrder', 'orders'])
+    },
     methods: {
       ...mapActions('orders', ['createOrder']),
       fnValidateTitle(val) {
@@ -123,6 +134,8 @@
         return val.length > 0 && val.length < 300 || 'длина символов до 300'
       },
       fnValidatePrice(val) {
+        console.log(val)
+        val = String(val)
         return val.length > 0 && val.length < 6 || 'длина символов до 6'
       },
 
@@ -154,9 +167,25 @@
         }
         console.log('onSubmit')
         console.log('order: ', order)
-        this.createOrder(order)
-        this.$router.push('/orders')
+        if (this.create) {
+          this.createOrder(order)
+          this.$router.push('/orders')
+        } else {
+          console.log('редактирование')
+        }
+
       },
+    },
+    mounted() {
+      console.log(this.$route)
+      const idOrder = this.$route.params.idOrder
+      if (this.$route.params.hasOwnProperty('idOrder')) {
+        console.log(this.$route.params.idOrder)
+        this.order = this.orders.find(order => order.id === idOrder)
+        this.create = false
+        this.edit = true
+        console.log('order: ', this.order)
+      }
     }
   }
 </script>

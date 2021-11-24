@@ -191,9 +191,9 @@
         default: ''
       },
       price: {
-        type: String,
+        type: Number,
         required: true,
-        default: ''
+        default: 0
       },
       dueDate: {
         type: String,

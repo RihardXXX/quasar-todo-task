@@ -24,6 +24,7 @@ const routes = [
       },
       {
         path: 'order', // создание заказа
+        name: 'order',
         component: () => import('pages/PageOrderCreate'),
       },
       {

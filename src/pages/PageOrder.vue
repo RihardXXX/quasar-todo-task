@@ -28,13 +28,26 @@
         v-if="isShowButton"
         class="my-card q-mt-md"
       >
-        <div class="flex justify-center q-pt-md q-pb-md ">
+        <div class="flex justify-around q-pt-md q-pb-md ">
+          <q-btn
+            v-if="isCustomer"
+            color="primary"
+            label="редактировать заказ"
+            :disable="isLoading"
+            @click="editOrder"
+          >
+            &nbsp;
+            <q-icon
+              right
+              size="2em"
+              name="edit"
+            />
+          </q-btn>
           <q-btn
             v-if="!currentOrder.selectedPerformer"
             color="purple"
             label="взять заказ"
             :disable="isLoading"
-            :style="{ width: '50%' }"
             @click="showModal = !showModal"
           >
             &nbsp;
@@ -160,6 +173,9 @@
       },
       countPerformers() {
         return this.currentOrder.listOfPerformers ? this.currentOrder.listOfPerformers.length : 0
+      },
+      isCustomer() {
+        return true
       }
     },
     methods: {
@@ -216,6 +232,10 @@
         this.namePerformer = this.namePerformer + 'q'
 
         this.addProposal({performer, currentOrder: this.currentOrder})
+      },
+      // переход на страницу редактирования заявки
+      editOrder() {
+        this.$router.push({ name: 'order',  params: { idOrder: this.currentOrder.id } })
       }
     },
     mounted() {

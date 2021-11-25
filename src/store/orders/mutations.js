@@ -110,3 +110,26 @@ export const createOrderFailure = (state, error) => {
   state.isLoading = false
   state.error = error
 }
+
+// редактируем текущий заказ
+export const editOrderStart = (state) => {
+  state.isLoading = true
+  state.error = null
+}
+
+export const editOrderSuccess = (state, order) => {
+  state.isLoading = false
+  state.error = null
+  state.orders = state.orders.map(item => {
+    if(item.id === order.id) {
+      item = {...order}
+    }
+    return item
+  })
+  // state.orders = [order, ... state.orders]
+}
+
+export const editOrderFailure = (state, error) => {
+  state.isLoading = false
+  state.error = error
+}

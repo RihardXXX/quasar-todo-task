@@ -34,9 +34,7 @@ export const addProposal = ({state, commit}, {performer, currentOrder}) => {
 
   // Сделать страницу создания заявки кастомером +
 
-  // создать страницу редактирования заказа
-
-  // создать экшены и мутации по апдейту и исправить ошибку
+  // создать страницу редактирования заказа +
 
   // создать мастера страницу
 
@@ -117,6 +115,22 @@ export const createOrder = ({ commit }, order) => {
     })
     .catch((error) => {
       commit('createOrderFailure', error)
+    })
+}
+
+// редактировать заказ
+export const editOrder = ({ commit }, order) => {
+  commit('editOrderStart')
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(order)
+    }, 2000)
+  })
+    .then((order) => {
+      commit('editOrderSuccess', order)
+    })
+    .catch((error) => {
+      commit('editOrderFailure', error)
     })
 }
 

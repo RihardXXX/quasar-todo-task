@@ -73,14 +73,7 @@
 
           <div>
             <q-btn
-              v-if="create"
-              label="создать заказ"
-              type="submit"
-              color="primary"
-            />
-            <q-btn
-              v-else-if="edit"
-              label="редактировать заказ"
+              :label="buttonLabel"
               type="submit"
               color="primary"
             />
@@ -120,10 +113,15 @@
       }
     },
     computed: {
-      ...mapState('orders', ['currentOrder', 'orders'])
+      ...mapState('orders', ['currentOrder', 'orders']),
+      buttonLabel() {
+        return this.$route.params.hasOwnProperty('idOrder')
+          ? 'редактировать заказ'
+          : 'создать заказ'
+      }
     },
     methods: {
-      ...mapActions('orders', ['createOrder']),
+      ...mapActions('orders', ['createOrder', 'editOrder']),
       fnValidateTitle(val) {
          return val !== null && val !== '' || 'заполните поле пожалуйста'
       },
@@ -141,50 +139,29 @@
 
       onSubmit() {
 
-        // this.$refs.title.validation()
-
-        console.log(111)
-
-        // const order = {
-        //   id: Math.random(),
-        //   title: this.order.title,
-        //   description: this.order.description,
-        //   body: this.order.body,
-        //   price: this.order.price,
-        //   address: this.order.address,
-        //   category: this.order.category,
-        //   dueDate: this.order.dueDate,
-        //   dueTime: this.order.dueTime,
-        //   listOfPerformers: this.order.listOfPerformers,
-        //   selectedPerformer: this.order.selectedPerformer,
-        //   customer: this.order.customer,
-        //   status: this.order.status,
-        //   victory: this.order.victory
-        // }
         const order = {
           id: uid(),
           ...this.order
         }
-        console.log('onSubmit')
-        console.log('order: ', order)
+
         if (this.create) {
+          console.log('создание')
           this.createOrder(order)
           this.$router.push('/orders')
         } else {
           console.log('редактирование')
+          this.editOrder(order)
+          this.$router.push('/orders')
         }
 
       },
     },
     mounted() {
-      console.log(this.$route)
       const idOrder = this.$route.params.idOrder
       if (this.$route.params.hasOwnProperty('idOrder')) {
-        console.log(this.$route.params.idOrder)
-        this.order = this.orders.find(order => order.id === idOrder)
+        this.order = {...this.orders.find(order => order.id === idOrder)}
         this.create = false
         this.edit = true
-        console.log('order: ', this.order)
       }
     }
   }

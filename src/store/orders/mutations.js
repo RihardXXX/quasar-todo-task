@@ -143,3 +143,21 @@ export const setSearchOrderString = (state, text) => {
 export const  initialOrdersSet = (state) => {
   state.orders = [...state.server]
 }
+
+// фильтрация заказов
+export const filteredOrdersStart = (state) => {
+  state.isLoading = true
+  state.error = null
+  state.orders = []
+}
+
+export const filteredOrdersSuccess = (state, text) => {
+  state.isLoading = false
+  state.error = null
+  state.orders = state.server.filter(order => order.title.toLowerCase().includes(text.toLowerCase()))
+}
+
+export const filteredOrdersFailure = (state, error) => {
+  state.isLoading = false
+  state.error = error
+}

@@ -36,9 +36,11 @@ export const addProposal = ({state, commit}, {performer, currentOrder}) => {
 
   // создать страницу редактирования заказа +
 
-  // создать фильтр поиска заказа
+  // создать фильтр поиска заказа +
 
-  // добавить баннер заказов не найдено
+  // добавить баннер заказов не найдено +
+
+  // сделать аналогичный фильтр для мастеров
 
   // создать фильтр перформеров
 
@@ -148,5 +150,20 @@ export const setSearchOrderString = ({ commit }, text) => {
 // первое заполнение заказов из фейковго сервера
 export  const initialOrders = ({ commit }) => {
   commit('initialOrdersSet')
+}
+
+// фильтрация заказов по поисковой строке
+export const filteredOrders = ({ commit, state }) => {
+  commit('filteredOrdersStart')
+  return new Promise((resolve) => {
+      const text = state.searchOrder
+      resolve(text)
+  })
+    .then(text => {
+      commit('filteredOrdersSuccess', text)
+    })
+    .catch(error => {
+      commit('filteredOrdersFailure', error)
+    })
 }
 

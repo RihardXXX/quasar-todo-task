@@ -36,6 +36,12 @@ export const addProposal = ({state, commit}, {performer, currentOrder}) => {
 
   // создать страницу редактирования заказа +
 
+  // создать фильтр поиска заказа
+
+  // добавить баннер заказов не найдено
+
+  // создать фильтр перформеров
+
   // создать мастера страницу
 
 
@@ -132,5 +138,15 @@ export const editOrder = ({ commit }, order) => {
     .catch((error) => {
       commit('editOrderFailure', error)
     })
+}
+
+// заносим данные в поисковую строку поиска заказов
+export const setSearchOrderString = ({ commit }, text) => {
+  commit('setSearchOrderString', text)
+}
+
+// первое заполнение заказов из фейковго сервера
+export  const initialOrders = ({ commit }) => {
+  commit('initialOrdersSet')
 }
 

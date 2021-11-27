@@ -133,3 +133,13 @@ export const editOrderFailure = (state, error) => {
   state.isLoading = false
   state.error = error
 }
+
+// установка в глобальный стейт поисковой строки
+export const setSearchOrderString = (state, text) => {
+  state.searchOrder = text
+}
+
+// Инициализация заказов с фейкового сервера при первичной отрисовке заказов
+export const  initialOrdersSet = (state) => {
+  state.orders = [...state.server]
+}

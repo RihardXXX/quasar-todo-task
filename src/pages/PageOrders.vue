@@ -1,10 +1,8 @@
 <template>
   <q-page class="q-pa-md">
-    тут поисковвый инпут с дебоунсом на сервер
-    <br>
-    плюс тут будет фильтр по свободным и выполненным заявкам
-    <br>
-    а также поиск по дате
+
+    <SearchBar />
+
     <q-list
       bordered
       padding
@@ -29,36 +27,53 @@
           :status="order.status"
         />
 
-
       </template>
+      <q-banner
+        v-else-if="!orders.length && !isLoading"
+        class="bg-primary text-white text-center"
+      >
+        <h6 class="q-ma-none">
+          Заказов пока нет
+        </h6>
+      </q-banner>
       <div
         class="flex justify-center"
-        v-else
+        v-else-if="isLoading"
       >
         <q-spinner-hourglass
           color="purple"
           size="4em"
         />
       </div>
-<!--      <pre>-->
-<!--        {{orders}}-->
-<!--      </pre>-->
 
     </q-list>
+
+<!--          <pre>-->
+<!--            {{isLoading}}-->
+<!--          </pre>-->
   </q-page>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-  import Order from "components/orders/Order";
+  import { mapGetters, mapActions } from 'vuex'
+  import Order from 'components/orders/Order'
+  import SearchBar from 'components/orders/SearchBar'
 
   export default {
     name: 'PageOrders',
     components: {
-      Order
+      Order,
+      SearchBar
     },
     computed: {
-      ...mapGetters('orders', ['orders'])
+      ...mapGetters('orders', ['orders', 'isLoading']),
+    },
+    methods: {
+      ...mapActions('orders', ['initialOrders'])
+    },
+    mounted() {
+      // первичная заполнение с фейковго сервера заказов
+      this.initialOrders()
     }
   }
 </script>

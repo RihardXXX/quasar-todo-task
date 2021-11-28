@@ -15,3 +15,8 @@ export const getCurrentCustomerFailure = (state, error) => {
   state.isLoading = false
   state.error = error
 }
+
+// устанавливаем поисковую строку для поиска клиентов в глобальное состоние
+export const setSearchNameCustomer = (state, searchCustomer) => {
+  state.searchCustomer = searchCustomer
+}

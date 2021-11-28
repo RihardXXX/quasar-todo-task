@@ -24,7 +24,7 @@
 
 
   export default {
-    name: 'SearchBar',
+    name: 'SearchBarOrders',
     computed: {
       ...mapState('orders', ['searchOrder']),
       searchText: {

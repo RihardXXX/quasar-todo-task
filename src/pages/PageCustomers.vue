@@ -1,9 +1,8 @@
 <template>
   <q-page class="q-pa-md">
-    тут поисковвый инпут с дебоунсом на сервер
-    <br>
-    тут будет фильтр клиентов  по рейтингу и отзывам
-    <br>
+
+    <SearchBarCustomers />
+
     <q-list
       bordered
       padding
@@ -26,11 +25,18 @@
         :reviews="customer.reviews"
       />
 
-
       </template>
+      <q-banner
+        v-else-if="!customers.length && !isLoading"
+        class="bg-primary text-white text-center"
+      >
+        <h6 class="q-ma-none">
+          Клиентов пока нет
+        </h6>
+      </q-banner>
       <div
         class="flex justify-center"
-        v-else
+        v-else-if="isLoading"
       >
         <q-spinner-hourglass
           color="purple"
@@ -46,16 +52,18 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import CustomerItem from "components/customers/CustomerItem";
+  import { mapGetters } from 'vuex'
+  import CustomerItem from 'components/customers/CustomerItem'
+  import SearchBarCustomers from 'components/customers/SearchBarCustomers'
 
-export default {
-  name: 'PageCustomers',
-  components: {
-    CustomerItem
-  },
-  computed: {
-    ...mapGetters('customers', ['customers'])
+  export default {
+    name: 'PageCustomers',
+    components: {
+      CustomerItem,
+      SearchBarCustomers
+    },
+    computed: {
+      ...mapGetters('customers', ['customers', 'isLoading'])
+    }
   }
-}
 </script>

@@ -25,3 +25,18 @@ export const getCurrentCustomer =  ({state, commit}, slug) => {
 
   // console.log('11: ', currentOrder)
 }
+
+// поиск клиентов строку устанавливаем
+export const setSearchNameCustomer = ({commit}, value) => {
+  commit('setSearchNameCustomer', value)
+}
+
+
+// Закомитить работу
+// добить мутации и тп
+// закончить с поиском клиентов
+
+// сортировка клиентов по имени
+export const filteredCustomers = ({commit, state}) => {
+
+}

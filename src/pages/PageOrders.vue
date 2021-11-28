@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-md">
 
-    <SearchBar />
+    <SearchBarOrders />
 
     <q-list
       bordered
@@ -57,13 +57,13 @@
 <script>
   import { mapGetters, mapActions } from 'vuex'
   import Order from 'components/orders/Order'
-  import SearchBar from 'components/orders/SearchBar'
+  import SearchBarOrders from 'components/orders/SearchBarOrders'
 
   export default {
     name: 'PageOrders',
     components: {
       Order,
-      SearchBar
+      SearchBarOrders
     },
     computed: {
       ...mapGetters('orders', ['orders', 'isLoading']),

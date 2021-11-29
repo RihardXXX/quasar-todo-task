@@ -167,3 +167,8 @@ export const filteredOrders = ({ commit, state }) => {
     })
 }
 
+// сортировка заказов
+export const setSort = ({commit}, sortName) => {
+  commit('setSort', sortName)
+}
+

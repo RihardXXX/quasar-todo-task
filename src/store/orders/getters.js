@@ -1,5 +1,12 @@
 export function orders (state) {
-  return state ? state.orders : null
+  if (state)  {
+    if (state.sort !== '') {
+      console.log('включена сортировка')
+      return []
+    }
+    return state.orders
+  }
+  return []
 }
 
 export function isLoading (state) {

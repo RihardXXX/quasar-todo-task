@@ -161,3 +161,9 @@ export const filteredOrdersFailure = (state, error) => {
   state.isLoading = false
   state.error = error
 }
+
+// установка фильтра сортировки в состянии
+export const setSort = (state, sortName) => {
+  console.log('sort name: ', sortName)
+  state.sort = sortName
+}

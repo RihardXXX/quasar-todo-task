@@ -31,12 +31,22 @@ export const setSearchNameCustomer = ({commit}, value) => {
   commit('setSearchNameCustomer', value)
 }
 
-
-// Закомитить работу
-// добить мутации и тп
-// закончить с поиском клиентов
-
 // сортировка клиентов по имени
 export const filteredCustomers = ({commit, state}) => {
+  commit('filteredCustomersStart')
+  return new Promise(resolve => {
+    const searchCustomerName = state.searchCustomer
+    resolve(searchCustomerName)
+  })
+    .then((searchCustomerName) => {
+      commit('filteredCustomersSuccess', searchCustomerName)
+    })
+    .catch((error) => {
+      commit('filteredCustomersFailure', error)
+    })
+}
 
+// инициализация первичной отрисовки клиентов
+export const initialCustomers = ({commit}) => {
+  commit('setInitialCustomers')
 }

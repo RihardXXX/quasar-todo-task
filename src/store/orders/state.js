@@ -6,6 +6,7 @@ export default function () {
     error: null,
     currentOrder: {},
     searchOrder: '',
+    sort: '',
     orders: [
       {
         id: 0,

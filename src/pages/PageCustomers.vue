@@ -52,7 +52,7 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
   import CustomerItem from 'components/customers/CustomerItem'
   import SearchBarCustomers from 'components/customers/SearchBarCustomers'
 
@@ -64,6 +64,12 @@
     },
     computed: {
       ...mapGetters('customers', ['customers', 'isLoading'])
+    },
+    methods: {
+      ...mapActions('customers', ['initialCustomers'])
+    },
+    mounted() {
+      this.initialCustomers()
     }
   }
 </script>

@@ -43,11 +43,11 @@ export default {
     ]),
     filterCustomers() {
       console.log(112)
-      // this.filteredCustomers()
+      this.filteredCustomers()
     },
     cleanInput() {
       this.searchNameCustomer = ''
-      // this.filteredCustomers()
+      this.filteredCustomers()
     },
   },
   created () {

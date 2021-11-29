@@ -3,6 +3,9 @@
 
     <SearchBarOrders />
 
+    <SortByOrders class="q-mb-md" />
+
+
     <q-list
       bordered
       padding
@@ -58,12 +61,14 @@
   import { mapGetters, mapActions } from 'vuex'
   import Order from 'components/orders/Order'
   import SearchBarOrders from 'components/orders/SearchBarOrders'
+  import SortByOrders from "components/orders/SortByOrders";
 
   export default {
     name: 'PageOrders',
     components: {
       Order,
-      SearchBarOrders
+      SearchBarOrders,
+      SortByOrders,
     },
     computed: {
       ...mapGetters('orders', ['orders', 'isLoading']),

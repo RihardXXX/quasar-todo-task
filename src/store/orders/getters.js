@@ -1,10 +1,24 @@
+import { sortTitle } from 'src/utils'
+
 export function orders (state) {
   if (state)  {
-    if (state.sort !== '') {
-      console.log('включена сортировка')
-      return []
+    if (state.sortType !== '') {
+      const { sortType } = state
+
+      console.log('sortType: ', sortType)
+
+      // типы сортировок
+      switch (sortType) {
+        case 'title':
+          return [...state.orders].sort(sortTitle)
+        case 'price':
+          return [...state.orders].sort((a, b) => a.price - b.price)
+        default:
+          return state.orders
+      }
+    } else {
+      return state.orders
     }
-    return state.orders
   }
   return []
 }

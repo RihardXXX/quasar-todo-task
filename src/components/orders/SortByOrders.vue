@@ -19,7 +19,7 @@ import { mapState, mapActions } from 'vuex'
         options: [
           {
             label: 'по имени',
-            value: 'name'
+            value: 'title'
           },
           {
             label: 'по цене',
@@ -37,10 +37,10 @@ import { mapState, mapActions } from 'vuex'
       }
     },
     computed: {
-      ...mapState('orders', ['sort']),
+      ...mapState('orders', ['sortType']),
       sortBy: {
         get() {
-          return this.sort
+          return this.sortType
         },
         set(value) {
           // console.log(value)

@@ -3,6 +3,9 @@
 
     <SearchBarCustomers />
 
+    <br>
+    Тут сделать сортировку по отзывам и рейтингу клиентов
+
     <q-list
       bordered
       padding

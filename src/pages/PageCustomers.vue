@@ -3,8 +3,7 @@
 
     <SearchBarCustomers />
 
-    <br>
-    Тут сделать сортировку по отзывам и рейтингу клиентов
+    <SortByCustomers class="q-mb-md" />
 
     <q-list
       bordered
@@ -58,12 +57,14 @@
   import { mapGetters, mapActions } from 'vuex'
   import CustomerItem from 'components/customers/CustomerItem'
   import SearchBarCustomers from 'components/customers/SearchBarCustomers'
+  import SortByCustomers from 'components/customers/SortByCustomers'
 
   export default {
     name: 'PageCustomers',
     components: {
       CustomerItem,
-      SearchBarCustomers
+      SearchBarCustomers,
+      SortByCustomers
     },
     computed: {
       ...mapGetters('customers', ['customers', 'isLoading'])

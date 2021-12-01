@@ -4,6 +4,7 @@ export default function () {
     error: null,
     currentCustomer: {},
     searchCustomer: '',
+    sortType: '',
     customers: [
       {
         id: 0,
@@ -85,7 +86,7 @@ export default function () {
         id: 1,
         username: 'Roman',
         payment: 'карта',
-        rating: 6,
+        rating: 8,
         reviews: [
           {
             id: Math.random(),
@@ -99,7 +100,7 @@ export default function () {
         id: 2,
         username: 'Ivan',
         payment: 'карта',
-        rating: 3,
+        rating: 5,
         reviews: [
           {
             id: Math.random(),
@@ -229,7 +230,7 @@ export default function () {
         id: 3,
         username: 'Malcovich',
         payment: 'карта',
-        rating: 3,
+        rating: 5,
         reviews: [
           {
             id: Math.random(),

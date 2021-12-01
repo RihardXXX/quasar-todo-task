@@ -50,3 +50,8 @@ export const filteredCustomers = ({commit, state}) => {
 export const initialCustomers = ({commit}) => {
   commit('setInitialCustomers')
 }
+
+// установка параметры сортировки клиентов по отзывам или рейтингу
+export const setSortType = ({commit}, sortType) => {
+  commit('setSortType', sortType)
+}

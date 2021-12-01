@@ -1,6 +1,19 @@
 
 export const customers = (state) => {
-  return state.customers.length ? state.customers : []
+  console.log(state.sortType)
+  if (state.sortType) {
+    const param = state.sortType
+    switch (param){
+      case 'rating':
+        return [...state.customers].sort((a, b) => b.rating - a.rating)
+      case 'reviews':
+        return [...state.customers].sort((a, b) => b.reviews.length - a.reviews.length)
+      default:
+        return state.customers
+    }
+  } else {
+    return state.customers.length ? state.customers : []
+  }
 }
 
 export const isLoading = (state) => {

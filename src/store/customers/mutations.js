@@ -48,3 +48,9 @@ export const filteredCustomersFailure = (state, error) => {
 export const  setInitialCustomers = (state) => {
   state.customers = [...state.server]
 }
+
+// устанавливаем тип сортировки клиентов
+export const setSortType = (state, sortType) => {
+  console.log(sortType)
+  state.sortType = sortType
+}

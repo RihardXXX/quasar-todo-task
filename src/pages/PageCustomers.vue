@@ -18,14 +18,22 @@
         v-if="customers.length"
       >
 
-      <CustomerItem
-        v-for="customer in customers"
-        :key="customer.id"
-        :slug="customer.id"
-        :rating="customer.rating"
-        :username="customer.username"
-        :reviews="customer.reviews"
-      />
+        <transition-group
+          appear
+          enter-active-class="animated backInUp"
+          leave-active-class="animated backInUp"
+        >
+
+          <CustomerItem
+            v-for="customer in customers"
+            :key="customer.id"
+            :slug="customer.id"
+            :rating="customer.rating"
+            :username="customer.username"
+            :reviews="customer.reviews"
+          />
+
+       </transition-group>
 
       </template>
       <q-banner

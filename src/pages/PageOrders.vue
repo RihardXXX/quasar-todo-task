@@ -1,55 +1,76 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page>
 
-    <SearchBarOrders />
-
-    <SortByOrders class="q-mb-md" />
-
-
-    <q-list
-      bordered
-      padding
-      separator
+    <div
+      class="q-pa-md absolute full-width full-height"
     >
-      <q-item-label header>
-        Общий список заказов
-      </q-item-label>
 
-      <template
-        v-if="orders.length"
+      <SearchBarOrders />
+
+      <SortByOrders class="q-mb-md" />
+
+
+      <q-list
+        bordered
+        padding
+        separator
+        :style="{height: '60vh'}"
       >
+        <q-item-label header>
+          Общий список заказов
+        </q-item-label>
 
-        <Order
-          v-for="order in orders"
-          :key="order.id"
-          :slug="order.id"
-          :title="order.title"
-          :description="order.description"
-          :price="order.price"
-          :selected-performer="order.selectedPerformer"
-          :status="order.status"
-        />
+        <template
+          v-if="orders.length"
+        >
+          <q-scroll-area class="q-scroll-area-orders">
 
-      </template>
-      <q-banner
-        v-else-if="!orders.length && !isLoading"
-        class="bg-primary text-white text-center"
-      >
-        <h6 class="q-ma-none">
-          Заказов пока нет
-        </h6>
-      </q-banner>
-      <div
-        class="flex justify-center"
-        v-else-if="isLoading"
-      >
-        <q-spinner-hourglass
-          color="purple"
-          size="4em"
-        />
-      </div>
+            <transition-group
+              appear
+              enter-active-class="animated backInUp"
+              leave-active-class="animated backInUp"
+            >
 
-    </q-list>
+              <Order
+                v-for="order in orders"
+                :key="order.id"
+                :slug="order.id"
+                :title="order.title"
+                :description="order.description"
+                :price="order.price"
+                :selected-performer="order.selectedPerformer"
+                :status="order.status"
+              />
+
+
+            </transition-group>
+
+          </q-scroll-area>
+
+        </template>
+        <q-banner
+          v-else-if="!orders.length && !isLoading"
+          class="bg-primary text-white text-center"
+        >
+          <h6 class="q-ma-none">
+            Заказов пока нет
+          </h6>
+        </q-banner>
+
+        <div
+          class="flex justify-center"
+          v-else-if="isLoading"
+        >
+          <q-spinner-hourglass
+            color="purple"
+            size="4em"
+          />
+        </div>
+
+
+      </q-list>
+
+    </div>
 
 <!--          <pre>-->
 <!--            {{isLoading}}-->
@@ -82,3 +103,11 @@
     }
   }
 </script>
+
+<style scoped>
+  .q-scroll-area-orders {
+    /*display: flex;*/
+    /*flex-grow: 1;*/
+    height: 100%;
+  }
+</style>

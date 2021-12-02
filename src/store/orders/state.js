@@ -160,6 +160,38 @@ export default function () {
         status: 'свободен',
         victory: []
       },
+      {
+        id: 6,
+        title: 'Уборка в офисе',
+        description: 'Описание',
+        body: 'В общем котёл сам по себе выключается',
+        price: 2000,
+        address: 'Гагаринский дом 3',
+        category: 'сантехника',
+        dueDate: '01.01.2021г.',
+        dueTime: '15:44',
+        listOfPerformers: [],
+        selectedPerformer: false,
+        customer: 'Rihard',
+        status: 'свободен',
+        victory: []
+      },
+      {
+        id: 7,
+        title: 'Постирать одежду',
+        description: 'Описание',
+        body: 'В общем котёл сам по себе выключается',
+        price: 2000,
+        address: 'Гагаринский дом 3',
+        category: 'сантехника',
+        dueDate: '01.01.2021г.',
+        dueTime: '15:44',
+        listOfPerformers: [],
+        selectedPerformer: false,
+        customer: 'Rihard',
+        status: 'свободен',
+        victory: []
+      },
     ]
   }
 }

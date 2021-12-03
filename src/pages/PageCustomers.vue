@@ -1,9 +1,23 @@
 <template>
   <q-page class="q-pa-md">
 
-    <SearchBarCustomers />
+    <div class="bg-grey-2 q-pa-sm rounded-borders q-mb-md">
+      <q-toggle
+        name="music_active"
+        v-model="showFilterSortPanel"
+        :label="labelToggle"
+      />
+    </div>
 
-    <SortByCustomers class="q-mb-md" />
+    <transition
+      appear
+      enter-active-class="animated backInUp"
+    >
+      <div v-if="showFilterSortPanel" class="menu-filter">
+        <SearchBarCustomers />
+        <SortByCustomers class="q-mb-md" />
+      </div>
+    </transition>
 
     <q-list
       bordered
@@ -31,6 +45,7 @@
             :rating="customer.rating"
             :username="customer.username"
             :reviews="customer.reviews"
+            class="customerList"
           />
 
        </transition-group>
@@ -74,8 +89,17 @@
       SearchBarCustomers,
       SortByCustomers
     },
+    data() {
+      return {
+        showFilterSortPanel: true,
+      }
+    },
     computed: {
-      ...mapGetters('customers', ['customers', 'isLoading'])
+      ...mapGetters('customers', ['customers', 'isLoading']),
+      labelToggle() {
+        const message = !this.showFilterSortPanel ? 'показать' : 'спрятать'
+        return `${message} фильтр поиска и сортировки клиентов`
+      }
     },
     methods: {
       ...mapActions('customers', ['initialCustomers'])
@@ -85,3 +109,13 @@
     }
   }
 </script>
+
+<style scoped>
+  .menu-filter {
+    animation-duration: .5s;
+  }
+
+  .customerList {
+    animation-duration: .5s;
+  }
+</style>

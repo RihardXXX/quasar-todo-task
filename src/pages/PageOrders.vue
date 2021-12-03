@@ -5,10 +5,23 @@
       class="q-pa-md absolute full-width full-height"
     >
 
-      <SearchBarOrders />
+      <div class="bg-grey-2 q-pa-sm rounded-borders q-mb-md">
+        <q-toggle
+          name="music_active"
+          v-model="showFilterSortPanel"
+          :label="labelToggle"
+        />
+      </div>
 
-      <SortByOrders class="q-mb-md" />
-
+      <transition
+        appear
+        enter-active-class="animated backInUp"
+      >
+        <div v-if="showFilterSortPanel" class="menu-filter">
+            <SearchBarOrders />
+            <SortByOrders class="q-mb-md" />
+        </div>
+      </transition>
 
       <q-list
         bordered
@@ -23,7 +36,10 @@
         <template
           v-if="orders.length"
         >
-          <q-scroll-area class="q-scroll-area-orders">
+          <q-scroll-area
+            visible
+            class="q-scroll-area-orders"
+          >
 
             <transition-group
               appear
@@ -40,6 +56,7 @@
                 :price="order.price"
                 :selected-performer="order.selectedPerformer"
                 :status="order.status"
+                class="ordersList"
               />
 
 
@@ -72,9 +89,6 @@
 
     </div>
 
-<!--          <pre>-->
-<!--            {{isLoading}}-->
-<!--          </pre>-->
   </q-page>
 </template>
 
@@ -91,8 +105,17 @@
       SearchBarOrders,
       SortByOrders,
     },
+    data() {
+      return {
+        showFilterSortPanel: true,
+      }
+    },
     computed: {
       ...mapGetters('orders', ['orders', 'isLoading']),
+      labelToggle() {
+        const message = !this.showFilterSortPanel ? 'показать' : 'спрятать'
+        return `${message} фильтр поиска и сортировки заказов`
+      }
     },
     methods: {
       ...mapActions('orders', ['initialOrders'])
@@ -109,5 +132,13 @@
     /*display: flex;*/
     /*flex-grow: 1;*/
     height: 100%;
+  }
+
+  .menu-filter {
+    animation-duration: .5s;
+  }
+
+  .ordersList {
+    animation-duration: .5s;
   }
 </style>

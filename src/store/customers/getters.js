@@ -19,3 +19,8 @@ export const customers = (state) => {
 export const isLoading = (state) => {
   return state.isLoading
 }
+
+// получение статуса тогла показа поиска и сортировки меню у клиентов
+export const showFilterSortPanel = (state) => {
+  return state ? state.showFilterSortPanel : null
+}

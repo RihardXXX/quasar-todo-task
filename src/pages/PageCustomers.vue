@@ -4,7 +4,7 @@
     <div class="bg-grey-2 q-pa-sm rounded-borders q-mb-md">
       <q-toggle
         name="music_active"
-        v-model="showFilterSortPanel"
+        v-model="showFilterSort"
         :label="labelToggle"
       />
     </div>
@@ -68,9 +68,6 @@
           size="4em"
         />
       </div>
-      <!--      <pre>-->
-      <!--        {{orders}}-->
-      <!--      </pre>-->
 
     </q-list>
   </q-page>
@@ -89,23 +86,34 @@
       SearchBarCustomers,
       SortByCustomers
     },
-    data() {
-      return {
-        showFilterSortPanel: true,
-      }
-    },
     computed: {
-      ...mapGetters('customers', ['customers', 'isLoading']),
+      ...mapGetters('customers', ['customers', 'isLoading', 'showFilterSortPanel']),
       labelToggle() {
         const message = !this.showFilterSortPanel ? 'показать' : 'спрятать'
         return `${message} фильтр поиска и сортировки клиентов`
+      },
+      showFilterSort: {
+        get() {
+          return this.showFilterSortPanel
+        },
+        set(statusToggleCustomer) {
+          console.log(statusToggleCustomer)
+          this.setShowFilterSortPanel(statusToggleCustomer)
+        }
       }
     },
     methods: {
-      ...mapActions('customers', ['initialCustomers'])
+      ...mapActions('customers', [
+        'initialCustomers',
+        'setShowFilterSortPanel',
+        'initialStatusToggleCustomer'
+      ])
     },
     mounted() {
+      // подгрузка кастомеров
       this.initialCustomers()
+      // инициализация состояния тогла из локалсториджа
+      this.initialStatusToggleCustomer()
     }
   }
 </script>

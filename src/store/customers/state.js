@@ -5,6 +5,7 @@ export default function () {
     currentCustomer: {},
     searchCustomer: '',
     sortType: '',
+    showFilterSortPanel: true,
     customers: [
       {
         id: 0,

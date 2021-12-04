@@ -26,3 +26,7 @@ export function orders (state) {
 export function isLoading (state) {
   return state ? state.isLoading : null
 }
+
+export const showFilterSortPanel =  (state) => {
+  return state ? state.showFilterSortPanel : null
+}

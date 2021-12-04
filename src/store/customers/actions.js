@@ -1,5 +1,6 @@
-// получение всей информации об текущем клиенте
+import { LocalStorage } from "quasar";
 
+// получение всей информации об текущем клиенте
 export const getCurrentCustomer =  ({state, commit}, slug) => {
   // console.log('slug: ', slug)
   // console.log('state: ', state)
@@ -54,4 +55,16 @@ export const initialCustomers = ({commit}) => {
 // установка параметры сортировки клиентов по отзывам или рейтингу
 export const setSortType = ({commit}, sortType) => {
   commit('setSortType', sortType)
+}
+
+// установка состояния показа тогла панели фильтра и сортирвки кастомеро
+export const setShowFilterSortPanel = ({commit}, statusToggleCustomer) => {
+  commit('setShowFilterSortPanel', statusToggleCustomer)
+  LocalStorage.set('statusToggleCustomer', statusToggleCustomer)
+}
+
+// инициализация первичного состояния тогла показа панели сортировки и поиска кастомеро покупателей
+export const initialStatusToggleCustomer = ({commit}) => {
+  const statusToggleCustomer = LocalStorage.getItem('statusToggleCustomer')
+  commit('setShowFilterSortPanel', statusToggleCustomer)
 }

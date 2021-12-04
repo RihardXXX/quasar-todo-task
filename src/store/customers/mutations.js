@@ -54,3 +54,8 @@ export const setSortType = (state, sortType) => {
   console.log(sortType)
   state.sortType = sortType
 }
+
+// мутация на измненения состояния тогла показа фильтра поиска и сортировки кастомеров
+export const setShowFilterSortPanel = (state, statusToggleCustomer) => {
+  state.showFilterSortPanel = statusToggleCustomer
+}

@@ -8,7 +8,7 @@
       <div class="bg-grey-2 q-pa-sm rounded-borders q-mb-md">
         <q-toggle
           name="music_active"
-          v-model="showFilterSortPanel"
+          v-model="showFilterSort"
           :label="labelToggle"
         />
       </div>
@@ -105,24 +105,29 @@
       SearchBarOrders,
       SortByOrders,
     },
-    data() {
-      return {
-        showFilterSortPanel: true,
-      }
-    },
     computed: {
-      ...mapGetters('orders', ['orders', 'isLoading']),
+      ...mapGetters('orders', ['orders', 'isLoading', 'showFilterSortPanel']),
       labelToggle() {
-        const message = !this.showFilterSortPanel ? 'показать' : 'спрятать'
+        const message = !this.showFilterSort ? 'показать' : 'спрятать'
         return `${message} фильтр поиска и сортировки заказов`
+      },
+      showFilterSort: {
+        get() {
+          return this.showFilterSortPanel
+        },
+        set(statusToggleOrder) {
+          this.setShowFilterSortPanel(statusToggleOrder)
+        }
       }
     },
     methods: {
-      ...mapActions('orders', ['initialOrders'])
+      ...mapActions('orders', ['initialOrders', 'setShowFilterSortPanel', 'initialToggleStatus'])
     },
     mounted() {
       // первичная заполнение с фейковго сервера заказов
       this.initialOrders()
+      // инициализация состония toggle
+      this.initialToggleStatus()
     }
   }
 </script>

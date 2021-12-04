@@ -7,6 +7,7 @@ export default function () {
     currentOrder: {},
     searchOrder: '',
     sortType: '',
+    showFilterSortPanel: true,
     orders: [
       {
         id: 0,

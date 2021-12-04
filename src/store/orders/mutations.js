@@ -167,3 +167,8 @@ export const setSort = (state, sortName) => {
   console.log('sort name: ', sortName)
   state.sortType = sortName
 }
+
+// установка показа состояния меню поиска и сортировке в заказах
+export const setShowFilterSortPanel = (state, status) => {
+  state.showFilterSortPanel = status
+}

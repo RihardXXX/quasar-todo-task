@@ -1,3 +1,5 @@
+import { LocalStorage } from 'quasar'
+
 // получение всей информации об одном заказе
 import {setProposalCurrentOrderFailure} from "src/store/orders/mutations";
 
@@ -171,5 +173,18 @@ export const filteredOrders = ({ commit, state }) => {
 export const setSort = ({commit}, sortName) => {
   commit('setSort', sortName)
 }
+
+// установка состояния тогла переключателя показа меню поиска и сортировки
+export const setShowFilterSortPanel = ({commit}, statusToggleOrder) => {
+  commit('setShowFilterSortPanel', statusToggleOrder)
+  LocalStorage.set('statusToggleOrder', statusToggleOrder)
+}
+
+// инициализация состояния из локалсториджа показа и сокрытия панели фильтра и сортировки
+export const initialToggleStatus = ({commit}) => {
+  const statusToggleOrder = LocalStorage.getItem('statusToggleOrder')
+  commit('setShowFilterSortPanel', statusToggleOrder)
+}
+
 
 

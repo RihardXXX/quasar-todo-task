@@ -20,6 +20,20 @@
            05 Мастер
         </q-toolbar-title>
 
+        <q-item
+          v-if="isLoggedIn"
+          class="absolute-right"
+        >
+          <q-item-section avatar>
+            <q-avatar>
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+            </q-avatar>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>имя пользователя</q-item-label>
+          </q-item-section>
+        </q-item>
+
       </q-toolbar>
     </q-header>
 
@@ -121,28 +135,35 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 
   const menu = [
     {
       id: 0,
+      title: 'Главная страница',
+      icon: 'home',
+      path: '/'
+    },
+    {
+      id: 1,
       title: 'Заказы на работу',
       icon: 'work',
       path: '/orders'
     },
     {
-      id: 1,
+      id: 2,
       title: 'Клиенты',
       icon: 'people',
       path: '/customers'
     },
     {
-      id: 2,
+      id: 3,
       title: 'Мастера',
       icon: 'engineering',
       path: '/performers'
     },
     {
-      id: 3,
+      id: 4,
       title: 'Чат',
       icon: 'chat',
       path: '/chats'
@@ -155,10 +176,10 @@
     data () {
       return {
         leftDrawerOpen: false,
-        isLoggedIn: true
       }
     },
     computed: {
+      ...mapState('authorization', ['isLoggedIn', 'isLoading']),
       isCustomer() {
         return true
       },
@@ -169,11 +190,12 @@
         return !this.isCustomer
             ? menu
             : [
+            ...menu,
                 {
                   id: Math.random(),
                   title: 'Мои заказы',
                   icon: 'work',
-                  path: '/'
+                  path: '/my-order'
                 },
                 {
                   id: Math.random(),
@@ -181,19 +203,24 @@
                   icon: 'add',
                   path: '/order'
                 },
-            ...menu
           ]
       },
       menuNotAuthorization() {
         return [
           {
             id: 0,
+            title: 'Главная страница',
+            icon: 'home',
+            path: '/'
+          },
+          {
+            id: 1,
             title: 'Регистрация',
             icon: 'app_registration',
             path: '/signUp'
           },
           {
-            id: 1,
+            id: 2,
             title: 'Войти',
             icon: 'login',
             path: '/signIn'

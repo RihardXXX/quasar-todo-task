@@ -1,6 +1,9 @@
 <template>
-  <q-page class="flex flex-center">
-    Page Sign In
+  <q-page padding>
+
+
+
+
   </q-page>
 </template>
 

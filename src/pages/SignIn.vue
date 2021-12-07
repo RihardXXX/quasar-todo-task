@@ -1,14 +1,128 @@
 <template>
-  <q-page padding>
+  <q-page padding :style="{maxWidth: '700px', margin: '0 auto'}">
 
+    <q-banner rounded class="bg-purple-8 text-white text-center">
+      Авторизация
+    </q-banner>
 
+    <div class="q-gutter-y-md" style="max-width: 700px">
+      <q-card>
+        <q-tabs
+          v-model="tab"
+          dense
+          class="text-grey"
+          active-color="primary"
+          indicator-color="primary"
+          align="justify"
+          narrow-indicator
+        >
+          <q-tab name="mail" label="почта и пароль" />
+          <q-tab name="social" label="Социальные сети" />
+        </q-tabs>
 
+        <q-separator />
+
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="mail">
+
+            <q-form
+              @submit="onSubmit"
+              class="q-gutter-md q-mt-md"
+            >
+              <q-input
+                filled
+                type="text"
+                v-model="userData.email"
+                label="электронная почта"
+                lazy-rules
+                :rules="[fnValidateEmail]"
+              />
+              <q-input
+                type="password"
+                filled
+                v-model="userData.password"
+                label="пароль"
+                lazy-rules
+                :rules="[fnValidatePassword]"
+              />
+
+              <div>
+                <q-btn
+                  :disabled="false"
+                  label="войти"
+                  type="submit"
+                  color="primary"
+                />
+              </div>
+            </q-form>
+
+          </q-tab-panel>
+
+          <q-tab-panel name="social">
+            <div class="q-pa-md q-gutter-sm flex justify-center">
+              <q-btn
+                color="white"
+                text-color="black"
+                label="instagram"
+                icon-right="photo_camera"
+              />
+              <q-btn
+                color="white"
+                text-color="black"
+                label="vk"
+                icon-right="person_add"
+              />
+              <q-btn
+                color="white"
+                text-color="black"
+                label="google"
+                icon-right="search"
+              />
+
+            </div>
+          </q-tab-panel>
+
+        </q-tab-panels>
+      </q-card>
+
+    </div>
 
   </q-page>
 </template>
 
 <script>
 export default {
-  name: 'SignIn'
+  name: 'SignIn',
+  data() {
+    return {
+      userData: {
+        name: '',
+        email: '',
+        password: '',
+        role: 'customer',
+      },
+      tab: 'mail'
+    }
+  },
+  methods: {
+    fnValidateEmail(email) {
+      return email.match(
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      ) || 'введите электронную почту в правильном формате'
+    },
+    fnValidateName(val) {
+      return val.length > 6 && val.length < 20 || 'имя должно быть больше 5 символов но меньше 20'
+    },
+    fnValidatePassword(val) {
+      return val.length && val.length > 10 && val.length < 100 || 'пароль должен быть больше 10 символов но меньше 100'
+    },
+    onSubmit() {
+      console.log('send form data', this.userData)
+      // this.userData.name = ''
+      // this.userData.email = ''
+      // this.userData.password = ''
+    }
+  }
 }
 </script>
+

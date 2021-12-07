@@ -14,6 +14,7 @@
         type="text"
         v-model="userData.name"
         label="ваше имя"
+        ref="name"
         lazy-rules
         :rules="[fnValidateName]"
       />

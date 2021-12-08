@@ -238,6 +238,12 @@ import qboot_Bootaxios from 'boot/axios'
 
 
 
+Vue.config.devtools = true
+Vue.config.productionTip = false
+
+
+
+console.info('[Quasar] Running SPA.')
 
 
 

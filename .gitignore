@@ -2,6 +2,9 @@
 .thumbs.db
 node_modules
 
+#api key))
+src/boot
+
 # Quasar core related directories
 #.quasar
 #/dist

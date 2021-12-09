@@ -3,6 +3,7 @@ export default function () {
     isLoggedIn: false,
     // isLoggedIn: true,
     isLoading: false,
-    error: null
+    error: null,
+    user: null
   }
 }

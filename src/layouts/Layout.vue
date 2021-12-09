@@ -30,7 +30,9 @@
             </q-avatar>
           </q-item-section>
           <q-item-section>
-            <q-item-label>имя пользователя</q-item-label>
+            <q-item-label>
+              {{ userEmail }}
+            </q-item-label>
           </q-item-section>
         </q-item>
 
@@ -135,7 +137,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
   const menu = [
     {
@@ -180,6 +182,7 @@ import { mapState } from 'vuex'
     },
     computed: {
       ...mapState('authorization', ['isLoggedIn', 'isLoading']),
+      ...mapGetters('authorization', ['userEmail']),
       isCustomer() {
         return true
       },

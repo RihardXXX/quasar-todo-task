@@ -19,3 +19,23 @@ export const registerUserFailure = (state, error) => {
   state.isLoading = false
   state.error = error
 }
+
+// Мутация для входа в систему
+
+export const signInUserStart = (state) => {
+  state.isLoading = true
+  state.isLoading = false
+  state.user = null
+}
+
+export const signInUserSuccess = (state, user) => {
+  state.isLoading = false
+  state.error = null
+  state.user = { ...user}
+  state.isLoggedIn = true
+}
+export const signInUserFailure = (state, error) => {
+  state.isLoading = false
+  state.isLoggedIn = false
+  state.error = error
+}

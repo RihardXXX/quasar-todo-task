@@ -1,5 +1,5 @@
 import { auth } from 'boot/firebase'
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 // Регистрация нового пользователя
 export const registerUser =  ({commit}, { email, password }) => {
@@ -15,9 +15,24 @@ export const registerUser =  ({commit}, { email, password }) => {
       resolve(response)
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
       commit('registerUserFailure', error)
     });
+  })
+}
+
+// Вход по почте и паролю для нового пользователя
+export const signInUser = ({commit}, { email, password }) => {
+  return new Promise((resolve, reject) => {
+    commit('signInUserStart')
+    signInWithEmailAndPassword(auth, email, password)
+      .then((response) => {
+        console.log(response)
+        commit('signInUserSuccess', response.user)
+        resolve(response)
+      })
+      .catch((error) => {
+        commit('signInUserFailure', error)
+        reject(error)
+      });
   })
 }

@@ -91,38 +91,52 @@
 </template>
 
 <script>
-export default {
-  name: 'SignIn',
-  data() {
-    return {
-      userData: {
-        name: '',
-        email: '',
-        password: '',
-        role: 'customer',
+  import { mapActions } from 'vuex'
+
+  export default {
+    name: 'SignIn',
+    data() {
+      return {
+        userData: {
+          name: '',
+          email: '',
+          password: '',
+          role: 'customer',
+        },
+        tab: 'mail'
+      }
+    },
+    methods: {
+      ...mapActions('authorization', ['signInUser']),
+      fnValidateEmail(email) {
+        return email.match(
+          /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        ) || 'введите электронную почту в правильном формате'
       },
-      tab: 'mail'
-    }
-  },
-  methods: {
-    fnValidateEmail(email) {
-      return email.match(
-        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      ) || 'введите электронную почту в правильном формате'
-    },
-    fnValidateName(val) {
-      return val.length > 6 && val.length < 20 || 'имя должно быть больше 5 символов но меньше 20'
-    },
-    fnValidatePassword(val) {
-      return val.length && val.length > 10 && val.length < 100 || 'пароль должен быть больше 10 символов но меньше 100'
-    },
-    onSubmit() {
-      console.log('send form data', this.userData)
-      // this.userData.name = ''
-      // this.userData.email = ''
-      // this.userData.password = ''
+      fnValidateName(val) {
+        return val.length > 6 && val.length < 20 || 'имя должно быть больше 5 символов но меньше 20'
+      },
+      fnValidatePassword(val) {
+        return val.length && val.length > 10 && val.length < 100 || 'пароль должен быть больше 10 символов но меньше 100'
+      },
+      onSubmit() {
+        console.log('send form data', this.userData)
+        this.signInUser({
+          email: this.userData.email,
+          password: this.userData.password
+        })
+        .then(() => {
+          this.userData.name = ''
+          this.userData.email = ''
+          this.$router.push({path: '/'})
+        })
+        .catch((error) => {
+          // тут выпускать модалку что пользователь с такой почтой и паролем не найден
+          console.log('user not fund', error)
+        })
+
+      }
     }
   }
-}
 </script>
 

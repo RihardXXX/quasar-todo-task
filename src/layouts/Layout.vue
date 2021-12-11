@@ -31,8 +31,16 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>
-              {{ userEmail }}
+              {{ emailUser }}
             </q-item-label>
+          </q-item-section>
+          <q-item-section>
+            <q-btn
+              color="deep-orange"
+              glossy
+              label="выйти"
+              @click="exit"
+            />
           </q-item-section>
         </q-item>
 
@@ -137,7 +145,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
   const menu = [
     {
@@ -181,8 +189,7 @@ import { mapState, mapGetters } from 'vuex'
       }
     },
     computed: {
-      ...mapState('authorization', ['isLoggedIn', 'isLoading']),
-      ...mapGetters('authorization', ['userEmail']),
+      ...mapState('authorization', ['isLoggedIn', 'isLoading', 'emailUser']),
       isCustomer() {
         return true
       },
@@ -229,6 +236,14 @@ import { mapState, mapGetters } from 'vuex'
             path: '/signIn'
           }
         ]
+      }
+    },
+    methods: {
+      ...mapActions('authorization', ['logoutUser']),
+      exit() {
+        console.log('exit')
+        this.logoutUser()
+        // this.$router.push({path: 'signIn'})
       }
     }
   }

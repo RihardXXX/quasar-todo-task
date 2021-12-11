@@ -1,5 +1,9 @@
 import { auth } from 'boot/firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+  } from "firebase/auth";
 
 // Регистрация нового пользователя
 export const registerUser =  ({commit}, { email, password }) => {
@@ -35,4 +39,28 @@ export const signInUser = ({commit}, { email, password }) => {
         reject(error)
       });
   })
+}
+
+// Устанавливает состояние авторизации юзера и наблюдает
+export const handlerAuthStateChange = ({commit}) => {
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      console.log(user)
+      commit('setIsLoggedIn', true)
+      commit('setEmailUser', user.email)
+    } else {
+      commit('setIsLoggedIn', false)
+      commit('setEmailUser', '')
+    }
+  });
+}
+
+// выйти из состояния авторизации
+export const logoutUser = ({commit}) => {
+  auth.signOut()
+  commit('setIsLoggedIn', false)
+
 }

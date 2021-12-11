@@ -4,13 +4,13 @@ const routes = [
     path: '/',
     component: () => import('layouts/Layout.vue'),
     children: [
-      // Эти роуты открыть для авторизованных
+      // Эти роуты открыть для не авторизованных
       {
         path: 'signUp',
         component: () => import('pages/SignUp')
       },
       {
-        path: 'signIn', //  все заказы список
+        path: 'signIn',
         component: () => import('pages/SignIn')
       },
       // Эти нижние роуты закрыть для тех кто не авторизован

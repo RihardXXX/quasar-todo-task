@@ -8,6 +8,11 @@ export const setEmailUser = (state, email) => {
   state.emailUser = email
 }
 
+// устанавливаем состояние юзера в свойство
+export const setUser = (state, user) => {
+  state.user = user
+}
+
 // Регистрация пользователя в системе
 export const registerUserStart = (state) => {
   state.isLoggedIn = false

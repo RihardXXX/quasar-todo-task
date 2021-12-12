@@ -1,3 +1,4 @@
+import { LocalStorage } from "quasar";
 import { auth } from 'boot/firebase'
 import {
     createUserWithEmailAndPassword,
@@ -42,16 +43,14 @@ export const signInUser = ({commit}, { email, password }) => {
 }
 
 // Устанавливает состояние авторизации юзера и наблюдает
-export const handlerAuthStateChange = ({commit}) => {
-
+export function handlerAuthStateChange({commit}) {
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
-      console.log(user)
+      LocalStorage.set('isLoggedIn', true)
       commit('setIsLoggedIn', true)
       commit('setEmailUser', user.email)
     } else {
+      LocalStorage.set('isLoggedIn', false)
       commit('setIsLoggedIn', false)
       commit('setEmailUser', '')
     }
@@ -59,8 +58,8 @@ export const handlerAuthStateChange = ({commit}) => {
 }
 
 // выйти из состояния авторизации
-export const logoutUser = ({commit}) => {
+export function logoutUser({commit, dispatch}) {
+  commit('setUser', undefined)
   auth.signOut()
-  commit('setIsLoggedIn', false)
-
 }
+

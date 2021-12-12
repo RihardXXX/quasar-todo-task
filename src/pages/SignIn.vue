@@ -126,13 +126,21 @@
           password: this.userData.password
         })
         .then(() => {
-          this.userData.name = ''
           this.userData.email = ''
-          this.$router.push({path: '/'})
+          this.userData.password = ''
+          this.$router.push({name: 'index'})
         })
         .catch((error) => {
           // тут выпускать модалку что пользователь с такой почтой и паролем не найден
-          console.log('user not fund', error)
+          this.$q.dialog({
+            title: 'Ошибка',
+            message: 'Пользователь с таким логином и паролем не существует',
+            ok: 'ок',
+            persistent: true
+          }).onOk(() => {
+            this.userData.email = ''
+            this.userData.password = ''
+          })
         })
 
       }

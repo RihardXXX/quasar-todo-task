@@ -7,15 +7,18 @@ const routes = [
       // Эти роуты открыть для не авторизованных
       {
         path: 'signUp',
+        name: 'signUp',
         component: () => import('pages/SignUp')
       },
       {
         path: 'signIn',
+        name: 'signIn',
         component: () => import('pages/SignIn')
       },
       // Эти нижние роуты закрыть для тех кто не авторизован
       {
         path: '',
+        name: 'index',
         component: () => import('pages/PageIndex.vue')
       },
       {

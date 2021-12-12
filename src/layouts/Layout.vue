@@ -243,7 +243,7 @@ import { mapState, mapGetters, mapActions } from 'vuex'
       exit() {
         console.log('exit')
         this.logoutUser()
-        // this.$router.push({path: 'signIn'})
+        this.$router.push('/signIn').catch(err => {})
       }
     }
   }

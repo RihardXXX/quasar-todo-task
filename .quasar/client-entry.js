@@ -232,6 +232,10 @@ import createApp from './app.js'
 
 import qboot_Bootaxios from 'boot/axios'
 
+import qboot_Bootrouterauth from 'boot/router-auth'
+
+import qboot_Bootfirebase from 'boot/firebase'
+
 
 
 
@@ -263,7 +267,7 @@ async function start () {
   }
 
   const urlPath = window.location.href.replace(window.location.origin, '')
-  const bootFiles = [qboot_Bootaxios]
+  const bootFiles = [qboot_Bootaxios,qboot_Bootrouterauth,qboot_Bootfirebase]
 
   for (let i = 0; hasRedirected === false && i < bootFiles.length; i++) {
     if (typeof bootFiles[i] !== 'function') {

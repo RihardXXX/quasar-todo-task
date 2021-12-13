@@ -99,6 +99,7 @@ module.exports = function (/* ctx */) {
         'Dialog',
         'LocalStorage',
         'Notify',
+        'Loading',
       ]
     },
 

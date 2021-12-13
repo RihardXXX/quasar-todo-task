@@ -62,6 +62,10 @@ const routes = [
         path: 'chat/:slug', // чат с определенным челом
         component: () => import('pages/PageChat.vue')
       },
+      {
+        path: 'my-orders', // чат с определенным челом
+        component: () => import('pages/PageMyOrders')
+      },
     ]
   },
 

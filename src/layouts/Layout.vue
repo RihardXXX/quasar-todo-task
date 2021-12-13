@@ -145,7 +145,8 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
+  import { QSpinnerGears } from 'quasar'
 
   const menu = [
     {
@@ -205,7 +206,7 @@ import { mapState, mapGetters, mapActions } from 'vuex'
                   id: Math.random(),
                   title: 'Мои заказы',
                   icon: 'work',
-                  path: '/my-order'
+                  path: '/my-orders'
                 },
                 {
                   id: Math.random(),
@@ -242,8 +243,19 @@ import { mapState, mapGetters, mapActions } from 'vuex'
       ...mapActions('authorization', ['logoutUser']),
       exit() {
         console.log('exit')
-        this.logoutUser()
-        this.$router.push('/signIn').catch(err => {})
+        // спиннер загрузки
+        this.$q.loading.show({
+          spinner: QSpinnerGears,
+          spinnerColor: 'red',
+          message: 'Идёт загрузка'
+        })
+        this.logoutUser().then(status => {
+          if (status === 'ok') {
+            this.$router.push('/signIn').catch(err => {})
+            this.$q.loading.hide()
+          }
+        })
+
       }
     }
   }

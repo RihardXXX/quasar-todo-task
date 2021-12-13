@@ -43,23 +43,36 @@ export const signInUser = ({commit}, { email, password }) => {
 }
 
 // Устанавливает состояние авторизации юзера и наблюдает
-export function handlerAuthStateChange({commit}) {
+export function handlerAuthStateChange({commit, dispatch}) {
   onAuthStateChanged(auth, (user) => {
     if (user) {
+      console.log(user)
       LocalStorage.set('isLoggedIn', true)
       commit('setIsLoggedIn', true)
       commit('setEmailUser', user.email)
+      commit('setCurrentUser', {...user})
+      dispatch('orders/getAllMyOrders', user.uid, { root:true } )
     } else {
       LocalStorage.set('isLoggedIn', false)
       commit('setIsLoggedIn', false)
       commit('setEmailUser', '')
+      commit('setCurrentUser', undefined)
     }
   });
 }
 
 // выйти из состояния авторизации
 export function logoutUser({commit, dispatch}) {
-  commit('setUser', undefined)
-  auth.signOut()
+  return new Promise(resolve => {
+    commit('setUser', undefined)
+    commit('setCurrentUser', undefined)
+    auth.signOut()
+      .then((res) => {
+      resolve('ok')
+    })
+      .catch(err => {
+        reject(err)
+      })
+  })
 }
 

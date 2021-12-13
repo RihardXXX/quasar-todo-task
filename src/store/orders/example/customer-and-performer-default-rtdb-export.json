@@ -1,0 +1,36 @@
+{
+  "orders" : {
+    "JFGX1SDx0HOaBcyZxt85IJfZgmt1": {
+      "id1": {
+        "title": "Починить котёл",
+        "description": "Описание000000000",
+        "body": "В общем котёл сам по себе выключается",
+        "price": 100,
+        "address": "Гагаринский дом 3",
+        "category": "сантехника",
+        "dueDate": "01.01.2021г.",
+        "dueTime": "15:44",
+        "listOfPerformers": "[]",
+        "selectedPerformer": false,
+        "status": "свободен",
+        "victory": "[]"
+      },
+      "id2": {
+        "title": "Поклеить обои",
+        "description": "Обои дизайнерские",
+        "body": "Нужно поклеить обои в двух комнатах",
+        "price": 2000,
+        "address": "Гагаринский дом 10",
+        "category": "общие работы",
+        "dueDate": "01.01.2021г.",
+        "dueTime": "15:44",
+        "listOfPerformers": "[]",
+        "selectedPerformer": false,
+        "status": "свободен",
+        "victory": "[]"
+      }
+    }
+  }
+}
+
+

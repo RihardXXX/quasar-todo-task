@@ -8,6 +8,8 @@ export default function () {
     searchOrder: '',
     sortType: '',
     showFilterSortPanel: true,
+    // заказы текущего кастомера или перформера
+    myOrders: [],
     orders: [
       {
         id: 0,

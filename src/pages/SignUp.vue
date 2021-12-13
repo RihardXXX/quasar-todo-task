@@ -73,6 +73,7 @@
 
 <script>
   import { mapActions } from 'vuex'
+  import { QSpinnerGears } from 'quasar'
 
   export default {
     name: 'SignUp',
@@ -101,15 +102,34 @@
       },
       onSubmit() {
         console.log('send form data', this.userData)
+        // спиннер загрузки
+        this.$q.loading.show({
+          spinner: QSpinnerGears,
+          spinnerColor: 'red',
+          message: 'Идёт загрузка'
+        })
         this.registerUser({
           email: this.userData.email,
           password: this.userData.password
         })
           .then(() => {
-            // this.userData.name = ''
+            // успешный ответ
+            this.$q.loading.hide()
             this.userData.email = ''
             this.userData.password = ''
             this.$router.push({ path: '/' })
+        })
+        .catch((error) => {
+          // тут выпускать модалку если произошла ошибка при регистрации
+          this.$q.loading.hide()
+          this.$q.dialog({
+            title: 'Ошибка',
+            message: 'регистрация не прошла, попробуйте позже',
+            ok: 'ок',
+            persistent: true
+          }).onOk(() => {
+            console.log(112)
+          })
         })
       }
     }

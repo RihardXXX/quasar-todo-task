@@ -172,3 +172,8 @@ export const setSort = (state, sortName) => {
 export const setShowFilterSortPanel = (state, status) => {
   state.showFilterSortPanel = status
 }
+
+// установка заказов текущего кастомера клиента
+export function setMyOrders (state, myOrders) {
+  state.myOrders = myOrders
+}

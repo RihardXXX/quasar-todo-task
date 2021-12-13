@@ -1,7 +1,9 @@
 import { LocalStorage } from 'quasar'
+import { getDatabase, ref, onValue} from "firebase/database";
 
 // получение всей информации об одном заказе
 import {setProposalCurrentOrderFailure} from "src/store/orders/mutations";
+// import {myOrders} from "src/store/orders/getters";
 
 export const getCurrentOrder =  ({state, commit}, slug) => {
   commit('getCurrentOrderStart')
@@ -25,32 +27,35 @@ export const getCurrentOrder =  ({state, commit}, slug) => {
 
 }
 
+// Получение только моих заказов для кастомера то есть клиента
+export function getAllMyOrders({commit, state}, uid) {
+  // console.log('getAllMyOrders')
+  // const uid  = rootState.authorization.currentUser ? rootState.authorization.currentUser.uid : undefined
+
+  const db = getDatabase();
+  const currentUserOrders = ref(db, `orders/${uid}`);
+  onValue(currentUserOrders, (snapshot) => {
+    const data = snapshot.val();
+    // разобраться с Джейсоном
+    console.log('data: ', data)
+    let myOrders = []
+    Object.keys(data).forEach(key => {
+      const order = {
+        id: key,
+        ...data[key]
+      }
+      myOrders.push(order)
+    })
+    console.log('myOrders: ', myOrders)
+    // Сделай коммит для сохранения заказов кастомера
+    // Верстка полетела к чертям починить надо шапку
+    // updateStarCount(postElement, data);
+  });
+}
+
 // подача заявки перформера на заказ кастомера кладём в массив
 
 export const addProposal = ({state, commit}, {performer, currentOrder}) => {
-
-
-  // сделать блок с лицом выполняющим работу для кастомера +
-
-  // кнопку подать заявку сделать меньше +
-
-  // Сделать страницу создания заявки кастомером +
-
-  // создать страницу редактирования заказа +
-
-  // создать фильтр поиска заказа +
-
-  // добавить баннер заказов не найдено +
-
-  // сделать аналогичный фильтр для мастеров
-
-  // создать фильтр перформеров
-
-  // создать мастера страницу
-
-
-  // добавить чат общий
-  // индивидуальные чаты
 
   commit('setProposalCurrentOrderIsLoading')
   return new Promise((resolve, reject) => {

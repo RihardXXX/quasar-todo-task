@@ -92,6 +92,7 @@
 
 <script>
   import { mapActions } from 'vuex'
+  import { QSpinnerGears } from 'quasar'
 
   export default {
     name: 'SignIn',
@@ -121,17 +122,27 @@
       },
       onSubmit() {
         console.log('send form data', this.userData)
+        // спиннер загрузки
+        this.$q.loading.show({
+          spinner: QSpinnerGears,
+          spinnerColor: 'red',
+          message: 'Идёт загрузка'
+        })
+        // запрос на сервер
         this.signInUser({
           email: this.userData.email,
           password: this.userData.password
         })
         .then(() => {
-          this.userData.email = ''
-          this.userData.password = ''
+          // успешный ответ
+          this.$q.loading.hide()
+          // this.userData.email = ''
+          // this.userData.password = ''
           this.$router.push({name: 'index'})
         })
         .catch((error) => {
           // тут выпускать модалку что пользователь с такой почтой и паролем не найден
+          this.$q.loading.hide()
           this.$q.dialog({
             title: 'Ошибка',
             message: 'Пользователь с таким логином и паролем не существует',

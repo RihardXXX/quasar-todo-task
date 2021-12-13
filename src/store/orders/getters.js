@@ -23,6 +23,10 @@ export function orders (state) {
   return []
 }
 
+export function myOrders(state) {
+  return state.myOrders.length ? state.myOrders : []
+}
+
 export function isLoading (state) {
   return state ? state.isLoading : null
 }

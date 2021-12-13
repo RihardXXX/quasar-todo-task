@@ -52,3 +52,8 @@ export const signInUserFailure = (state, error) => {
   state.error = error
 }
 
+// установка данных текущего юзера при handlerAuthStateChange
+export function setCurrentUser(state, user) {
+  state.currentUser = user
+}
+

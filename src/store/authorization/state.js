@@ -5,5 +5,6 @@ export default function () {
     error: null,
     user: undefined,
     emailUser: '',
+    currentUser: undefined,
   }
 }

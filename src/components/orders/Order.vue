@@ -58,7 +58,7 @@
     name: 'Order',
     props: {
       slug: {
-        type: Number,
+        type: String,
         required: true
       },
       title: {

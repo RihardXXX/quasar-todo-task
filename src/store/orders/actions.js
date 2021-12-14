@@ -1,5 +1,5 @@
-import { LocalStorage } from 'quasar'
-import { getDatabase, ref, onValue} from "firebase/database";
+import { LocalStorage, uid as generateId } from 'quasar'
+import { getDatabase, ref, onValue, set, update} from "firebase/database";
 
 // получение всей информации об одном заказе
 import {setProposalCurrentOrderFailure} from "src/store/orders/mutations";
@@ -47,9 +47,9 @@ export function getAllMyOrders({commit, state}, uid) {
       myOrders.push(order)
     })
     console.log('myOrders: ', myOrders)
+    commit('setMyOrders', [...myOrders])
     // Сделай коммит для сохранения заказов кастомера
-    // Верстка полетела к чертям починить надо шапку
-    // updateStarCount(postElement, data);
+    // updateOrders(postElement, data);
   });
 }
 
@@ -118,19 +118,44 @@ export const selectPerformer = ({ commit }, idPerformer) => {
 }
 
 // создать заказ
-export const createOrder = ({ commit }, order) => {
-  commit('createOrderStart')
+export const createOrder = ({ commit, rootState }) => {
   return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(order)
-    }, 2000)
+    commit('createOrderStart')
+    // генератор id
+    const idOrder = generateId()
+    let newOrder = {}
+    newOrder[idOrder] = {
+      title: "Починить котёл",
+      description: "Описание000000000",
+      body: "В общем котёл сам по себе выключается",
+      price: 100,
+      address: "Гагаринский дом 3",
+      category: "сантехника",
+      dueDate: "01.01.2021г.",
+      dueTime: "15:44",
+      listOfPerformers: "[]",
+      selectedPerformer: false,
+      status: "свободен",
+      victory: "[]"
+    }
+
+    console.log('start', newOrder)
+    const uid = rootState?.authorization?.currentUser?.uid
+    console.log('rootState', rootState)
+    console.log('uid', uid)
+
+    //сформировать нормальный объект для firebase в самом компоненте
+
+    const db = getDatabase();
+    update(ref(db, `orders/${uid}`), newOrder)
+      .then(() => {
+        // commit('createOrderSuccess')
+      })
+      .catch((error) => {
+        commit('createOrderFailure', error)
+      })
   })
-    .then((order) => {
-      commit('createOrderSuccess', order)
-    })
-    .catch((error) => {
-      commit('createOrderFailure', error)
-    })
+
 }
 
 // редактировать заказ

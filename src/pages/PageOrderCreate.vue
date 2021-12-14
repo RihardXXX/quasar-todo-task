@@ -80,6 +80,12 @@
           </div>
         </q-form>
 
+        <q-btn
+          label="тестовый заказы"
+          @click="createTestOrder"
+          color="primary"
+        />
+
       </div>
   </q-page>
 </template>
@@ -137,6 +143,10 @@
         return val.length > 0 && val.length < 6 || 'длина символов до 6'
       },
 
+      createTestOrder() {
+        this.createOrder()
+      },
+
       onSubmit() {
 
         const order = {
@@ -146,8 +156,8 @@
 
         if (this.create) {
           console.log('создание')
-          this.createOrder(order)
-          this.$router.push('/orders')
+          // this.createOrder(order)
+          // this.$router.push('/orders')
         } else {
           console.log('редактирование')
           this.editOrder(order)

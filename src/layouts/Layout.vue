@@ -16,7 +16,9 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
 
-        <q-toolbar-title class="absolute-center">
+        <q-toolbar-title :class="{
+          'absolute-center': !isLoggedIn
+        }">
            05 Мастер
         </q-toolbar-title>
 

@@ -3,8 +3,8 @@ import { getDatabase, ref, onValue, set, update} from "firebase/database";
 
 // получение всей информации об одном заказе
 import {setProposalCurrentOrderFailure} from "src/store/orders/mutations";
-// import {myOrders} from "src/store/orders/getters";
 
+// Сделать подгрузку текущего заказа из сервера
 export const getCurrentOrder =  ({state, commit}, slug) => {
   commit('getCurrentOrderStart')
   // console.log('slug: ', slug)
@@ -118,34 +118,17 @@ export const selectPerformer = ({ commit }, idPerformer) => {
 }
 
 // создать заказ
-export const createOrder = ({ commit, rootState }) => {
+export const createOrder = ({ commit, rootState }, order) => {
   return new Promise((resolve) => {
     commit('createOrderStart')
-    // генератор id
-    const idOrder = generateId()
-    let newOrder = {}
-    newOrder[idOrder] = {
-      title: "Починить котёл",
-      description: "Описание000000000",
-      body: "В общем котёл сам по себе выключается",
-      price: 100,
-      address: "Гагаринский дом 3",
-      category: "сантехника",
-      dueDate: "01.01.2021г.",
-      dueTime: "15:44",
-      listOfPerformers: "[]",
-      selectedPerformer: false,
-      status: "свободен",
-      victory: "[]"
-    }
 
-    console.log('start', newOrder)
+    // формируем id и кладём его
+    const id = generateId()
+    const newOrder = {}
+    newOrder[id] = {...order}
     const uid = rootState?.authorization?.currentUser?.uid
-    console.log('rootState', rootState)
-    console.log('uid', uid)
 
     //сформировать нормальный объект для firebase в самом компоненте
-
     const db = getDatabase();
     update(ref(db, `orders/${uid}`), newOrder)
       .then(() => {

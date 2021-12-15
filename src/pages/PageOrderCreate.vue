@@ -80,11 +80,11 @@
           </div>
         </q-form>
 
-        <q-btn
-          label="тестовый заказы"
-          @click="createTestOrder"
-          color="primary"
-        />
+<!--        <q-btn-->
+<!--          label="тестовый заказы"-->
+<!--          @click="createTestOrder"-->
+<!--          color="primary"-->
+<!--        />-->
 
       </div>
   </q-page>
@@ -110,11 +110,10 @@
           category: '',
           dueDate: '',
           dueTime: '',
-          listOfPerformers: [],
+          listOfPerformers: '[]',
           selectedPerformer: false,
-          customer: 'Rihard',
           status: 'свободен',
-          victory: []
+          victory: '[]'
         },
       }
     },
@@ -149,15 +148,10 @@
 
       onSubmit() {
 
-        const order = {
-          id: uid(),
-          ...this.order
-        }
-
         if (this.create) {
           console.log('создание')
-          // this.createOrder(order)
-          // this.$router.push('/orders')
+          this.createOrder(this.order)
+          this.$router.push('/my-orders')
         } else {
           console.log('редактирование')
           this.editOrder(order)

@@ -73,10 +73,7 @@
         type: Boolean,
         required: true
       },
-      price: {
-        type: Number,
-        required: true
-      },
+      price: [String, Number],
       status: {
         type: String,
         required: true

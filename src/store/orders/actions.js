@@ -5,39 +5,37 @@ import { getDatabase, ref, onValue, set, update} from "firebase/database";
 import {setProposalCurrentOrderFailure} from "src/store/orders/mutations";
 
 // Сделать подгрузку текущего заказа из сервера
-export const getCurrentOrder =  ({state, commit}, slug) => {
+export const getCurrentOrder =  ({state, commit, rootState}, slug) => {
   commit('getCurrentOrderStart')
-  // console.log('slug: ', slug)
+  console.log('slug: ', slug)
   // console.log('state: ', state)
   return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const currentOrder = state.orders.find(order => order.id === +slug)
-      resolve(currentOrder)
-    }, 2000)
+    const uid = rootState?.authorization?.currentUser?.uid
+
+    const db = getDatabase();
+    const currentUserOrders = ref(db, `orders/${uid}/${slug}`);
+    onValue(currentUserOrders, (snapshot) => {
+      const data = snapshot.val();
+      const currentOrder = {
+        id: slug,
+        ...data
+      }
+      console.log('data: ', data);
+      console.log('currentOrder', currentOrder);
+      commit('getCurrentOrderSuccess', currentOrder)
+    });
   })
-    .then((currentOrder) => {
-    commit('getCurrentOrderSuccess', currentOrder)
-  })
-    .catch((err) => {
-      commit('getCurrentOrderFailure', err)
-    })
-
-
-  // console.log('11: ', currentOrder)
-
 }
 
 // Получение только моих заказов для кастомера то есть клиента
 export function getAllMyOrders({commit, state}, uid) {
-  // console.log('getAllMyOrders')
-  // const uid  = rootState.authorization.currentUser ? rootState.authorization.currentUser.uid : undefined
 
   const db = getDatabase();
   const currentUserOrders = ref(db, `orders/${uid}`);
   onValue(currentUserOrders, (snapshot) => {
     const data = snapshot.val();
     // разобраться с Джейсоном
-    console.log('data: ', data)
+    // console.log('data: ', data)
     let myOrders = []
     Object.keys(data).forEach(key => {
       const order = {
@@ -46,7 +44,7 @@ export function getAllMyOrders({commit, state}, uid) {
       }
       myOrders.push(order)
     })
-    console.log('myOrders: ', myOrders)
+    // console.log('myOrders: ', myOrders)
     commit('setMyOrders', [...myOrders])
     // Сделай коммит для сохранения заказов кастомера
     // updateOrders(postElement, data);

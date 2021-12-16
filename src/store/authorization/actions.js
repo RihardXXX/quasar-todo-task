@@ -46,7 +46,7 @@ export const signInUser = ({commit}, { email, password }) => {
 export function handlerAuthStateChange({commit, dispatch}) {
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      console.log(user)
+      // console.log(user)
       LocalStorage.set('isLoggedIn', true)
       commit('setIsLoggedIn', true)
       commit('setEmailUser', user.email)

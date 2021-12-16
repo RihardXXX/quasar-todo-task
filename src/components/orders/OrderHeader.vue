@@ -24,6 +24,7 @@
            </q-item-label>
            <q-item-label caption>
              {{ customer }}
+             сюда отдельным запросом взять имя клиента
            </q-item-label>
          </q-item-section>
        </q-item>
@@ -191,7 +192,7 @@
         default: ''
       },
       price: {
-        type: Number,
+        type: [String, Number],
         required: true,
         default: 0
       },

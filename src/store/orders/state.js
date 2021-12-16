@@ -4,7 +4,7 @@ export default function () {
   return {
     isLoading: false,
     error: null,
-    currentOrder: {},
+    currentOrder: undefined,
     searchOrder: '',
     sortType: '',
     showFilterSortPanel: true,

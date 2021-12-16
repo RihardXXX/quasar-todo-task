@@ -9,18 +9,19 @@
       @onOk="sendProposal"
     />
 
-    <OrderHeader
-      :body="currentOrder.body"
-      :price="currentOrder.price"
-      :description="currentOrder.description"
-      :title="currentOrder.title"
-      :address="currentOrder.address"
-      :customer="currentOrder.customer"
-      :due-date="currentOrder.dueDate"
-      :due-time="currentOrder.dueTime"
-      :status="currentOrder.status"
-    />
-
+    <template v-if="currentOrder">
+      <OrderHeader
+        :body="currentOrder.body"
+        :price="currentOrder.price"
+        :description="currentOrder.description"
+        :title="currentOrder.title"
+        :address="currentOrder.address"
+        :customer="currentOrder.customer"
+        :due-date="currentOrder.dueDate"
+        :due-time="currentOrder.dueTime"
+        :status="currentOrder.status"
+      />
+    </template>
 
     <template v-if="isShowInfoBlock">
 
@@ -69,6 +70,7 @@
         <q-separator/>
         <template v-if="!isLoading">
           <template v-if="countPerformers">
+            112
             <PerformerInfoBlock
               v-for="performer in currentOrder.listOfPerformers"
               :key="performer.id"

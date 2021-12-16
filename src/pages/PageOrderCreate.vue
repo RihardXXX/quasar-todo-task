@@ -110,10 +110,10 @@
           category: '',
           dueDate: '',
           dueTime: '',
-          listOfPerformers: '[]',
+          listOfPerformers: [],
           selectedPerformer: false,
           status: 'свободен',
-          victory: '[]'
+          victory: []
         },
       }
     },

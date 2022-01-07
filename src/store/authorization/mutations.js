@@ -23,7 +23,7 @@ export const registerUserStart = (state) => {
 export const registerUserSuccess = (state, user) => {
   state.isLoading = false
   state.error = null
-  // state.isLoggedIn = true
+  state.isLoggedIn = true
   state.user = {...user}
 }
 

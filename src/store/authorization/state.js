@@ -4,7 +4,5 @@ export default function () {
     isLoading: false,
     error: null,
     user: undefined,
-    emailUser: '',
-    currentUser: undefined,
   }
 }

@@ -1,5 +1,6 @@
 import { LocalStorage } from "quasar";
 import { auth } from 'boot/firebase'
+import { api, url } from 'boot/axios';
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -7,21 +8,21 @@ import {
   } from "firebase/auth";
 
 // Регистрация нового пользователя
-export const registerUser =  ({commit}, { email, password }) => {
-  console.log('email: ', email)
-  console.log('password: ', password)
+export const registerUser =  ({commit}, user) => {
+  commit('registerUserStart');
   return new Promise(resolve => {
-    commit('registerUserStart')
-    createUserWithEmailAndPassword(auth, email, password)
-    .then(response => {
-      // Signed in
-      console.log(response)
-      commit('registerUserSuccess', response.user)
-      resolve(response)
-    })
-    .catch((error) => {
-      commit('registerUserFailure', error)
-    });
+    api.post(url.createUser, { user: user })
+      .then(response => {
+        // сохранить юзер и токен
+        const { user } = response.data;
+        commit('registerUserSuccess', user);
+        LocalStorage.set('token', user.token);
+        resolve(user);
+        // console.log(response.data.user);
+      })
+      .catch(error => {
+        commit('registerUserFailure', error)
+      })
   })
 }
 
@@ -74,5 +75,10 @@ export function logoutUser({commit, dispatch}) {
         reject(err)
       })
   })
+}
+
+// вход по номеру телефона
+export function signInNumberPhone({commit}, phone) {
+  console.log('112: ', phone)
 }
 

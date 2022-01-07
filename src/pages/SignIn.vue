@@ -65,6 +65,7 @@
                 text-color="black"
                 label="instagram"
                 icon-right="photo_camera"
+                @click="signInInstagram"
               />
               <q-btn
                 color="white"
@@ -78,6 +79,28 @@
                 label="google"
                 icon-right="search"
               />
+              <q-form
+                @submit="signInNumber"
+              >
+                <q-input
+                  filled
+                  v-model="phone"
+                  label="вход по номеру"
+                  mask="###########"
+                  hint="формат: 7 (777) 777 - 77 - 77"
+                  lazy-rules
+                  :rules="[ val => val.length >= 11 || 'пожалуйста введите все символы']"
+                />
+                <br>
+                <q-btn
+                  class="center"
+                  color="white"
+                  type="submit"
+                  text-color="black"
+                  label="войти по номеру"
+                />
+              </q-form>
+
 
             </div>
           </q-tab-panel>
@@ -104,11 +127,12 @@
           password: '',
           role: 'customer',
         },
-        tab: 'mail'
+        tab: 'social',
+        phone: '',
       }
     },
     methods: {
-      ...mapActions('authorization', ['signInUser']),
+      ...mapActions('authorization', ['signInUser', 'signInNumberPhone']),
       fnValidateEmail(email) {
         return email.match(
           /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -154,6 +178,12 @@
           })
         })
 
+      },
+      signInInstagram() {
+        console.log('sigIn instagram')
+      },
+      signInNumber() {
+        this.signInNumberPhone(this.phone)
       }
     }
   }

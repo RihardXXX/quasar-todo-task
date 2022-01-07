@@ -66,7 +66,7 @@ const routes = [
         path: 'my-orders', // чат с определенным челом
         component: () => import('pages/PageMyOrders')
       },
-    ]
+    ],
   },
 
   // Always leave this as last one,

@@ -12,7 +12,7 @@
       ...mapActions('authorization', ['handlerAuthStateChange']),
     },
     mounted() {
-      this.handlerAuthStateChange()
+      // this.handlerAuthStateChange()
     }
   }
 </script>

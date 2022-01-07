@@ -33,7 +33,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>
-              {{ emailUser }}
+              {{ username }}
             </q-item-label>
           </q-item-section>
           <q-item-section>
@@ -192,7 +192,8 @@
       }
     },
     computed: {
-      ...mapState('authorization', ['isLoggedIn', 'isLoading', 'emailUser']),
+      ...mapState('authorization', ['isLoggedIn', 'isLoading']),
+      ...mapGetters('authorization', ['username']),
       isCustomer() {
         return true
       },

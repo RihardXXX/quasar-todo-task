@@ -101,19 +101,48 @@
         category: ['сантехника', 'электрика', 'общестроительные'],
         create: true,
         edit: false,
+      // {
+      //   "article": {
+        //   "slug": "how-to-train-your-dragon",
+      //     "title": "How to train your dragon",
+      //     "description": "Ever wonder how?",
+      //     "body": "It takes a Jacobian",
+      //     "tagList": ["dragons", "training"],
+      //     "createdAt": "2016-02-18T03:22:56.637Z",
+      //     "updatedAt": "2016-02-18T03:48:35.824Z",
+      //     "favorited": false,
+      //     "favoritesCount": 0,
+      //     "author": {
+        //     "username": "jake",
+        //       "bio": "I work at statefarm",
+        //       "image": "https://i.stack.imgur.com/xHWG8.jpg",
+        //       "following": false
+        //   }
+      // }
+      // }
         order: {
+          slug: '',
           title: '',
           description: '',
           body: '',
           price: '',
           address: '',
+          // отправлять массив строк с категориями
           category: '',
           dueDate: '',
           dueTime: '',
-          listOfPerformers: [],
-          selectedPerformer: false,
-          status: 'свободен',
-          victory: []
+          // создать связь с таблицей перформеров мастеров по айди чтобы клал
+          // это не отправлять это на сервере уже будет собрано
+          // listOfPerformers: [],
+          // когда бцдет выбрат победитель
+          // это не отправлять это на сервере уже будет собрано
+          // selectedPerformer: false,
+          // начальный статус
+          // это не отправлять это на сервере уже будет собрано
+          // status: 'свободен',
+          // положить айди победителя
+          // это не отправлять это на сервере уже будет собрано
+          // victory: null
         },
       }
     },

@@ -1,11 +1,6 @@
-// import Vue from 'vue'
-// import axios from 'axios'
-//
-// Vue.prototype.$axios = axios.create({
-//   baseURL: 'http//:localhost:3000'
-// })
 import Vue from 'vue';
 import axios from 'axios';
+import { LocalStorage } from 'quasar';
 
 Vue.prototype.$axios = axios
 
@@ -17,11 +12,23 @@ const api = axios.create({
   baseURL: 'http://localhost:3000/'
 });
 
+// Интерсептор для отслеживания состояния авторизации на сервере при каждом запросе
+api.interceptors.request.use(config => {
+  const token = LocalStorage.getItem('token') // получаем токен из локалсториджа
+  const authorizationToken = token ? `token ${token}` : '' // формируем токен в виде строки
+  if(authorizationToken) {
+    config.headers.Authorization = authorizationToken // положили в хедеры токен
+  }
+  return config
+})
+
 Vue.prototype.$api = api
 
 // пути чтобы вручную не приписывать
 const url = {
-  createUser: 'users'
+  createUser: 'users',
+  loginUser: 'users/login',
+  currentUser: 'user'
 }
 
 export { axios, api, url }

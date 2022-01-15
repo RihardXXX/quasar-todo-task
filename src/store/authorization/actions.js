@@ -1,16 +1,10 @@
 import { LocalStorage } from "quasar";
-import { auth } from 'boot/firebase'
 import { api, url } from 'boot/axios';
-import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    onAuthStateChanged,
-  } from "firebase/auth";
 
 // Регистрация нового пользователя
 export const registerUser =  ({commit}, user) => {
   commit('registerUserStart');
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     api.post(url.createUser, { user: user })
       .then(response => {
         // сохранить юзер и токен
@@ -21,64 +15,77 @@ export const registerUser =  ({commit}, user) => {
         // console.log(response.data.user);
       })
       .catch(error => {
-        commit('registerUserFailure', error)
+        const { message } = error.response.data;
+        reject(message);
+        commit('registerUserFailure', message);
       })
   })
 }
 
 // Вход по почте и паролю для нового пользователя
 export const signInUser = ({commit}, { email, password }) => {
+  commit('signInUserStart');
   return new Promise((resolve, reject) => {
-    commit('signInUserStart')
-    signInWithEmailAndPassword(auth, email, password)
-      .then((response) => {
-        console.log(response)
-        commit('signInUserSuccess', response.user)
-        resolve(response)
+    api.post(url.loginUser, { user: { email, password } })
+      .then(response => {
+        // сохранить юзер и токен
+        // console.log('response: ', response);
+        const { user } = response.data;
+        commit('signInUserSuccess', user);
+        LocalStorage.set('token', user.token);
+        resolve(user);
       })
-      .catch((error) => {
-        commit('signInUserFailure', error)
-        reject(error)
-      });
+      .catch(error => {
+        const { message } = error.response.data;
+        reject(message);
+        commit('signInUserFailure', message);
+      })
   })
 }
 
 // Устанавливает состояние авторизации юзера и наблюдает
-export function handlerAuthStateChange({commit, dispatch}) {
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // console.log(user)
-      LocalStorage.set('isLoggedIn', true)
-      commit('setIsLoggedIn', true)
-      commit('setEmailUser', user.email)
-      commit('setCurrentUser', {...user})
-      dispatch('orders/getAllMyOrders', user.uid, { root:true } )
-    } else {
-      LocalStorage.set('isLoggedIn', false)
-      commit('setIsLoggedIn', false)
-      commit('setEmailUser', '')
-      commit('setCurrentUser', undefined)
-    }
-  });
+export function authUser({commit}) {
+  const token = LocalStorage.getItem('token');
+  // если нет токена то не делать запрос на проверку состояния
+  if (!token) {
+    return;
+  }
+
+  commit('signInUserStart');
+  return new Promise(resolve => {
+    api.get(url.currentUser)
+      .then(response => {
+        // console.log(response);
+        const { user } = response.data;
+        commit('signInUserSuccess', user);
+        LocalStorage.set('token', user.token);
+        resolve();
+      })
+      .catch(error => {
+        const { message } = error.response.data;
+        commit('signInUserFailure', message);
+      })
+  })
+
 }
 
 // выйти из состояния авторизации
-export function logoutUser({commit, dispatch}) {
-  return new Promise(resolve => {
-    commit('setUser', undefined)
-    commit('setCurrentUser', undefined)
-    auth.signOut()
-      .then((res) => {
-      resolve('ok')
-    })
-      .catch(err => {
-        reject(err)
-      })
-  })
-}
-
-// вход по номеру телефона
-export function signInNumberPhone({commit}, phone) {
-  console.log('112: ', phone)
-}
+// export function logoutUser({commit, dispatch}) {
+//   return new Promise(resolve => {
+//     commit('setUser', undefined)
+//     commit('setCurrentUser', undefined)
+//     auth.signOut()
+//       .then((res) => {
+//       resolve('ok')
+//     })
+//       .catch(err => {
+//         reject(err)
+//       })
+//   })
+// }
+//
+// // вход по номеру телефона
+// export function signInNumberPhone({commit}, phone) {
+//   console.log('112: ', phone)
+// }
 

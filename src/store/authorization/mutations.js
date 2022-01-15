@@ -44,7 +44,7 @@ export const signInUserSuccess = (state, user) => {
   state.isLoading = false
   state.error = null
   state.user = { ...user}
-  // state.isLoggedIn = true
+  state.isLoggedIn = true
 }
 export const signInUserFailure = (state, error) => {
   state.isLoading = false

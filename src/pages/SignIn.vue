@@ -47,12 +47,12 @@
               />
 
               <div>
-                <q-btn
-                  :disabled="false"
-                  label="войти"
-                  type="submit"
-                  color="primary"
-                />
+                  <q-btn
+                    :disabled="false"
+                    label="войти"
+                    type="submit"
+                    color="primary"
+                  />
               </div>
             </q-form>
 
@@ -114,11 +114,12 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
-  import { QSpinnerGears } from 'quasar'
+  import { mapActions } from 'vuex';
+  import { QSpinnerGears } from 'quasar';
 
   export default {
     name: 'SignIn',
+
     data() {
       return {
         userData: {
@@ -127,12 +128,14 @@
           password: '',
           role: 'customer',
         },
-        tab: 'social',
+        tab: 'mail',
         phone: '',
       }
     },
+
     methods: {
       ...mapActions('authorization', ['signInUser', 'signInNumberPhone']),
+
       fnValidateEmail(email) {
         return email.match(
           /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -145,6 +148,7 @@
         return val.length && val.length > 10 && val.length < 100 || 'пароль должен быть больше 10 символов но меньше 100'
       },
       onSubmit() {
+
         console.log('send form data', this.userData)
         // спиннер загрузки
         this.$q.loading.show({
@@ -160,8 +164,6 @@
         .then(() => {
           // успешный ответ
           this.$q.loading.hide()
-          // this.userData.email = ''
-          // this.userData.password = ''
           this.$router.push({name: 'index'})
         })
         .catch((error) => {
@@ -169,12 +171,11 @@
           this.$q.loading.hide()
           this.$q.dialog({
             title: 'Ошибка',
-            message: 'Пользователь с таким логином и паролем не существует',
+            message: error,
             ok: 'ок',
             persistent: true
           }).onOk(() => {
-            this.userData.email = ''
-            this.userData.password = ''
+            console.log(112)
           })
         })
 

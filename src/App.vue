@@ -4,15 +4,17 @@
   </div>
 </template>
 <script>
-  import { mapActions } from 'vuex'
+  import { mapActions } from 'vuex';
 
   export default {
     name: 'App',
     methods: {
-      ...mapActions('authorization', ['handlerAuthStateChange']),
+      ...mapActions('authorization', ['authUser']),
     },
     mounted() {
-      // this.handlerAuthStateChange()
+      // проверка авторизации при каждом запросе
+      this.authUser()
+        .then(() => this.$router.push({path: '/'}).catch(() => {}));
     }
   }
 </script>

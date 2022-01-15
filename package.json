@@ -11,11 +11,14 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "@vue/composition-api": "^1.4.3",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "firebase": "^9.6.0",
     "material-icons": "^1.10.4",
-    "quasar": "^1.0.0"
+    "quasar": "^1.0.0",
+    "socket.io-client": "^4.4.1",
+    "vue-recaptcha": "^2.0.1"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0"

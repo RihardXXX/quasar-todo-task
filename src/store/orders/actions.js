@@ -1,6 +1,5 @@
-// import { LocalStorage, uid as generateId } from 'quasar'
-// // import { getDatabase, ref, onValue, set, update} from "firebase/database";
-//
+import { api, url } from 'boot/axios';
+
 // // получение всей информации об одном заказе
 // import {setProposalCurrentOrderFailure} from "src/store/orders/mutations";
 //
@@ -115,29 +114,24 @@
 //     })
 // }
 //
-// // создать заказ
-// export const createOrder = ({ commit, rootState }, order) => {
-//   return new Promise((resolve) => {
-//     commit('createOrderStart')
-//
-//     // формируем id и кладём его
-//     const id = generateId()
-//     const newOrder = {}
-//     newOrder[id] = {...order}
-//     const uid = rootState?.authorization?.currentUser?.uid
-//
-//     //сформировать нормальный объект для firebase в самом компоненте
-//     const db = getDatabase();
-//     update(ref(db, `orders/${uid}`), newOrder)
-//       .then(() => {
-//         // commit('createOrderSuccess')
-//       })
-//       .catch((error) => {
-//         commit('createOrderFailure', error)
-//       })
-//   })
-//
-// }
+// создать заказ
+export const createOrder = ({ commit }, order) => {
+  commit('createOrderStart')
+  return new Promise((resolve, reject) => {
+    // console.log('orders: ', order)
+    api.post(url.orders.create, { order })
+      .then(response => {
+        // console.log(response)
+        commit('createOrderSuccess')
+        resolve(response)
+      }).catch(error => {
+      const { message } = error.response.data;
+        commit('createOrderFailure', message)
+        reject(message)
+    })
+  })
+
+}
 //
 // // редактировать заказ
 // export const editOrder = ({ commit }, order) => {
@@ -160,10 +154,36 @@
 //   commit('setSearchOrderString', text)
 // }
 //
-// // первое заполнение заказов из фейковго сервера
-// export  const initialOrders = ({ commit }) => {
-//   commit('initialOrdersSet')
-// }
+// подгрузка заказов c пагинацией
+export  const getAllOrders = ({ commit, state }) => {
+  commit('getAllOrdersStart')
+  return new Promise((resolve, reject) => {
+
+    const urlPath = url.orders.list
+
+    const params = {
+      limit: state.limit,
+      offset: state.offset
+    }
+
+    // тут будем мёрджить параметры из стейта при поиске например
+    Object.assign(params, state.params)
+
+    api.get(urlPath, { params })
+      .then((response) => {
+        commit('getAllOrdersSSuccess', {
+          orders: response.data.orders,
+          ordersCount: response.data.ordersCount
+        })
+        resolve()
+    })
+      .catch(error => {
+        const { message } = error.response.data;
+        commit('getAllOrdersFailure', message)
+        reject()
+      })
+  })
+}
 //
 // // фильтрация заказов по поисковой строке
 // export const filteredOrders = ({ commit, state }) => {

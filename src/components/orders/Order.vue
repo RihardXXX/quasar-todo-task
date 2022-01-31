@@ -37,18 +37,18 @@
         color="positive"
         :label="`цена: ${price}`"
       />
-      <q-item-label
-        caption
-        class="q-mt-sm"
-      >
-        рейтинг автора
-      </q-item-label>
+<!--      <q-item-label-->
+<!--        caption-->
+<!--        class="q-mt-sm"-->
+<!--      >-->
+<!--        рейтинг автора-->
+<!--      </q-item-label>-->
 
-      <div class="text-orange">
-        <q-icon name="star" />
-        <q-icon name="star" />
-        <q-icon name="star" />
-      </div>
+<!--      <div class="text-orange">-->
+<!--        <q-icon name="star" />-->
+<!--        <q-icon name="star" />-->
+<!--        <q-icon name="star" />-->
+<!--      </div>-->
     </q-item-section>
   </q-item>
 </template>

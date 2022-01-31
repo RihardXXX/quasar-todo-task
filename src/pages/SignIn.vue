@@ -17,7 +17,7 @@
           narrow-indicator
         >
           <q-tab name="mail" label="почта и пароль" />
-          <q-tab name="social" label="Социальные сети" />
+<!--          <q-tab name="social" label="Социальные сети" />-->
         </q-tabs>
 
         <q-separator />
@@ -58,52 +58,52 @@
 
           </q-tab-panel>
 
-          <q-tab-panel name="social">
-            <div class="q-pa-md q-gutter-sm flex justify-center">
-              <q-btn
-                color="white"
-                text-color="black"
-                label="instagram"
-                icon-right="photo_camera"
-                @click="signInInstagram"
-              />
-              <q-btn
-                color="white"
-                text-color="black"
-                label="vk"
-                icon-right="person_add"
-              />
-              <q-btn
-                color="white"
-                text-color="black"
-                label="google"
-                icon-right="search"
-              />
-              <q-form
-                @submit="signInNumber"
-              >
-                <q-input
-                  filled
-                  v-model="phone"
-                  label="вход по номеру"
-                  mask="###########"
-                  hint="формат: 7 (777) 777 - 77 - 77"
-                  lazy-rules
-                  :rules="[ val => val.length >= 11 || 'пожалуйста введите все символы']"
-                />
-                <br>
-                <q-btn
-                  class="center"
-                  color="white"
-                  type="submit"
-                  text-color="black"
-                  label="войти по номеру"
-                />
-              </q-form>
+<!--          <q-tab-panel name="social">-->
+<!--            <div class="q-pa-md q-gutter-sm flex justify-center">-->
+<!--              <q-btn-->
+<!--                color="white"-->
+<!--                text-color="black"-->
+<!--                label="instagram"-->
+<!--                icon-right="photo_camera"-->
+<!--                @click="signInInstagram"-->
+<!--              />-->
+<!--              <q-btn-->
+<!--                color="white"-->
+<!--                text-color="black"-->
+<!--                label="vk"-->
+<!--                icon-right="person_add"-->
+<!--              />-->
+<!--              <q-btn-->
+<!--                color="white"-->
+<!--                text-color="black"-->
+<!--                label="google"-->
+<!--                icon-right="search"-->
+<!--              />-->
+<!--              <q-form-->
+<!--                @submit="signInNumber"-->
+<!--              >-->
+<!--                <q-input-->
+<!--                  filled-->
+<!--                  v-model="phone"-->
+<!--                  label="вход по номеру"-->
+<!--                  mask="###########"-->
+<!--                  hint="формат: 7 (777) 777 - 77 - 77"-->
+<!--                  lazy-rules-->
+<!--                  :rules="[ val => val.length >= 11 || 'пожалуйста введите все символы']"-->
+<!--                />-->
+<!--                <br>-->
+<!--                <q-btn-->
+<!--                  class="center"-->
+<!--                  color="white"-->
+<!--                  type="submit"-->
+<!--                  text-color="black"-->
+<!--                  label="войти по номеру"-->
+<!--                />-->
+<!--              </q-form>-->
 
 
-            </div>
-          </q-tab-panel>
+<!--            </div>-->
+<!--          </q-tab-panel>-->
 
         </q-tab-panels>
       </q-card>
@@ -149,7 +149,7 @@
       },
       onSubmit() {
 
-        console.log('send form data', this.userData)
+        // console.log('send form data', this.userData)
         // спиннер загрузки
         this.$q.loading.show({
           spinner: QSpinnerGears,

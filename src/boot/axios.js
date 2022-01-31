@@ -24,11 +24,15 @@ api.interceptors.request.use(config => {
 
 Vue.prototype.$api = api
 
-// пути чтобы вручную не приписывать
+// пути чтобы вручную не прописывать
 const url = {
   createUser: 'users',
   loginUser: 'users/login',
-  currentUser: 'user'
+  currentUser: 'user',
+  orders: {
+    create: 'orders',
+    list: 'orders/list'
+  }
 }
 
 export { axios, api, url }

@@ -100,10 +100,9 @@ export const createOrderStart = (state) => {
   state.error = null
 }
 
-export const createOrderSuccess = (state, order) => {
+export const createOrderSuccess = (state) => {
   state.isLoading = false
   state.error = null
-  state.orders = [order, ... state.orders]
 }
 
 export const createOrderFailure = (state, error) => {
@@ -139,9 +138,47 @@ export const setSearchOrderString = (state, text) => {
   state.searchOrder = text
 }
 
-// Инициализация заказов с фейкового сервера при первичной отрисовке заказов
-export const  initialOrdersSet = (state) => {
-  state.orders = [...state.server]
+// Подгрузка всех заказов
+export const  getAllOrdersStart = (state) => {
+  state.isLoading = true
+  state.error = null
+}
+
+export const  getAllOrdersSSuccess = (state, {orders, ordersCount}) => {
+  state.isLoading = false
+  state.error = null
+  state.ordersCount = ordersCount
+  state.orders = [...state.orders,...orders]
+}
+
+export const  getAllOrdersFailure = (state, error) => {
+  state.isLoading = false
+  state.error = error
+}
+
+// Для пагинации офссет увеличение
+export const setOffset = (state, num) => {
+  state.offset += num
+}
+
+// Сброс всего состояния по заказам чтобы при переходе на роут и тп случаях не было ошибок
+export const resetStateOrders = (state) => {
+  state.orders = []
+  state.isLoading = false
+  state.error = null
+  state.limit = 20
+  state.offset = 0
+  state.ordersCount = 0
+}
+
+// Добавление параметров для поискового запроса в заказах
+export const addParamsForOrders = (state, nameParams) => {
+  state.params = { ...nameParams }
+}
+
+// Сброс параметров для поискового запроса
+export const resetParamsForOrders = (state) => {
+  state.params = {}
 }
 
 // фильтрация заказов

@@ -57,3 +57,11 @@ export function setCurrentUser(state, user) {
   state.currentUser = user
 }
 
+// Мутация которые устаналивает состояние стейта выйти из авторизации
+export function logoutUser(state) {
+    state.isLoggedIn = false
+    state.isLoading = false
+    state.error = null
+    state.user = undefined
+}
+

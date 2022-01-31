@@ -1,98 +1,98 @@
 <template>
   <q-page class="container">
     <h5 class="text-center q-mb-none">Создать заказ</h5>
-      <div class="q-pa-md text-center">
-        <q-form
-          @submit="onSubmit"
-          class="q-gutter-md"
-        >
-          <q-input
-            filled
-            v-model="order.title"
-            label="имя заказа"
-            clearable
-            lazy-rules
-            :rules="[fnValidateTitle, fnValidateLength]"
-          />
-          <q-input
-            filled
-            v-model="order.description"
-            label="краткое описание"
-            clearable
-            lazy-rules
-            :rules="[fnValidateTitle, fnValidateLength]"
-          />
-          <q-input
-            type="textarea"
-            filled
-            v-model="order.body"
-            label="общая информация о заказе"
-            clearable
-            lazy-rules
-            :rules="[fnValidateTitle, fnValidateBody]"
-          />
-          <q-input
-            filled
-            v-model="order.address"
-            label="адрес"
-            clearable
-            lazy-rules
-            :rules="[fnValidateTitle, fnValidateLength]"
-          />
+    <div class="q-pa-md">
+      <q-form
+        @submit="onSubmit"
+        class="q-gutter-md"
+      >
+        <q-input
+          filled
+          v-model="order.title"
+          label="имя заказа"
+          clearable
+          lazy-rules
+          :rules="[fnValidateTitle, fnValidateLength]"
+        />
+        <q-input
+          filled
+          v-model="order.description"
+          label="краткое описание"
+          clearable
+          lazy-rules
+          :rules="[fnValidateTitle, fnValidateLength]"
+        />
+        <q-input
+          type="textarea"
+          filled
+          v-model="order.body"
+          label="общая информация о заказе"
+          clearable
+          lazy-rules
+          :rules="[fnValidateTitle, fnValidateBody]"
+        />
+        <q-input
+          filled
+          v-model="order.address"
+          label="адрес"
+          clearable
+          lazy-rules
+          :rules="[fnValidateTitle, fnValidateLength]"
+        />
 
-          <q-select
+        <div class="q-pa-md">
+          <q-option-group
+            :options="options"
+            type="checkbox"
             v-model="order.category"
-            :options="category"
-            label="категория"
           />
+        </div>
 
+        <div class="q-pa-md text-center">
           <q-date
             v-model="order.dueDate"
             title="дата выполнения"
             subtitle="какого числа придти мастеру"
           />
-          <br>
+        </div>
 
+        <div class="q-pa-md text-center">
           <q-time
             v-model="order.dueTime"
             format24h
           />
-          <br>
+        </div>
 
-          <q-input
-            type="number"
-            filled
-            prefix="₽"
-            v-model="order.price"
-            label="цена за работу"
-            clearable
-            lazy-rules
-            :rules="[fnValidateTitle, fnValidatePrice]"
+        <q-input
+          type="number"
+          filled
+          prefix="₽"
+          v-model="order.price"
+          label="цена за работу"
+          clearable
+          lazy-rules
+          :rules="[fnValidateTitle, fnValidatePrice]"
+        />
+
+
+        <div class="q-pa-md text-center">
+          <q-btn
+            :label="buttonLabel"
+            type="submit"
+            color="primary"
           />
+        </div>
 
+      </q-form>
 
-          <div>
-            <q-btn
-              :label="buttonLabel"
-              type="submit"
-              color="primary"
-            />
-          </div>
-        </q-form>
-
-<!--        <q-btn-->
-<!--          label="тестовый заказы"-->
-<!--          @click="createTestOrder"-->
-<!--          color="primary"-->
-<!--        />-->
-
-      </div>
+    </div>
   </q-page>
 </template>
 
 <script>
   import { mapActions, mapState } from 'vuex'
-  import { uid } from 'quasar'
+  import {QSpinnerGears} from 'quasar';
+  import { categoryList } from 'boot/staticData';
 
   export default {
     name: 'OrderCreate',
@@ -101,49 +101,17 @@
         category: ['сантехника', 'электрика', 'общестроительные'],
         create: true,
         edit: false,
-      // {
-      //   "article": {
-        //   "slug": "how-to-train-your-dragon",
-      //     "title": "How to train your dragon",
-      //     "description": "Ever wonder how?",
-      //     "body": "It takes a Jacobian",
-      //     "tagList": ["dragons", "training"],
-      //     "createdAt": "2016-02-18T03:22:56.637Z",
-      //     "updatedAt": "2016-02-18T03:48:35.824Z",
-      //     "favorited": false,
-      //     "favoritesCount": 0,
-      //     "author": {
-        //     "username": "jake",
-        //       "bio": "I work at statefarm",
-        //       "image": "https://i.stack.imgur.com/xHWG8.jpg",
-        //       "following": false
-        //   }
-      // }
-      // }
         order: {
-          slug: '',
           title: '',
           description: '',
           body: '',
           price: '',
           address: '',
-          // отправлять массив строк с категориями
-          category: '',
+          category: [],
           dueDate: '',
           dueTime: '',
-          // создать связь с таблицей перформеров мастеров по айди чтобы клал
-          // это не отправлять это на сервере уже будет собрано
-          // listOfPerformers: [],
-          // когда бцдет выбрат победитель
-          // это не отправлять это на сервере уже будет собрано
-          // selectedPerformer: false,
-          // начальный статус
-          // это не отправлять это на сервере уже будет собрано
-          // status: 'свободен',
-          // положить айди победителя
-          // это не отправлять это на сервере уже будет собрано
-          // victory: null
         },
+        options: [...categoryList],
       }
     },
     computed: {
@@ -168,19 +136,40 @@
       fnValidatePrice(val) {
         console.log(val)
         val = String(val)
-        return val.length > 0 && val.length < 6 || 'длина символов до 6'
-      },
-
-      createTestOrder() {
-        this.createOrder()
+        return val.length > 0 && val.length < 10 || 'длина символов до 10'
       },
 
       onSubmit() {
 
         if (this.create) {
-          console.log('создание')
+
+          this.$q.loading.show({
+            spinner: QSpinnerGears,
+            spinnerColor: 'red',
+            message: 'Идёт загрузка'
+          })
+
+          // запрос на сервер
           this.createOrder(this.order)
-          this.$router.push('/my-orders')
+            .then(() => {
+              // успешный ответ
+              this.$q.loading.hide()
+              this.$router.push({name: 'index'})
+            })
+            .catch((error) => {
+              const items = error.map(er => `<li>${er}</li>`).join('')
+              const listErrors = `<ul>${items}</ul>`
+              this.$q.loading.hide()
+              this.$q.dialog({
+                title: 'Ошибка',
+                message: listErrors,
+                html: true,
+                ok: 'ок',
+                persistent: true
+              }).onOk(() => {
+                console.log(112)
+              })
+            })
         } else {
           console.log('редактирование')
           this.editOrder(order)
@@ -199,3 +188,4 @@
     }
   }
 </script>
+

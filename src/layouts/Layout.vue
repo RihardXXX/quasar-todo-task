@@ -36,6 +36,12 @@
               {{ username }}
             </q-item-label>
           </q-item-section>
+          &nbsp;
+          <q-item-section>
+            <q-item-label>
+              {{ role }}
+            </q-item-label>
+          </q-item-section>
           <q-item-section>
             <q-btn
               color="deep-orange"
@@ -149,6 +155,7 @@
 <script>
   import { mapState, mapGetters, mapActions } from 'vuex'
   import { QSpinnerGears } from 'quasar'
+  import {customer} from 'src/store/authorization/getters';
 
   const menu = [
     {
@@ -159,7 +166,7 @@
     },
     {
       id: 1,
-      title: 'Заказы на работу',
+      title: 'Все заказы',
       icon: 'work',
       path: '/orders'
     },
@@ -193,31 +200,34 @@
     },
     computed: {
       ...mapState('authorization', ['isLoggedIn', 'isLoading']),
-      ...mapGetters('authorization', ['username']),
-      isCustomer() {
-        return true
-      },
-      isPerformer() {
-        return 0
-      },
+      ...mapGetters('authorization', ['username', 'customer', 'performer', 'role']),
       menuBar() {
-        return !this.isCustomer
-            ? menu
-            : [
+        if (this.customer) {
+          return [
             ...menu,
-                {
-                  id: Math.random(),
-                  title: 'Мои заказы',
-                  icon: 'work',
-                  path: '/my-orders'
-                },
-                {
-                  id: Math.random(),
-                  title: 'Создать заказ',
-                  icon: 'add',
-                  path: '/order'
-                },
+            {
+              id: Math.random(),
+              title: 'Мои заказы',
+              icon: 'work',
+              path: '/my-orders'
+            },
+            {
+              id: Math.random(),
+              title: 'Создать заказ',
+              icon: 'add',
+              path: '/order'
+            },
           ]
+        }
+        return [
+          ...menu,
+          {
+            id: Math.random(),
+            title: 'Заказы на которые подал заявки',
+            icon: 'work',
+            path: '/my-orders'
+          },
+        ]
       },
       menuNotAuthorization() {
         return [
@@ -245,19 +255,21 @@
     methods: {
       ...mapActions('authorization', ['logoutUser']),
       exit() {
-        console.log('exit')
+        // console.log('exit')
         // спиннер загрузки
         this.$q.loading.show({
           spinner: QSpinnerGears,
           spinnerColor: 'red',
           message: 'Идёт загрузка'
         })
-        this.logoutUser().then(status => {
-          if (status === 'ok') {
-            this.$router.push('/signIn').catch(err => {})
-            this.$q.loading.hide()
-          }
-        })
+        this.logoutUser()
+          .then(status => {
+            if (status === 'exit') {
+              this.$router.push('/signIn')
+                .catch(() => {})
+              this.$q.loading.hide()
+            }
+          })
 
       }
     }

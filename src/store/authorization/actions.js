@@ -70,22 +70,11 @@ export function authUser({commit}) {
 }
 
 // выйти из состояния авторизации
-// export function logoutUser({commit, dispatch}) {
-//   return new Promise(resolve => {
-//     commit('setUser', undefined)
-//     commit('setCurrentUser', undefined)
-//     auth.signOut()
-//       .then((res) => {
-//       resolve('ok')
-//     })
-//       .catch(err => {
-//         reject(err)
-//       })
-//   })
-// }
-//
-// // вход по номеру телефона
-// export function signInNumberPhone({commit}, phone) {
-//   console.log('112: ', phone)
-// }
+export function logoutUser({commit}) {
+  return new Promise(resolve => {
+    LocalStorage.remove('token')
+    commit('logoutUser')
+    resolve('exit')
+  })
+}
 

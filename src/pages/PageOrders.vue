@@ -1,81 +1,80 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <q-btn-dropdown
-        color="primary"
-        label="Выбрать категорию для поиска"
-      >
-        <q-list>
-          <q-item
-            v-for="category in categoryList"
-            :key="category.label"
-            clickable
-            v-close-popup
-            @click="setCategoryForSearchOrders(category.label)"
-          >
-            <q-item-section>
-              <q-item-label>{{category.label}}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-btn-dropdown>
 
-      &nbsp;
+      <div class="q-ma-md">
+        <q-btn-dropdown
+          color="primary"
+          :disable="closeCategory"
+          :label="currentCategory || 'Выбрать категорию для поиска'"
+        >
+          <q-list>
+            <q-item
+              v-for="category in categoryList"
+              :key="category.label"
+              clickable
+              v-close-popup
+              @click="setCategoryForSearchOrders(category.label)"
+            >
+              <q-item-section>
+                <q-item-label>{{category.label}}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+        &nbsp;
+        <q-badge
+          v-if="currentCategory"
+          outline
+          color="secondary"
+          :label="currentCategory"
+          class="q-ma-md"
+        />
+        &nbsp;
+        <q-btn
+          v-if="currentCategory"
+          color="amber"
+          glossy
+          text-color="black"
+          icon="close"
+          class="q-ma-md"
+          @click="clearCategory"
+        />
+      </div>
 
-      <q-badge
-        v-if="currentCategory"
-        outline
-        color="secondary"
-        :label="currentCategory"
-        class="q-ma-md"
-      />
-
-      &nbsp;
-
-      <q-btn
-        v-if="currentCategory"
-        color="amber"
-        glossy
-        text-color="black"
-        icon="close"
-        class="q-ma-md"
-        @click="clearCategory"
-      />
+      <div class="q-ma-md">
+        <q-input
+          outlined
+          debounce="2000"
+          v-model="searchName"
+          :disable="closeInput"
+          filled
+          label="Поиск заказа по ключевой фразе"
+        />
+      </div>
 
     </div>
         <q-item-label header>
           Общий список заказов
         </q-item-label>
 
+        <template v-if="orders.length">
+          <Order
+            v-for="order in orders"
+            :key="order.id"
+            :slug="order.slug"
+            :title="order.title"
+            :description="order.description"
+            :price="order.price"
+            :selected-performer="order.selectedPerformer"
+            :status="order.status"
+            class="ordersList"
+          />
+        </template>
         <q-infinite-scroll
-          @load="onLoad"
-          :offset="250"
+          @load="loadMore"
+          ref="infiniteScroll"
         >
-<!--          <template-->
-<!--            v-if="orders.length"-->
-<!--          >-->
-              <transition-group
-                appear
-                enter-active-class="animated backInUp"
-                leave-active-class="animated backInUp"
-              >
-
-                <Order
-                  v-for="order in orders"
-                  :key="order.id"
-                  :slug="order.slug"
-                  :title="order.title"
-                  :description="order.description"
-                  :price="order.price"
-                  :selected-performer="order.selectedPerformer"
-                  :status="order.status"
-                  class="ordersList"
-                />
-
-
-              </transition-group>
-
-<!--          </template>-->
           <template v-slot:loading>
             <div class="row justify-center q-my-md">
               <q-spinner-dots
@@ -85,6 +84,7 @@
             </div>
           </template>
         </q-infinite-scroll>
+
         <div v-if="!orders.length">
           <q-banner dense class="bg-grey-3 text-center q-ma-md">
             <h5>Ничего не найдено</h5>
@@ -94,7 +94,8 @@
 </template>
 
 <script>
-import {mapActions, mapState} from 'vuex';
+  // Компонент готов к работе, легкие тесты пройдены
+  import {mapActions, mapState} from 'vuex';
   import Order from 'components/orders/Order';
   import SearchBarOrders from 'components/orders/SearchBarOrders';
   import SortByOrders from 'components/orders/SortByOrders';
@@ -114,6 +115,12 @@ export default {
         categoryList: [...categoryList],
         // Выбранная категория для поиска
         currentCategory: '',
+        // Поиск заказа по ключевой фразе
+        searchName: '',
+        // Закрытие инпута когда выбрана категория
+        closeInput: false,
+        // Отключение фильтра поиска по категории при выбранном поиске по ключевой фразе
+        closeCategory: false
       }
     },
     computed: {
@@ -125,62 +132,88 @@ export default {
         'offset'
       ])
     },
-    // watch: {
-    //   currentCategory(selectCategory){
-    //     // console.log(selectCategory)
-    //
-    //
-    //   }
-    // },
+    watch: {
+      // Реализация поиска по ключевой фразе
+      searchName(newName) {
+        if (!newName) {
+          // если стёр всё в инпуте то сбрасываем всё и запускаем поиск общий заново
+          this.closeCategory = false
+          this.resetOrdersStateAndParamsFetch()
+          this.getAllOrders()
+          this.$refs.infiniteScroll.resume()
+        } else {
+          // Если написал что то в инпуте то добавляем параметр для поиска и запускаем запрос на сервер
+          this.closeCategory = true
+          this.resetOrdersStateAndParamsFetch()
+          // запускаем мутацию на добавление параметров при запросе
+          this.$store.commit('orders/addParamsForOrders', {
+            name: newName
+          })
+          this.getAllOrders()
+          this.$refs.infiniteScroll.resume()
+        }
+      }
+    },
     methods: {
       ...mapActions('orders', ['getAllOrders']),
+      // Метод запускающие коммиты для сброса параметров запроса, а также общего состояния заказов
+      resetOrdersStateAndParamsFetch() {
+        this.$store.commit('orders/resetStateOrders')
+        this.$store.commit('orders/resetParamsForOrders')
+      },
       // Бесконечная загрузка метод скролла
-      onLoad (index, done) {
-        console.log('112')
-        console.log('index: ', index)
-        console.log('done: ', done)
-        console.log('this.ordersCount: ', this.ordersCount)
-        console.log('this.orders.length: ', this.orders.length)
+      loadMore (index, done) {
+        // Чтобы первый раз не пролетел мимо скролл))
+        if (this.orders.length === 0) {
+          this.$refs.infiniteScroll.resume()
+          done()
+          return
+        }
+
         // Если с количество найденных заказов больше чем прогружено то запускаем заново
         if (this.ordersCount > this.orders.length) {
-          console.log('continue')
           this.$store.commit('orders/setOffset', 20)
           this.getAllOrders()
-          // done()
-        } else {
-          console.log('break')
-          // когда всё подгруженно
-          // index = 0
-          // done(true)
-          done()
+            .then(() => done())
+        } else if (this.orders.length >= this.ordersCount) {
+          this.$refs.infiniteScroll.stop()
         }
       },
       // Установить категорию для поиска
       setCategoryForSearchOrders(categoryName) {
-        // console.log('category name: ', categoryName);
+        // Чтобы пользователь видел выбранную категорию а также закрываем поиск по имени
         this.currentCategory = categoryName
+        this.closeInput = true
+
+        // сброс старых данных
+        this.resetOrdersStateAndParamsFetch()
+
         // запускаем мутацию на добавление параметров при запросе
         this.$store.commit('orders/addParamsForOrders', {
           category: categoryName
         })
 
-        // мутация на стирание старых данных сброс
-        this.$store.commit('orders/resetStateOrders')
-
         // делаем новы запрос
         this.getAllOrders()
+        // обновляем состояние скролла
+        this.$refs.infiniteScroll.resume()
       },
       // Очистка категории
       clearCategory() {
         this.currentCategory = ''
-        this.$store.commit('orders/resetParamsForOrders')
+        this.closeInput = false
+        this.searchName = ''
+        this.resetOrdersStateAndParamsFetch()
         this.getAllOrders()
+        // обновляем состояние скролла
+        this.$refs.infiniteScroll.resume()
       }
     },
     // Все заказы
     mounted() {
       // сброс состояния чтобы не было дублирования при смене роута и тп
-      this.$store.commit('orders/resetStateOrders')
+      // при смене роута категории тоже сбрасываем
+      this.resetOrdersStateAndParamsFetch()
       // первичная отрисовка
       this.getAllOrders()
     }

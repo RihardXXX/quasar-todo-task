@@ -16,7 +16,9 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
 
-        <q-toolbar-title :class="{
+        <q-toolbar-title
+          v-if="$q.platform.is.desktop || ($q.platform.is.mobile && !isLoggedIn)"
+          :class="{
           'absolute-center': !isLoggedIn
         }">
            05 Мастер

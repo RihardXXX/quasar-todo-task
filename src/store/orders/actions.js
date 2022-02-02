@@ -3,28 +3,24 @@ import { api, url } from 'boot/axios';
 // // получение всей информации об одном заказе
 // import {setProposalCurrentOrderFailure} from "src/store/orders/mutations";
 //
-// // Сделать подгрузку текущего заказа из сервера
-// export const getCurrentOrder =  ({state, commit, rootState}, slug) => {
-//   commit('getCurrentOrderStart')
-//   console.log('slug: ', slug)
-//   // console.log('state: ', state)
-//   return new Promise((resolve, reject) => {
-//     const uid = rootState?.authorization?.currentUser?.uid
-//
-//     const db = getDatabase();
-//     const currentUserOrders = ref(db, `orders/${uid}/${slug}`);
-//     onValue(currentUserOrders, (snapshot) => {
-//       const data = snapshot.val();
-//       const currentOrder = {
-//         id: slug,
-//         ...data
-//       }
-//       console.log('data: ', data);
-//       console.log('currentOrder', currentOrder);
-//       commit('getCurrentOrderSuccess', currentOrder)
-//     });
-//   })
-// }
+// Сделать подгрузку текущего заказа из сервера
+export const getCurrentOrder =  ({commit}, slug) => {
+  commit('getCurrentOrderStart')
+  return new Promise((resolve, reject) => {
+    const urlPath = url.orders.slug(slug)
+    api.get(urlPath)
+      .then(response => {
+        console.log(response)
+        commit('getCurrentOrderSuccess', response.data.order)
+        resolve()
+      })
+      .catch(error => {
+        console.log(error)
+        commit('getCurrentOrderFailure', error.response.message)
+        reject()
+      })
+  })
+}
 //
 // // Получение только моих заказов для кастомера то есть клиента
 // export function getAllMyOrders({commit, state}, uid) {

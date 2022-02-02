@@ -3,7 +3,7 @@
     clickable
     exact
     :class="selectedPerformer ? 'bg-light-green-3' : 'bg-grey-1'"
-    :to="{ path: `order/${slug}`}"
+    :to="{ path: `orders/${slug}`}"
   >
     <q-item-section top avatar>
       <q-avatar

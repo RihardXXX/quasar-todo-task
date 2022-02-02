@@ -31,7 +31,8 @@ const url = {
   currentUser: 'user',
   orders: {
     create: 'orders',
-    list: 'orders/list'
+    list: 'orders/list',
+    slug: slug => `orders/${slug}`
   }
 }
 

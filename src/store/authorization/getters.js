@@ -12,6 +12,10 @@ export const performer = (state) => {
   return state.user ? state.user.role === 'performer' : null;
 }
 
+export const idUser = (state) => {
+  return state.user ? state.user.id : null;
+}
+
 export const role = (state) => {
   if (state.user) {
     return state.user.role === 'customer' ? 'клиент' : 'мастер'

@@ -1,7 +1,7 @@
 
 const routes = [
   {
-    path: '/',
+    path: '',
     component: () => import('layouts/Layout.vue'),
     children: [
       // Эти роуты открыть для не авторизованных
@@ -31,7 +31,7 @@ const routes = [
         component: () => import('pages/PageOrderCreate'),
       },
       {
-        path: 'order/:slug', // описание одного заказа
+        path: 'orders/:slug', // описание одного заказа
         component: () => import('pages/PageOrder.vue'),
       },
       {

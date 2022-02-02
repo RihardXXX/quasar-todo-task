@@ -24,7 +24,6 @@
            </q-item-label>
            <q-item-label caption>
              {{ customer }}
-             сюда отдельным запросом взять имя клиента
            </q-item-label>
          </q-item-section>
        </q-item>
@@ -179,16 +178,14 @@
       customer: {
         type: String,
         required: true,
-        default: ''
       },
       description: {
         type: String,
         required: true,
-        default: ''
       },
       body: {
         type: String,
-        required: true,
+        required: false,
         default: ''
       },
       price: {
@@ -199,22 +196,18 @@
       dueDate: {
         type: String,
         required: true,
-        default: ''
       },
       dueTime: {
         type: String,
         required: true,
-        default: ''
       },
       address: {
         type: String,
         required: true,
-        default: ''
       },
       status: {
         type: String,
         required: true,
-        default: ''
       },
     },
     computed: {

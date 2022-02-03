@@ -10,7 +10,7 @@ export const getCurrentOrder =  ({commit}, slug) => {
     const urlPath = url.orders.slug(slug)
     api.get(urlPath)
       .then(response => {
-        console.log(response)
+        // console.log(response)
         commit('getCurrentOrderSuccess', response.data.order)
         resolve()
       })
@@ -46,37 +46,24 @@ export const getCurrentOrder =  ({commit}, slug) => {
 //   });
 // }
 //
-// // подача заявки перформера на заказ кастомера кладём в массив
-//
-// export const addProposal = ({state, commit}, {performer, currentOrder}) => {
-//
-//   commit('setProposalCurrentOrderIsLoading')
-//   return new Promise((resolve, reject) => {
-//     setTimeout(() => {
-//       // копируем массив с заявками и кладёт туда заявку с новым перформером
-//       const newListPerformer = [...currentOrder.listOfPerformers, performer]
-//
-//       // создаём новый текущий заказ кладём старый но меняем поле массива с заказами
-//       const newCurrentOrder = {
-//         ...currentOrder,
-//         listOfPerformers: newListPerformer
-//       }
-//       resolve(newCurrentOrder)
-//     }, 2000)
-//   })
-//     .then((newCurrentOrder) => {
-//       // кладём в текущий заказ обновленный заказ с предлодежением перформера
-//       commit('setProposalCurrentOrder', newCurrentOrder)
-//       // отправляем новый текущий заказ с предложенными перформерами в состояние
-//       commit('updateOrders', newCurrentOrder)
-//   })
-//     .catch((err) => {
-//       commit('setProposalCurrentOrderFailure', err)
-//   })
-//
-//
-//
-// }
+// подача заявки перформера на заказ кастомера кладём в массив
+export const addProposal = ({commit}, slug) => {
+  commit('addProposalStart')
+  return new Promise((resolve, reject) => {
+    const urlPath = url.orders.submitApplication(slug)
+    api.patch(urlPath)
+      .then(response => {
+        console.log(response)
+        commit('addProposalSuccess', response.data.order)
+        resolve()
+      })
+      .catch(error => {
+        const message = error.response.message
+        commit('addProposalFailure', message)
+        reject(message)
+      })
+  })
+}
 //
 // // отклонение заявки определённого мастера
 // export const rejectPerformer = ({ commit }, idPerformer) => {

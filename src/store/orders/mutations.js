@@ -14,16 +14,21 @@ export const getCurrentOrderFailure = (state, payload) => {
   state.error = payload
 }
 
-// кладём новый текущий заказ в котором в массив заявок от перформеров лежит предложение
-export const setProposalCurrentOrderIsLoading = (state) => {
+// Подача заявки на заказ
+export function addProposalStart(state) {
   state.isLoading = true
   state.error = null
 }
 
-export const setProposalCurrentOrder = (state, currentOrder) => {
+export function addProposalSuccess(state, currentOrder) {
   state.isLoading = false
   state.error = null
-  state.currentOrder = currentOrder
+  state.currentOrder = {...currentOrder}
+}
+
+export function addProposalFailure(state, error) {
+  state.isLoading = false
+  state.error = error
 }
 
 // обновление состояние заказов

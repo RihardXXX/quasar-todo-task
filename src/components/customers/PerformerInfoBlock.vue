@@ -29,17 +29,17 @@
     <q-item-section
       v-if="isCustomer"
     >
-      <q-btn
-        color="purple"
-        label="принять"
-        @click="okPerformer"
-      />
-      <q-btn
-        color="deep-orange"
-        label="отклонить"
-        class="q-mt-md"
-        @click="cancelPerformer"
-      />
+<!--      <q-btn-->
+<!--        color="purple"-->
+<!--        label="принять"-->
+<!--        @click="okPerformer"-->
+<!--      />-->
+<!--      <q-btn-->
+<!--        color="deep-orange"-->
+<!--        label="отклонить"-->
+<!--        class="q-mt-md"-->
+<!--        @click="cancelPerformer"-->
+<!--      />-->
     </q-item-section>
   </q-item>
 </template>

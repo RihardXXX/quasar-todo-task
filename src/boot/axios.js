@@ -32,7 +32,8 @@ const url = {
   orders: {
     create: 'orders',
     list: 'orders/list',
-    slug: slug => `orders/${slug}`
+    slug: slug => `orders/${slug}`,
+    submitApplication: slug => `orders/${slug}/submit`
   }
 }
 

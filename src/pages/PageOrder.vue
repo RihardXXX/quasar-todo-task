@@ -1,14 +1,6 @@
 <template>
   <q-page class="q-pa-md">
 
-    <ConfirmModal
-      label="вы действительно хотите подать заявку"
-      :show="showModal"
-      button-cancel="не хочу"
-      button-ok="подать"
-      @onOk="sendProposal"
-    />
-
     <template v-if="currentOrder">
       <OrderHeader
         :customer="currentOrder.user.username"
@@ -23,7 +15,7 @@
       />
     </template>
 
-    <template v-if="currentOrder.status === 'свободен'">
+
 
       <q-card
         class="my-card q-mt-md"
@@ -33,7 +25,7 @@
         </h6>
         <q-separator/>
         <template v-if="!isLoading">
-          <template v-if="currentOrder.listOfPerformers.length">
+          <template v-if="currentOrder ? currentOrder.listOfPerformers.length : undefined">
             <PerformerInfoBlock
               v-for="performer in currentOrder.listOfPerformers"
               :key="performer.id"
@@ -61,8 +53,8 @@
             size="4em"
           />
         </div>
-
       </q-card>
+
 
       <q-card
         v-if="isSubmitApplicationOrder"
@@ -85,31 +77,32 @@
         </div>
       </q-card>
 
-      <q-card
-        v-if="isEditOrder"
-        class="my-card q-mt-md"
-      >
-        <div class="flex justify-around q-pt-md q-pb-md ">
-          <q-btn
-            v-if="true"
-            color="primary"
-            label="редактировать заказ"
-            :disable="isLoading"
-            @click="editOrder"
-          >
-            &nbsp;
-            <q-icon
-              right
-              size="2em"
-              name="edit"
-            />
-          </q-btn>
-        </div>
-      </q-card>
 
-    </template>
+<!--      <q-card-->
+<!--        v-if="isEditOrder"-->
+<!--        class="my-card q-mt-md"-->
+<!--      >-->
+<!--        <div class="flex justify-around q-pt-md q-pb-md ">-->
+<!--          <q-btn-->
+<!--            v-if="true"-->
+<!--            color="primary"-->
+<!--            label="редактировать заказ"-->
+<!--            :disable="isLoading"-->
+<!--            @click="editOrder"-->
+<!--          >-->
+<!--            &nbsp;-->
+<!--            <q-icon-->
+<!--              right-->
+<!--              size="2em"-->
+<!--              name="edit"-->
+<!--            />-->
+<!--          </q-btn>-->
+<!--        </div>-->
+<!--      </q-card>-->
 
-<!--    <template v-if="victoryShow">-->
+<!--    </template>-->
+
+<!--    <template v-if="true">-->
 <!--      <q-card-->
 <!--        class="my-card q-mt-md"-->
 <!--      >-->
@@ -125,28 +118,22 @@
 <!--            <q-avatar>-->
 <!--              <img src="https://cdn.quasar.dev/img/boy-avatar.png">-->
 <!--            </q-avatar>-->
-<!--            {{victoryName}}-->
+<!--            rerer-->
 <!--          </q-chip>-->
 <!--        </q-banner>-->
 <!--      </q-card>-->
 
 <!--    </template>-->
 
-<!--    <pre>-->
-<!--      {{currentOrder}}-->
-<!--    </pre>-->
-    $q.platform.is.mobile: {{$q.platform.is.mobile}}
-    <br>
-    currentOrder: <pre>{{currentOrder}}</pre>
-
   </q-page>
 </template>
 
 <script>
-import {mapActions, mapGetters, mapState} from 'vuex';
+  import {mapActions, mapGetters, mapState} from 'vuex';
   import ConfirmModal from "components/modals/ConfirmModal"
   import OrderHeader from "components/orders/OrderHeader"
   import PerformerInfoBlock from "components/customers/PerformerInfoBlock"
+  import {QSpinnerGears} from 'quasar';
 
   export default {
     name: 'PageOrder',
@@ -165,10 +152,16 @@ import {mapActions, mapGetters, mapState} from 'vuex';
     computed: {
       ...mapState('orders', ['currentOrder', 'isLoading']),
       ...mapGetters('authorization', ['customer', 'performer', 'idUser']),
+      // Показать блок для подачи заявок и кто подал если статус свободен
+      isShowBlockSubmitApplication() {
+
+      },
       // Показать кнопку подать заявку если ты мастер, победитель не выбран, и тебя нет в списке поданных
       isSubmitApplicationOrder() {
-        const isSubmitPrevious = this.currentOrder.listOfPerformers.some(id => id === this.idUser )
-        return this.performer && !this.currentOrder.selectedPerformer && !isSubmitPrevious
+        if (this.currentOrder) {
+          const isSubmitPrevious = this.currentOrder.listOfPerformers.some(id => Number(id) === this.idUser )
+          return this.performer && !this.currentOrder.selectedPerformer && !isSubmitPrevious
+        }
       },
       // Показать кнопку редактировать заказ если нет победителя и ты автор заказа
       isEditOrder() {
@@ -196,13 +189,23 @@ import {mapActions, mapGetters, mapState} from 'vuex';
     methods: {
       ...mapActions('orders', [
         'getCurrentOrder',
-        // 'addProposal',
+        'addProposal',
         // 'rejectPerformer',
         // 'selectPerformer'
       ]),
       // принятие заявки мастера
       submitApplicationOnOrder() {
-
+        // открываем модалку с загрузкой
+        // спиннер загрузки
+        this.$q.loading.show({
+          spinner: QSpinnerGears,
+          spinnerColor: 'red',
+          message: 'Идёт загрузка'
+        })
+        const slug = this.$route.params.slug
+        this.addProposal(slug)
+          .then(() => this.$q.loading.hide())
+          .catch(() => this.$q.loading.hide())
       },
       acceptApplication(slug) {
         console.log('slug: acceptApplication', slug)
@@ -235,31 +238,9 @@ import {mapActions, mapGetters, mapState} from 'vuex';
           console.log('>>>> Cancel')
         })
       },
-      sendProposal() {
-        console.log('подать заявку')
-
-        // закрываем модалку модалку
-        this.showModal = false
-
-        const performer = {
-          id: this.idPerformer,
-          name: this.namePerformer
-        }
-
-        this.idPerformer += 1
-        this.namePerformer = this.namePerformer + 'q'
-
-        this.addProposal({performer, currentOrder: this.currentOrder})
-      },
-      // переход на страницу редактирования заявки
-      editOrder() {
-        console.log('редактировать заказ')
-        // this.$router.push({ name: 'order',  params: { idOrder: this.currentOrder.id } })
-      }
     },
     mounted() {
       const { slug } = this.$route.params
-      console.log('slug: ', slug)
       this.getCurrentOrder(slug)
     }
   }

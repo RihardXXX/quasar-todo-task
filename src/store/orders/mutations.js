@@ -1,3 +1,4 @@
+// Получение текущего заказа
 export const getCurrentOrderStart = (state) => {
   state.isLoading = true
   state.error = null
@@ -12,6 +13,23 @@ export const getCurrentOrderSuccess = (state, payload) => {
 export const getCurrentOrderFailure = (state, payload) => {
   state.isLoading = false
   state.error = payload
+}
+
+// Получение списка мастеров по текущему заказу
+export function getListOfPerformersOnCurrentOrderStart(state) {
+  state.isLoading = true
+  state.error = null
+}
+
+export function getListOfPerformersOnCurrentOrderSuccess(state, listOfPerformersOnCurrentOrder) {
+  state.isLoading = false
+  state.error = null
+  state.listOfPerformersOnCurrentOrder = [...listOfPerformersOnCurrentOrder]
+}
+
+export function getListOfPerformersOnCurrentOrderFailure(state, error) {
+  state.isLoading = false
+  state.error = error
 }
 
 // Подача заявки на заказ

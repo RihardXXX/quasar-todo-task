@@ -25,12 +25,12 @@
         </h6>
         <q-separator/>
         <template v-if="!isLoading">
-          <template v-if="currentOrder ? currentOrder.listOfPerformers.length : undefined">
+          <template v-if="listOfPerformersOnCurrentOrder.length">
             <PerformerInfoBlock
-              v-for="performer in currentOrder.listOfPerformers"
+              v-for="performer in listOfPerformersOnCurrentOrder"
               :key="performer.id"
-              :name="performer.name"
-              :slug="performer.id"
+              :id="performer.id"
+              :name="performer.username"
               @acceptApplication="acceptApplication"
               @rejectApplication="rejectApplication"
             />
@@ -76,7 +76,6 @@
           </q-btn>
         </div>
       </q-card>
-
 
 <!--      <q-card-->
 <!--        v-if="isEditOrder"-->
@@ -150,7 +149,7 @@
       }
     },
     computed: {
-      ...mapState('orders', ['currentOrder', 'isLoading']),
+      ...mapState('orders', ['currentOrder', 'isLoading', 'listOfPerformersOnCurrentOrder']),
       ...mapGetters('authorization', ['customer', 'performer', 'idUser']),
       // Показать блок для подачи заявок и кто подал если статус свободен
       isShowBlockSubmitApplication() {

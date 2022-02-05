@@ -4,14 +4,16 @@ import { api, url } from 'boot/axios';
 // import {setProposalCurrentOrderFailure} from "src/store/orders/mutations";
 //
 // Сделать подгрузку текущего заказа из сервера
-export const getCurrentOrder =  ({commit}, slug) => {
+export const getCurrentOrder =  ({commit, dispatch}, slug) => {
   commit('getCurrentOrderStart')
   return new Promise((resolve, reject) => {
     const urlPath = url.orders.slug(slug)
     api.get(urlPath)
       .then(response => {
         // console.log(response)
-        commit('getCurrentOrderSuccess', response.data.order)
+        const order = response.data.order
+        commit('getCurrentOrderSuccess', order)
+        dispatch('getListOfPerformersOnCurrentOrder', order.listOfPerformers)
         resolve()
       })
       .catch(error => {
@@ -21,6 +23,18 @@ export const getCurrentOrder =  ({commit}, slug) => {
       })
   })
 }
+
+// Получение списка мастеров по текущему заказу
+export function getListOfPerformersOnCurrentOrder({commit}, listId) {
+  commit('getListOfPerformersOnCurrentOrderStart')
+  Promise.all(listId.map(id => api.get(url.userInfo(id))))
+    .then(response => {
+      const performersCurrentOrder = response.map(ob => ob.data.user)
+      commit('getListOfPerformersOnCurrentOrderSuccess', performersCurrentOrder)
+    })
+    .catch(error => commit('getListOfPerformersOnCurrentOrderFailure', error.response.message))
+}
+
 //
 // // Получение только моих заказов для кастомера то есть клиента
 // export function getAllMyOrders({commit, state}, uid) {
@@ -47,7 +61,7 @@ export const getCurrentOrder =  ({commit}, slug) => {
 // }
 //
 // подача заявки перформера на заказ кастомера кладём в массив
-export const addProposal = ({commit}, slug) => {
+export const addProposal = ({commit, dispatch}, slug) => {
   commit('addProposalStart')
   return new Promise((resolve, reject) => {
     const urlPath = url.orders.submitApplication(slug)
@@ -55,6 +69,7 @@ export const addProposal = ({commit}, slug) => {
       .then(response => {
         console.log(response)
         commit('addProposalSuccess', response.data.order)
+        dispatch('getCurrentOrder', slug)
         resolve()
       })
       .catch(error => {

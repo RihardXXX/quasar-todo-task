@@ -4,7 +4,10 @@ export default function () {
   return {
     isLoading: false,
     error: null,
+    // Текущий заказ
     currentOrder: undefined,
+    // Список мастеров по текущему заказу
+    listOfPerformersOnCurrentOrder: [],
     searchOrder: '',
     sortType: '',
     showFilterSortPanel: true,
@@ -16,6 +19,7 @@ export default function () {
     params: {},
     // заказы текущего кастомера или перформера
     myOrders: [],
+    // Все заказы
     orders: [],
   }
 }

@@ -29,6 +29,7 @@ const url = {
   createUser: 'users',
   loginUser: 'users/login',
   currentUser: 'user',
+  userInfo: id => `users/${id}`,
   orders: {
     create: 'orders',
     list: 'orders/list',

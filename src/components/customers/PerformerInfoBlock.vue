@@ -1,56 +1,54 @@
 <template>
-  <q-item
-  >
-    <q-item-section side>
+  <q-card>
+    <q-item class="flex justify-between">
       <q-avatar rounded size="48px">
         <img src="https://cdn.quasar.dev/img/avatar.png" />
         <q-badge floating color="teal">
           заявка
         </q-badge>
       </q-avatar>
-    </q-item-section>
-    <q-item-section>
-      <q-item-label>
-        {{name}}
-      </q-item-label>
       <q-item
         clickable
         v-ripple
         bordered
         class="q-bg-secondary"
-        :to="{ path: `/performer/${slug}` }"
+        :to="{ path: `/performer/${id}` }"
       >
         <q-btn
           icon="send"
           label="на страницу мастера"
         />
       </q-item>
-    </q-item-section>
-    <q-item-section
-      v-if="isCustomer"
-    >
-<!--      <q-btn-->
-<!--        color="purple"-->
-<!--        label="принять"-->
-<!--        @click="okPerformer"-->
-<!--      />-->
-<!--      <q-btn-->
-<!--        color="deep-orange"-->
-<!--        label="отклонить"-->
-<!--        class="q-mt-md"-->
-<!--        @click="cancelPerformer"-->
-<!--      />-->
-    </q-item-section>
-  </q-item>
+    </q-item>
+    <q-item>
+        {{name}}
+    </q-item>
+<!--    <q-item-section-->
+<!--      v-if="isCustomer"-->
+<!--    >-->
+<!--&lt;!&ndash;      <q-btn&ndash;&gt;-->
+<!--&lt;!&ndash;        color="purple"&ndash;&gt;-->
+<!--&lt;!&ndash;        label="принять"&ndash;&gt;-->
+<!--&lt;!&ndash;        @click="okPerformer"&ndash;&gt;-->
+<!--&lt;!&ndash;      />&ndash;&gt;-->
+<!--&lt;!&ndash;      <q-btn&ndash;&gt;-->
+<!--&lt;!&ndash;        color="deep-orange"&ndash;&gt;-->
+<!--&lt;!&ndash;        label="отклонить"&ndash;&gt;-->
+<!--&lt;!&ndash;        class="q-mt-md"&ndash;&gt;-->
+<!--&lt;!&ndash;        @click="cancelPerformer"&ndash;&gt;-->
+<!--&lt;!&ndash;      />&ndash;&gt;-->
+<!--    </q-item-section>-->
+
+    <q-separator />
+  </q-card>
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
 
   export default {
     name: 'PerformerInfoBlock',
     props: {
-      slug: {
+      id: {
         type: [Number, String],
         required: true
       },
@@ -65,14 +63,14 @@
       }
     },
     methods: {
-      okPerformer() {
-        // console.log('ok performer');
-        this.$emit('acceptApplication', this.slug)
-      },
-      cancelPerformer() {
-        // console.log('cancel performer')
-        this.$emit('rejectApplication', this.slug)
-      }
+      // okPerformer() {
+      //   // console.log('ok performer');
+      //   this.$emit('acceptApplication', this.slug)
+      // },
+      // cancelPerformer() {
+      //   // console.log('cancel performer')
+      //   this.$emit('rejectApplication', this.slug)
+      // }
     }
   }
 

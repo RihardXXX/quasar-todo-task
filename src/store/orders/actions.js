@@ -79,6 +79,48 @@ export const addProposal = ({commit, dispatch}, slug) => {
       })
   })
 }
+
+// Поставить лайка текущему заказу
+export const likedOrder = ({commit, dispatch}, slug) => {
+  commit('likedOrdersStart')
+  return new Promise((resolve, reject) => {
+    const urlPath = url.orders.liked(slug)
+
+    api.post(urlPath)
+      .then(() => {
+        // console.log(response)
+        commit('likedOrdersSuccess')
+        dispatch('getCurrentOrder', slug)
+        resolve()
+      })
+      .catch(error => {
+        const message = error.response.message
+        commit('likedOrdersFailure', message)
+        reject(message)
+      })
+  })
+}
+
+// Поставить лайка текущему заказу
+export const dislikedOrder = ({commit, dispatch}, slug) => {
+  commit('likedOrdersStart')
+  return new Promise((resolve, reject) => {
+    const urlPath = url.orders.liked(slug)
+
+    api.delete(urlPath)
+      .then(() => {
+        // console.log(response)
+        commit('likedOrdersSuccess')
+        dispatch('getCurrentOrder', slug)
+        resolve()
+      })
+      .catch(error => {
+        const message = error.response.message
+        commit('likedOrdersFailure', message)
+        reject(message)
+      })
+  })
+}
 //
 // // отклонение заявки определённого мастера
 // export const rejectPerformer = ({ commit }, idPerformer) => {
@@ -96,21 +138,28 @@ export const addProposal = ({commit, dispatch}, slug) => {
 //     })
 // }
 //
-// // выбрать исполнителя
-// export const selectPerformer = ({ commit }, idPerformer) => {
-//   commit('selectPerformerStart')
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       resolve(idPerformer)
-//     }, 2000)
-//   })
-//     .then((idPerformer) => {
-//       commit('selectPerformerSuccess', idPerformer)
-//     })
-//     .catch((err) => {
-//       commit('selectPerformerFailure', err)
-//     })
-// }
+// выбрать исполнителя
+export const selectPerformer = ({ commit, dispatch }, {id, slugOrder}) => {
+  console.log(id, slugOrder)
+  commit('selectPerformerStart')
+  return new Promise((resolve, reject) => {
+    api.post(url.orders.victory, {
+      victory: {
+        idPerformer: String(id),
+        slugOrder: slugOrder
+      }
+    })
+      .then(() => {
+        commit('selectPerformerSuccess')
+        dispatch('getCurrentOrder', slugOrder)
+        resolve()
+      })
+      .catch((err) => {
+        commit('selectPerformerFailure', err.response.message)
+        reject()
+      })
+  })
+}
 //
 // создать заказ
 export const createOrder = ({ commit }, order) => {

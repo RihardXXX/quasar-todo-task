@@ -49,6 +49,21 @@ export function addProposalFailure(state, error) {
   state.error = error
 }
 
+// лайк поставить заказу
+export function likedOrdersStart(state){
+  state.isLoading = true
+  state.error = null
+}
+
+export function likedOrdersSuccess(state){
+  state.isLoading = false
+  state.error = null
+}
+export function likedOrdersFailure(state, error){
+  state.isLoading = false
+  state.error = error
+}
+
 // обновление состояние заказов
 export const updateOrders = (state, currentOrder) => {
   // текущий заказ у которого в с массивом заполненных перформеров
@@ -92,24 +107,9 @@ export const selectPerformerStart = (state) => {
   state.error = null
 }
 
-export const selectPerformerSuccess = (state, idPerformer) => {
+export const selectPerformerSuccess = (state) => {
   state.isLoading = false
   state.error = null
-  console.log('idPerformer', idPerformer)
-  const victoryPerformer = state.currentOrder
-    .listOfPerformers.find(performer => performer.id === idPerformer)
-
-  state.currentOrder = {
-    ...state.currentOrder,
-    listOfPerformers: [],
-    selectedPerformer: true,
-    status: 'в работе',
-    victory: [victoryPerformer]
-  }
-
-  // state.currentOrder = {}
-
-  // console.log(state)
 }
 
 export const selectPerformerFailure = (state, error) => {

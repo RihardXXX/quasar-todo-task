@@ -12,19 +12,20 @@
         :due-date="currentOrder.dueDate"
         :due-time="currentOrder.dueTime"
         :status="currentOrder.status"
+        :favorites-count="currentOrder.favoritesCount"
+        :slug="currentOrder.slug"
       />
     </template>
 
-
-
       <q-card
+        v-if="currentOrder ? !currentOrder.victory : undefined"
         class="my-card q-mt-md"
       >
         <h6 class="no-margin text-center">
           заявки поданные на текущий заказ
         </h6>
         <q-separator/>
-        <template v-if="!isLoading">
+        <template>
           <template v-if="listOfPerformersOnCurrentOrder.length">
             <PerformerInfoBlock
               v-for="performer in listOfPerformersOnCurrentOrder"
@@ -32,7 +33,6 @@
               :id="performer.id"
               :name="performer.username"
               @acceptApplication="acceptApplication"
-              @rejectApplication="rejectApplication"
             />
           </template>
           <q-banner
@@ -44,15 +44,6 @@
           </q-banner>
         </template>
 
-        <div
-          class="flex justify-center"
-          v-else
-        >
-          <q-spinner-hourglass
-            color="purple"
-            size="4em"
-          />
-        </div>
       </q-card>
 
 
@@ -76,6 +67,8 @@
           </q-btn>
         </div>
       </q-card>
+
+<!--    <pre>{{currentOrder}}</pre>-->
 
 <!--      <q-card-->
 <!--        v-if="isEditOrder"-->
@@ -143,9 +136,9 @@
     },
     data() {
       return {
-        namePerformer: 'Roberto',
         idPerformer: 0,
-        showModal: false
+        showModal: false,
+        slugOrder: '',
       }
     },
     computed: {
@@ -190,7 +183,7 @@
         'getCurrentOrder',
         'addProposal',
         // 'rejectPerformer',
-        // 'selectPerformer'
+        'selectPerformer'
       ]),
       // принятие заявки мастера
       submitApplicationOnOrder() {
@@ -201,13 +194,12 @@
           spinnerColor: 'red',
           message: 'Идёт загрузка'
         })
-        const slug = this.$route.params.slug
-        this.addProposal(slug)
+
+        this.addProposal(this.slugOrder)
           .then(() => this.$q.loading.hide())
           .catch(() => this.$q.loading.hide())
       },
-      acceptApplication(slug) {
-        console.log('slug: acceptApplication', slug)
+      acceptApplication(id) {
         this.$q.dialog({
           title: 'Подтверждение',
           message: 'Вы дествительно хотите выбрать этого мастера для работы',
@@ -215,31 +207,35 @@
           ok: 'да',
           persistent: true
         }).onOk(() => {
-          console.log('>>>> OK, received', slug)
-          this.selectPerformer(slug)
+          console.log('>>>> OK, received', id)
+          this.selectPerformer({
+            id,
+            slugOrder: this.slugOrder
+          })
         }).onCancel(() => {
           console.log('>>>> Cancel')
         })
       },
       // отклонение заявки определённого мастера
-      rejectApplication(slug) {
-        console.log('slug: rejectApplication', slug);
-        this.$q.dialog({
-          title: 'Подтверждение',
-          message: 'Вы дествительно хотите отклонить мастера и удалить из желающих',
-          cancel: 'нет',
-          ok: 'да',
-          persistent: true
-        }).onOk(() => {
-          console.log('>>>> OK, received', slug)
-          this.rejectPerformer(slug)
-        }).onCancel(() => {
-          console.log('>>>> Cancel')
-        })
-      },
+      // rejectApplication(slug) {
+      //   console.log('slug: rejectApplication', slug);
+      //   this.$q.dialog({
+      //     title: 'Подтверждение',
+      //     message: 'Вы дествительно хотите отклонить мастера и удалить из желающих',
+      //     cancel: 'нет',
+      //     ok: 'да',
+      //     persistent: true
+      //   }).onOk(() => {
+      //     console.log('>>>> OK, received', slug)
+      //     this.rejectPerformer(slug)
+      //   }).onCancel(() => {
+      //     console.log('>>>> Cancel')
+      //   })
+      // },
     },
     mounted() {
       const { slug } = this.$route.params
+      this.slugOrder = slug;
       this.getCurrentOrder(slug)
     }
   }

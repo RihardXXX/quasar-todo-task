@@ -34,7 +34,9 @@ const url = {
     create: 'orders',
     list: 'orders/list',
     slug: slug => `orders/${slug}`,
-    submitApplication: slug => `orders/${slug}/submit`
+    submitApplication: slug => `orders/${slug}/submit`,
+    victory: 'orders/victory',
+    liked: slug => `orders/${slug}/favorite`
   }
 }
 

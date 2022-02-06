@@ -7,37 +7,21 @@
           заявка
         </q-badge>
       </q-avatar>
-      <q-item
-        clickable
-        v-ripple
-        bordered
-        class="q-bg-secondary"
-        :to="{ path: `/performer/${id}` }"
-      >
         <q-btn
           icon="send"
           label="на страницу мастера"
+          :to="{ path: `/performer/${id}` }"
         />
-      </q-item>
     </q-item>
-    <q-item>
+    <q-item class="flex justify-between">
         {{name}}
+        <q-btn
+          v-if="isOrderOwner"
+          color="purple"
+          label="сделать победителем"
+          @click="okPerformer"
+        />
     </q-item>
-<!--    <q-item-section-->
-<!--      v-if="isCustomer"-->
-<!--    >-->
-<!--&lt;!&ndash;      <q-btn&ndash;&gt;-->
-<!--&lt;!&ndash;        color="purple"&ndash;&gt;-->
-<!--&lt;!&ndash;        label="принять"&ndash;&gt;-->
-<!--&lt;!&ndash;        @click="okPerformer"&ndash;&gt;-->
-<!--&lt;!&ndash;      />&ndash;&gt;-->
-<!--&lt;!&ndash;      <q-btn&ndash;&gt;-->
-<!--&lt;!&ndash;        color="deep-orange"&ndash;&gt;-->
-<!--&lt;!&ndash;        label="отклонить"&ndash;&gt;-->
-<!--&lt;!&ndash;        class="q-mt-md"&ndash;&gt;-->
-<!--&lt;!&ndash;        @click="cancelPerformer"&ndash;&gt;-->
-<!--&lt;!&ndash;      />&ndash;&gt;-->
-<!--    </q-item-section>-->
 
     <q-separator />
   </q-card>
@@ -45,7 +29,9 @@
 
 <script>
 
-  export default {
+import {mapGetters, mapState} from 'vuex';
+
+export default {
     name: 'PerformerInfoBlock',
     props: {
       id: {
@@ -58,19 +44,17 @@
       }
     },
     computed: {
-      isCustomer() {
-        return true
+      ...mapState('orders', ['currentOrder']),
+      ...mapGetters('authorization', ['idUser']),
+      // Является ли создателем заказа это лицо
+      isOrderOwner() {
+        return this.idUser === this.currentOrder.user.id
       }
     },
     methods: {
-      // okPerformer() {
-      //   // console.log('ok performer');
-      //   this.$emit('acceptApplication', this.slug)
-      // },
-      // cancelPerformer() {
-      //   // console.log('cancel performer')
-      //   this.$emit('rejectApplication', this.slug)
-      // }
+      okPerformer() {
+        this.$emit('acceptApplication', this.id)
+      },
     }
   }
 

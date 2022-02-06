@@ -1,15 +1,37 @@
 <template>
 
  <div>
-   <q-banner class="bg-primary text-white text-center">
+   <q-banner
+     inline-actions
+     class="bg-primary text-white"
+   >
      {{ title }}
+     <template v-slot:action>
+       <q-btn
+         round
+         color="secondary"
+         icon="thumb_up_off_alt"
+         @click="liked"
+       />
+       <q-btn
+         round
+         color="deep-orange"
+         icon="favorite"
+       >
+         {{favoritesCount}}
+       </q-btn>
+       <q-btn
+         round
+         color="secondary"
+         icon="thumb_down_off_alt"
+         @click="disliked"
+       />
+     </template>
    </q-banner>
 
    <q-card class="my-card">
 
-     <q-list
-       v-if="!isLoading"
-     >
+     <q-list>
 
        <q-item>
          <q-item-section avatar>
@@ -149,23 +171,15 @@
 
      </q-list>
 
-     <div
-       class="flex justify-center"
-       v-else
-     >
-       <q-spinner-hourglass
-         color="purple"
-         size="4em"
-       />
-     </div>
-
    </q-card>
+
  </div>
 
 </template>
 
 <script>
-  import { mapState } from 'vuex'
+import {mapActions, mapGetters, mapState} from 'vuex';
+
 
   export default {
     name: 'OrderHeader',
@@ -209,9 +223,19 @@
         type: String,
         required: true,
       },
+      favoritesCount: {
+        type: [String, Number],
+        required: true
+      },
+      slug: {
+        type: String,
+        required: true
+      },
     },
     computed: {
       ...mapState('orders', ['isLoading']),
+      ...mapGetters('authorization', ['idUser']),
+      // В зависимости от статуса даём разын цвета
       statusCurrentOrder() {
         const statusObject = {
           positive: 'свободен',
@@ -223,6 +247,16 @@
           ? Object.keys(statusObject).find(key => statusObject[key] === this.status)
           : null
       },
+    },
+    methods: {
+      ...mapActions('orders', ['likedOrder', 'dislikedOrder']),
+      liked() {
+        // console.log(112, this.slug)
+        this.likedOrder(this.slug)
+      },
+      disliked() {
+        this.dislikedOrder(this.slug)
+      }
     }
   }
 

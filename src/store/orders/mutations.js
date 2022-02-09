@@ -194,9 +194,14 @@ export const resetStateOrders = (state) => {
   state.ordersCount = 0
 }
 
-// Добавление параметров для поискового запроса в заказах
+// Добавление параметров для поискового запроса в заказах со стиранием старого
 export const addParamsForOrders = (state, nameParams) => {
   state.params = { ...nameParams }
+}
+
+// мерджим в существующий объект параметров
+export const mergeNewParams = (state, nameParams) => {
+  state.params = { ...state.params,...nameParams }
 }
 
 // Сброс параметров для поискового запроса

@@ -53,6 +53,21 @@
         />
       </div>
 
+      <div class="q-ma-md">
+        <q-btn-toggle
+          v-model="statusOrder"
+          push
+          glossy
+          rounded
+          toggle-color="primary"
+          :options="[
+            {label: 'свободен', value: 'свободен'},
+            {label: 'в работе', value: 'в работе'},
+            {label: 'выполнено', value: 'выполнено'}
+          ]"
+        />
+      </div>
+
     </div>
         <q-item-label header>
           Общий список заказов
@@ -120,7 +135,9 @@ export default {
         // Закрытие инпута когда выбрана категория
         closeInput: false,
         // Отключение фильтра поиска по категории при выбранном поиске по ключевой фразе
-        closeCategory: false
+        closeCategory: false,
+        // сортировка заказов по статусу выполнения
+        statusOrder: 'свободен',
       }
     },
     computed: {
@@ -139,6 +156,9 @@ export default {
           // если стёр всё в инпуте то сбрасываем всё и запускаем поиск общий заново
           this.closeCategory = false
           this.resetOrdersStateAndParamsFetch()
+          this.$store.commit('orders/addParamsForOrders', {
+            status: this.statusOrder
+          })
           this.getAllOrders()
           this.$refs.infiniteScroll.resume()
         } else {
@@ -147,11 +167,23 @@ export default {
           this.resetOrdersStateAndParamsFetch()
           // запускаем мутацию на добавление параметров при запросе
           this.$store.commit('orders/addParamsForOrders', {
-            name: newName
+            name: newName,
+            status: this.statusOrder
           })
           this.getAllOrders()
           this.$refs.infiniteScroll.resume()
         }
+      },
+      // отслеживание состояния кнопки чтобы сделать запрос при изменении кнопки статуса заказа
+      statusOrder(newStatus) {
+        console.log(newStatus)
+        this.$store.commit('orders/resetStateOrders')
+        // тут не стирая старый объект параметров добавляем статусы к заказам
+        this.$store.commit('orders/mergeNewParams', {
+          status: this.statusOrder
+        })
+        this.getAllOrders()
+        this.$refs.infiniteScroll.resume()
       }
     },
     methods: {
@@ -190,7 +222,8 @@ export default {
 
         // запускаем мутацию на добавление параметров при запросе
         this.$store.commit('orders/addParamsForOrders', {
-          category: categoryName
+          category: categoryName,
+          status: this.statusOrder
         })
 
         // делаем новы запрос
@@ -204,6 +237,9 @@ export default {
         this.closeInput = false
         this.searchName = ''
         this.resetOrdersStateAndParamsFetch()
+        this.$store.commit('orders/addParamsForOrders', {
+          status: this.statusOrder
+        })
         this.getAllOrders()
         // обновляем состояние скролла
         this.$refs.infiniteScroll.resume()
@@ -214,6 +250,11 @@ export default {
       // сброс состояния чтобы не было дублирования при смене роута и тп
       // при смене роута категории тоже сбрасываем
       this.resetOrdersStateAndParamsFetch()
+
+      // запускаем мутацию на добавление параметров при запросе
+      this.$store.commit('orders/addParamsForOrders', {
+        status: this.statusOrder
+      })
       // первичная отрисовка
       this.getAllOrders()
     }
@@ -221,7 +262,7 @@ export default {
 </script>
 
 
-<style scoped>
+<style lang="scss" scoped>
   .q-scroll-area-orders {
     /*display: flex;*/
     /*flex-grow: 1;*/

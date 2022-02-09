@@ -51,7 +51,7 @@ const routes = [
         component: () => import('pages/PagePerformers.vue')
       },
       {
-        path: 'performer/:slug', // индивидуальная страница с отзывами и рейтингом мастера
+        path: 'performer/:id', // индивидуальная страница с отзывами и рейтингом мастера
         component: () => import('pages/PagePerformer.vue')
       },
       {

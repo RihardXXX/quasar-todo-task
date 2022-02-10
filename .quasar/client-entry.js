@@ -249,7 +249,7 @@ console.info('[Quasar] Running SPA.')
 
 
 
-const publicPath = ``
+const publicPath = `/`
 
 
 async function start () {

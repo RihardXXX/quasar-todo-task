@@ -22,13 +22,12 @@ export function role (state) {
 }
 
 // биография
-// export function someGetter (/* state */) {
-// }
-// export function someGetter (/* state */) {
-// }
-//
-// export function someGetter (/* state */) {
-// }
-//
-// export function someGetter (/* state */) {
-// }
+export function bio (state) {
+  return state.currentPerformer ? state.currentPerformer.bio : null
+}
+
+// количество лайков
+export function countLikes (state) {
+  return state.currentPerformer ? state.currentPerformer.countLikes : 0
+}
+

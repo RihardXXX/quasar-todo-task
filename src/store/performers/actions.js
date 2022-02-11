@@ -9,11 +9,13 @@ export function getInfoPerformer ({commit}, id) {
       .then(response => {
         console.log(response)
         commit('getInfoPerformerSuccess', response.data.user)
+        resolve()
       })
       .catch(error => {
         console.log(error.response.message)
         const message = error.response.message
         commit('getInfoPerformerFailure', message)
+        reject()
       })
   })
 }

@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-md q-gutter-sm centerContent">
-    <q-card class="my-card" :style="{ width: '50%' }">
+    <q-card class="my-card" :style="{ width: '70%' }">
 
       <q-list>
 
@@ -87,19 +87,21 @@ import {mapActions, mapGetters} from 'vuex';
   export default {
     name: 'PagePerformer',
     computed: {
-      ...mapGetters('performers', ['username', 'bio', 'countLikes', 'role'])
+      ...mapGetters('performers', ['username', 'bio', 'countLikes', 'role', 'idUser'])
     },
     methods: {
       ...mapActions('performers', ['getInfoPerformer']),
+      ...mapActions('authorization', ['setLikeAccount']),
       // поставить лайк анкете
       setFavorite() {
-        console.log('поставить лайк анкете')
+        // console.log('поставить лайк анкете')
+        this.setLikeAccount(this.idUser)
       }
     },
     mounted() {
       const { id } = this.$route.params;
 
-      console.log('id: ', id);
+      // console.log('id: ', id);
       this.getInfoPerformer(id)
     }
   }

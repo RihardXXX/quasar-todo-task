@@ -8,6 +8,11 @@
 //     "countLikes": 0
 //   }
 
+// id
+export function idUser (state) {
+  return state.currentPerformer ? state.currentPerformer.id : null
+}
+
 // имя
 export function username (state) {
   return state.currentPerformer ? state.currentPerformer.username : null

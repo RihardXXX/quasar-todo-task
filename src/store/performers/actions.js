@@ -7,7 +7,7 @@ export function getInfoPerformer ({commit}, id) {
     const urlPath = url.userInfo(id)
     api.get(urlPath)
       .then(response => {
-        console.log(response)
+        // console.log(response)
         commit('getInfoPerformerSuccess', response.data.user)
         resolve()
       })

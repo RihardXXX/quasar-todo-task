@@ -65,3 +65,17 @@ export function logoutUser(state) {
     state.user = undefined
 }
 
+// Мутации по установке лайка аккаунтам
+export function setLikeAccountStart(state) {
+  state.isLoading = true
+  state.error = null
+}
+
+export function setLikeAccountSuccess(state) {
+  state.isLoading = false
+  state.error = null
+}
+export function setLikeAccountFailure(state, error) {
+  state.isLoading = false
+  state.error = error
+}

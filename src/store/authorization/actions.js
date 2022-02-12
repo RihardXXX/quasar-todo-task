@@ -78,3 +78,23 @@ export function logoutUser({commit}) {
   })
 }
 
+// Поставить лайк аккаунту
+export function setLikeAccount({commit, dispatch}, idAccount) {
+  commit('setLikeAccountStart')
+  return new Promise((resolve, reject) => {
+    const urlPath = url.user.liked(idAccount)
+    api.post(urlPath)
+      .then(response => {
+        // console.log(response)
+        commit('setLikeAccountSuccess')
+        commit('performers/getInfoPerformerSuccess', response.data, {root:true})
+        // dispatch('performers/getInfoPerformer', idAccount, {root:true})
+        resolve()
+      })
+      .catch(error => {
+        commit('setLikeAccountFailure', error.response.message)
+        reject()
+      })
+  })
+}
+

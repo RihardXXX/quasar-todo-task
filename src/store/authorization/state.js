@@ -4,5 +4,7 @@ export default function () {
     isLoading: false,
     error: null,
     user: undefined,
+    // отзывы по аккаунту
+    reviews: null,
   }
 }

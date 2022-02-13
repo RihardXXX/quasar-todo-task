@@ -1,5 +1,6 @@
 import { LocalStorage } from "quasar";
 import { api, url } from 'boot/axios';
+import {getReviewsByAccountStart} from 'src/store/authorization/mutations';
 
 // Регистрация нового пользователя
 export const registerUser =  ({commit}, user) => {
@@ -93,6 +94,24 @@ export function setLikeAccount({commit, dispatch}, idAccount) {
       })
       .catch(error => {
         commit('setLikeAccountFailure', error.response.message)
+        reject()
+      })
+  })
+}
+
+// Получить все отзывы по текущему аккаунту
+export function getReviewsByAccount({commit}, id) {
+  commit('getReviewsByAccountStart')
+  return new Promise((resolve, reject) => {
+    const urlPath = url.user.reviews(id)
+    api.get(urlPath)
+      .then((response) => {
+        console.log(response)
+        commit('getReviewsByAccountSuccess', response.data.reviews)
+        resolve()
+      })
+      .catch(error => {
+        commit('getReviewsByAccountFailure', error.response.message)
         reject()
       })
   })

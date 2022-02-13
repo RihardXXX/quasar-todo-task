@@ -79,3 +79,19 @@ export function setLikeAccountFailure(state, error) {
   state.isLoading = false
   state.error = error
 }
+
+// Мутации по получению отзывов по аккаунту
+export function getReviewsByAccountStart(state) {
+  state.isLoading = true
+  state.error = null
+}
+
+export function getReviewsByAccountSuccess(state, reviews) {
+  state.isLoading = false
+  state.error = null
+  state.reviews = [...reviews]
+}
+export function getReviewsByAccountFailure(state, error) {
+  state.isLoading = false
+  state.error = error
+}

@@ -5,6 +5,10 @@ export default function () {
     error: null,
     user: undefined,
     // отзывы по аккаунту
-    reviews: null,
+    reviews: [],
+    // эта шл]па нужна для пагинации отзывов
+    limit: 10,
+    offset: 0,
+    reviewsCount: 0,
   }
 }

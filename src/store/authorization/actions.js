@@ -93,26 +93,60 @@ export function setLikeAccount({commit, dispatch}, idAccount) {
         resolve()
       })
       .catch(error => {
-        commit('setLikeAccountFailure', error.response.message)
+        commit('setLikeAccountFailure', error.response.data.message)
         reject()
       })
   })
 }
 
 // Получить все отзывы по текущему аккаунту
-export function getReviewsByAccount({commit}, id) {
+export function getReviewsByAccount({commit, state}, id) {
+  // console.log('wqwq')
   commit('getReviewsByAccountStart')
   return new Promise((resolve, reject) => {
     const urlPath = url.user.reviews(id)
-    api.get(urlPath)
+
+    const params = {
+      limit: state.limit,
+      offset: state.offset
+    }
+
+    api.get(urlPath, { params })
       .then((response) => {
-        console.log(response)
-        commit('getReviewsByAccountSuccess', response.data.reviews)
+        // console.log(response)
+        const { reviewsCount, reviews } = response.data
+        // console.log(reviewsCount)
+        // console.log(reviews)
+        commit('getReviewsByAccountSuccess', { reviewsCount, reviews })
         resolve()
       })
       .catch(error => {
-        commit('getReviewsByAccountFailure', error.response.message)
+        console.log(error)
+        commit('getReviewsByAccountFailure', error.response.data.message)
         reject()
+      })
+  })
+}
+
+// Создание отзыва по текущему аккаунту
+export function createReview({commit, dispatch}, review) {
+  commit('createReviewStart')
+  return new Promise((resolve, reject) => {
+    const urlPath = url.user.createReview;
+    api.post(urlPath, { review })
+      .then(response => {
+        // console.log(response)
+        commit('createReviewSuccess')
+        // после добавления отзыва сбрасываем все отзывы
+        commit('resetStateReviews')
+        dispatch('getReviewsByAccount', review.idAccount)
+        resolve()
+      })
+      .catch(error => {
+        const message = error.response.data.message[0]
+        // console.log(message);
+        commit('createReviewFailure', message)
+        reject(message)
       })
   })
 }

@@ -40,7 +40,8 @@ const url = {
   },
   user: {
     liked: id => `/user/${id}/like`,
-    reviews: id => `reviews/${id}`
+    reviews: id => `reviews/${id}`,
+    createReview: 'reviews',
   }
 }
 

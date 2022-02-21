@@ -80,18 +80,52 @@ export function setLikeAccountFailure(state, error) {
   state.error = error
 }
 
+// Для пагинации офссет увеличение
+export const setOffset = (state, num) => {
+  state.offset += num
+}
+
+// Сброс всего состояния по отзывам чтобы при переходе на роут и тп случаях не было ошибок
+export const resetStateReviews = (state) => {
+  state.reviews = []
+  state.isLoading = false
+  state.error = null
+  state.limit = 10
+  state.offset = 0
+  state.reviewsCount = 0
+}
+
 // Мутации по получению отзывов по аккаунту
 export function getReviewsByAccountStart(state) {
   state.isLoading = true
   state.error = null
 }
 
-export function getReviewsByAccountSuccess(state, reviews) {
+export function getReviewsByAccountSuccess(state, { reviewsCount, reviews }) {
+  // console.log(111, reviewsCount)
+  // console.log(112, reviews)
   state.isLoading = false
   state.error = null
-  state.reviews = [...reviews]
+  state.reviews = [...state.reviews,...reviews]
+  state.reviewsCount = reviewsCount
 }
 export function getReviewsByAccountFailure(state, error) {
+  state.isLoading = false
+  state.error = error
+}
+
+// Мутации для создания отзыва
+export function createReviewStart(state) {
+  state.isLoading = true
+  state.error = null
+}
+
+export function createReviewSuccess(state) {
+  state.isLoading = false
+  state.error = null
+}
+
+export function createReviewFailure(state, error) {
   state.isLoading = false
   state.error = error
 }

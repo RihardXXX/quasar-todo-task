@@ -136,6 +136,19 @@
           size="10"
           class="q-pa-md"
         />
+        <q-infinite-scroll
+          @load="loadMore"
+          ref="infiniteScroll"
+        >
+          <template v-slot:loading>
+            <div class="row justify-center q-my-md">
+              <q-spinner-dots
+                color="primary"
+                size="70px"
+              />
+            </div>
+          </template>
+        </q-infinite-scroll>
       </template>
       <q-banner
         v-else
@@ -161,13 +174,13 @@ import {mapActions, mapGetters, mapState} from 'vuex';
     },
     computed: {
       ...mapGetters('performers', ['username', 'bio', 'countLikes', 'role', 'idUser']),
-      ...mapState('authorization', ['reviews', 'user'])
+      ...mapState('authorization', ['reviews', 'user', 'reviewsCount'])
     },
     methods: {
       // Данные того кого просматриваем
       ...mapActions('performers', ['getInfoPerformer']),
       // Данные автора
-      ...mapActions('authorization', ['setLikeAccount', 'getReviewsByAccount']),
+      ...mapActions('authorization', ['setLikeAccount', 'getReviewsByAccount', 'createReview']),
       // поставить лайк анкете
       setFavorite() {
         // console.log('поставить лайк анкете')
@@ -175,7 +188,7 @@ import {mapActions, mapGetters, mapState} from 'vuex';
       },
       // отправить отзыв
       sendReview() {
-        console.log('отправить отзывы')
+        // console.log('отправить отзывы')
         const review = {
           author: this.user.username,
           // автор отзыва
@@ -184,10 +197,45 @@ import {mapActions, mapGetters, mapState} from 'vuex';
           // на кого оставляем отзыв
           idAccount: this.idUser
         }
-        console.log('review: ', review)
-      }
+        // console.log('review: ', review)
+        this.createReview(review)
+          .then(() => {
+            // console.log('успех')
+            this.text = ''
+          })
+          .catch(message => {
+            this.$q.dialog({
+              title: 'Ошибка',
+              message,
+              persistent: true
+            }).onOk(() => {
+              // console.log('>>>> OK, received')
+            })
+          })
+      },
+      // Бесконечная загрузка метод скролла
+      loadMore (index, done) {
+        // Чтобы первый раз не пролетел мимо скролл))
+        if (this.reviews.length === 0) {
+          this.$refs.infiniteScroll.resume()
+          done()
+          return
+        }
+
+        // Если с количество найденных отзывов больше чем прогружено то запускаем заново
+        if (this.reviewsCount > this.reviews.length) {
+          console.log('загружаем дальше')
+          this.$store.commit('authorization/setOffset', 10)
+          this.getReviewsByAccount(this.idUser)
+            .then(() => done())
+        } else if (this.reviews.length >= this.reviewsCount) {
+          console.log('прогрузку останавливаем')
+          this.$refs.infiniteScroll.stop()
+        }
+      },
     },
     mounted() {
+      this.$store.commit('authorization/resetStateReviews')
       const { id } = this.$route.params;
 
       // console.log('id: ', id);

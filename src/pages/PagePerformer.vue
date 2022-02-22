@@ -1,11 +1,20 @@
 <template>
-  <q-page class="q-pa-md q-gutter-sm centerContent">
+  <q-page
+    v-if="currentPerformer"
+    class="q-pa-md q-gutter-sm centerContent"
+  >
+
+<!--    isFollow: {{isFollow}}-->
+<!--    <br>-->
+<!--    isCheckFollow: {{ isCheckFollow }}-->
+<!--    <br>-->
+<!--    currentPerformer: {{currentPerformer}}-->
 
     <q-card class="my-card" :style="{ width: '70%' }">
 
       <q-list>
 
-        <q-item class="flex-center">
+        <q-item class="flex-center justify-around">
           <q-item-section avatar>
             <q-btn
               round
@@ -20,7 +29,25 @@
               </q-tooltip>
             </q-btn>
           </q-item-section>
+          <div v-if="isCheckFollow">
+            <q-btn
+              outline
+              color="primary"
+              :label="labelFollow"
+              @click="setFollow"
+            />
+            <q-btn
+              v-if="isFollow"
+              class="q-ml-md"
+              round
+              icon="notifications"
+              disable
+            >
+            </q-btn>
+          </div>
         </q-item>
+
+        <q-separator color="orange" inset />
 
         <q-item>
           <q-item-section avatar>
@@ -173,8 +200,30 @@ import {mapActions, mapGetters, mapState} from 'vuex';
       }
     },
     computed: {
-      ...mapGetters('performers', ['username', 'bio', 'countLikes', 'role', 'idUser']),
-      ...mapState('authorization', ['reviews', 'user', 'reviewsCount'])
+      ...mapGetters('performers', ['username', 'bio', 'countLikes', 'role', 'idUser', 'listFollows']),
+      ...mapGetters('authorization', ['idUser']),
+      ...mapState('authorization', ['reviews', 'user', 'reviewsCount']),
+      ...mapState('performers', ['currentPerformer']),
+      // Тут проверяем можно ли продписываться на данный аккаунт
+      // Если роли одинаковые то подписываться нельзя
+      isCheckFollow() {
+        // console.log('this.user: ', this.user)
+        // console.log('performers role: ', this.currentPerformer)
+        const { user, currentPerformer } = this
+        return user && currentPerformer
+          ? user.role !== currentPerformer.role
+          : false
+      },
+      // Проверяем подписан ли текущий юзер на этот аккаунт
+      isFollow() {
+        // console.log(this.listIdFollows)
+        // console.log(this.idUser)
+        return this.listFollows.some(idUsers => Number(idUsers) === this.idUser)
+      },
+      // Текст на кнопке есои подписаны
+      labelFollow() {
+        return this.isFollow ? 'отписаться' : 'подписаться'
+      }
     },
     methods: {
       // Данные того кого просматриваем
@@ -233,6 +282,10 @@ import {mapActions, mapGetters, mapState} from 'vuex';
           this.$refs.infiniteScroll.stop()
         }
       },
+      // Подписаться на текущий аккаунт
+      setFollow() {
+        console.log('подписаься на аккаунт')
+      }
     },
     mounted() {
       this.$store.commit('authorization/resetStateReviews')

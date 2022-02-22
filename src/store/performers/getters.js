@@ -36,3 +36,8 @@ export function countLikes (state) {
   return state.currentPerformer ? state.currentPerformer.countLikes : 0
 }
 
+// массив с подписчиками
+export function listFollows (state) {
+  return state.currentPerformer ? state.currentPerformer.listIdFollows : null
+}
+

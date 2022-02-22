@@ -151,3 +151,8 @@ export function createReview({commit, dispatch}, review) {
   })
 }
 
+// Подписаться на аккаунт по указанному айди
+export function subscribeAccount({commit}, id) {
+  return new Promise()
+}
+

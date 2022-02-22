@@ -42,6 +42,7 @@ const url = {
     liked: id => `/user/${id}/like`,
     reviews: id => `reviews/${id}`,
     createReview: 'reviews',
+    setFollow: id => `users/follow/${id}`
   }
 }
 

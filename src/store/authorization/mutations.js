@@ -129,3 +129,19 @@ export function createReviewFailure(state, error) {
   state.isLoading = false
   state.error = error
 }
+
+// Блок мутаций для подписки на аккаунты
+export function subscribeAccountStart(state) {
+  state.isLoading = true
+  state.error = null
+}
+
+export function subscribeAccountSuccess(state) {
+  state.isLoading = false
+  state.error = null
+}
+
+export function subscribeAccountFailure(state, error) {
+  state.isLoading = false
+  state.error = error
+}

@@ -81,6 +81,7 @@ export function logoutUser({commit}) {
 
 // Поставить лайк аккаунту
 export function setLikeAccount({commit, dispatch}, idAccount) {
+  // console.log('idAccount: ', idAccount)
   commit('setLikeAccountStart')
   return new Promise((resolve, reject) => {
     const urlPath = url.user.liked(idAccount)
@@ -153,6 +154,22 @@ export function createReview({commit, dispatch}, review) {
 
 // Подписаться на аккаунт по указанному айди
 export function subscribeAccount({commit}, id) {
-  return new Promise()
+  commit('subscribeAccountStart')
+  return new Promise((resolve, reject) => {
+    const urlPath = url.user.setFollow(id)
+
+    api.get(urlPath)
+      .then(response => {
+        // аккаунт на который подписываемся
+        const account = response.data
+        commit('subscribeAccountSuccess')
+        commit('performers/getInfoPerformerSuccess', account, {root:true})
+        resolve()
+      })
+      .catch(error => {
+        commit('subscribeAccountFailure', error.response.data.message)
+        reject(error.response.data.message)
+      })
+  })
 }
 

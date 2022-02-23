@@ -12,6 +12,7 @@ export const performer = (state) => {
   return state.user ? state.user.role === 'performer' : null;
 }
 
+// Внимание такой же геттер существует и в перформерах работать аккуратно
 export const idUser = (state) => {
   return state.user ? state.user.id : null;
 }

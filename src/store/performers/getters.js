@@ -8,6 +8,7 @@
 //     "countLikes": 0
 //   }
 
+// Внимание такой же геттер существует и в перформерах работаь аккуртано
 // id
 export function idUser (state) {
   return state.currentPerformer ? state.currentPerformer.id : null

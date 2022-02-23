@@ -3,7 +3,7 @@
     v-if="currentPerformer"
     class="q-pa-md q-gutter-sm centerContent"
   >
-
+    this.idUser: {{this.idUser}}
 <!--    isFollow: {{isFollow}}-->
 <!--    <br>-->
 <!--    isCheckFollow: {{ isCheckFollow }}-->
@@ -201,14 +201,15 @@ import {mapActions, mapGetters, mapState} from 'vuex';
     },
     computed: {
       ...mapGetters('performers', ['username', 'bio', 'countLikes', 'role', 'idUser', 'listFollows']),
-      ...mapGetters('authorization', ['idUser']),
+      // Комменты не убирать а то будет баг айдишка авторизованного пользователя будет перебивать айди кому лайкаем
+      // ...mapGetters('authorization', ['idUser']),
       ...mapState('authorization', ['reviews', 'user', 'reviewsCount']),
       ...mapState('performers', ['currentPerformer']),
       // Тут проверяем можно ли продписываться на данный аккаунт
       // Если роли одинаковые то подписываться нельзя
       isCheckFollow() {
-        // console.log('this.user: ', this.user)
-        // console.log('performers role: ', this.currentPerformer)
+        // console.log('this.user: ', this.user.role)
+        // console.log('performers role: ', this.currentPerformer.role)
         const { user, currentPerformer } = this
         return user && currentPerformer
           ? user.role !== currentPerformer.role
@@ -216,9 +217,9 @@ import {mapActions, mapGetters, mapState} from 'vuex';
       },
       // Проверяем подписан ли текущий юзер на этот аккаунт
       isFollow() {
-        // console.log(this.listIdFollows)
-        // console.log(this.idUser)
-        return this.listFollows.some(idUsers => Number(idUsers) === this.idUser)
+        // console.log(this.listFollows)
+        // console.log(this.user.id)
+        return this.listFollows.some(idUsers => Number(idUsers) === this.user.id)
       },
       // Текст на кнопке есои подписаны
       labelFollow() {
@@ -229,10 +230,11 @@ import {mapActions, mapGetters, mapState} from 'vuex';
       // Данные того кого просматриваем
       ...mapActions('performers', ['getInfoPerformer']),
       // Данные автора
-      ...mapActions('authorization', ['setLikeAccount', 'getReviewsByAccount', 'createReview']),
+      ...mapActions('authorization',
+        ['setLikeAccount', 'getReviewsByAccount', 'createReview', 'subscribeAccount']),
       // поставить лайк анкете
       setFavorite() {
-        // console.log('поставить лайк анкете')
+        // console.log('поставить лайк анкете', this.idUser)
         this.setLikeAccount(this.idUser)
       },
       // отправить отзыв
@@ -285,6 +287,7 @@ import {mapActions, mapGetters, mapState} from 'vuex';
       // Подписаться на текущий аккаунт
       setFollow() {
         console.log('подписаься на аккаунт')
+        this.subscribeAccount(this.idUser)
       }
     },
     mounted() {

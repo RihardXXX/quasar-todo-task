@@ -157,7 +157,6 @@
 <script>
   import { mapState, mapGetters, mapActions } from 'vuex'
   import { QSpinnerGears } from 'quasar'
-  import {customer} from 'src/store/authorization/getters';
 
   const menu = [
     {
@@ -182,14 +181,14 @@
       id: 3,
       title: 'Мастера',
       icon: 'engineering',
-      path: '/performers'
+      path: '/workers'
     },
-    {
-      id: 4,
-      title: 'Чат',
-      icon: 'chat',
-      path: '/chats'
-    },
+    // {
+    //   id: 4,
+    //   title: 'Чат',
+    //   icon: 'chat',
+    //   path: '/chats'
+    // },
   ]
 
   export default {
@@ -204,6 +203,15 @@
       ...mapState('authorization', ['isLoggedIn', 'isLoading']),
       ...mapGetters('authorization', ['username', 'customer', 'performer', 'role']),
       menuBar() {
+        // тут предварительно удаляем пункт мастера или клиенты в зависимости от роли
+        // Если клиент то удаляем пункт клиенты а если мастер то удаляем пункт мастера
+        if (this.customer) {
+          menu.splice(2, 1)
+        } else {
+          menu.splice(3, 1)
+        }
+
+        // А тут в зависимости от роли добавляем данные
         if (this.customer) {
           return [
             ...menu,

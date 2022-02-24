@@ -12,34 +12,34 @@
     <q-card-actions vertical>
 
       <div class="flex justify-start">
-        <span>рейтинг</span>
-        <div
-          class="q-ml-md"
-          :class="colorStar"
-        >
-          <q-icon
-            v-for="i in rating"
-            :key="i"
-            name="star"
-          />
-        </div>
-      </div>
-      <div class="flex justify-start">
-        <span>отзывы</span>
-        <div
-          class="q-ml-md"
-        >
-          <q-icon
-            name="reviews"
-          />
-        </div>
-        <q-badge
-          v-if="reviews.length"
-          rounded
-          color="primary"
-          class="q-ml-md"
-          :label="reviews.length"
-        />
+<!--        <span>рейтинг</span>-->
+<!--        <div-->
+<!--          class="q-ml-md"-->
+<!--          :class="colorStar"-->
+<!--        >-->
+<!--          <q-icon-->
+<!--            v-for="i in rating"-->
+<!--            :key="i"-->
+<!--            name="star"-->
+<!--          />-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="flex justify-start">-->
+<!--        <span>отзывы</span>-->
+<!--        <div-->
+<!--          class="q-ml-md"-->
+<!--        >-->
+<!--          <q-icon-->
+<!--            name="reviews"-->
+<!--          />-->
+<!--        </div>-->
+<!--        <q-badge-->
+<!--          v-if="reviews.length"-->
+<!--          rounded-->
+<!--          color="primary"-->
+<!--          class="q-ml-md"-->
+<!--          :label="reviews.length"-->
+<!--        />-->
       </div>
 
       <q-btn

@@ -3,12 +3,6 @@
     v-if="currentPerformer"
     class="q-pa-md q-gutter-sm centerContent"
   >
-    this.idUser: {{this.idUser}}
-<!--    isFollow: {{isFollow}}-->
-<!--    <br>-->
-<!--    isCheckFollow: {{ isCheckFollow }}-->
-<!--    <br>-->
-<!--    currentPerformer: {{currentPerformer}}-->
 
     <q-card class="my-card" :style="{ width: '70%' }">
 

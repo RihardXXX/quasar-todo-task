@@ -1,21 +1,55 @@
 <template>
   <q-page class="q-pa-md">
 
-    <div class="bg-grey-2 q-pa-sm rounded-borders q-mb-md">
-      <q-toggle
-        name="music_active"
-        v-model="showFilterSort"
-        :label="labelToggle"
-      />
+    <div
+      class="bg-grey-2 q-pa-sm rounded-borders q-mb-md text-center"
+    >
+      <q-btn-dropdown
+        color="primary"
+        label="выбрать"
+        dropdown-icon="change_history"
+      >
+        <q-list>
+          <q-item
+            clickable
+            v-close-popup
+            @click="allFace"
+          >
+            <q-item-section>
+              <q-item-label>
+                Все {{labelFilterSort}}
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-item
+            clickable
+            v-close-popup
+            @click="followFace"
+          >
+            <q-item-section>
+              <q-item-label>
+                {{labelFilterSort}} на которых я подписался
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+
+        </q-list>
+      </q-btn-dropdown>
     </div>
 
     <transition
       appear
       enter-active-class="animated backInUp"
     >
-      <div v-if="showFilterSortPanel" class="menu-filter">
-        <SearchBarCustomers />
-        <SortByCustomers class="q-mb-md" />
+      <div
+        v-if="true"
+        class="menu-filter"
+      >
+<!--        <SearchBarCustomers />-->
+<!--        <SortByCustomers -->
+<!--          class="q-mb-md" -->
+<!--        />-->
       </div>
     </transition>
 
@@ -88,6 +122,7 @@
     },
     computed: {
       ...mapGetters('customers', ['customers', 'isLoading', 'showFilterSortPanel']),
+      ...mapGetters('authorization', ['customer', 'performer']),
       labelToggle() {
         const message = !this.showFilterSortPanel ? 'показать' : 'спрятать'
         return `${message} фильтр поиска и сортировки клиентов`
@@ -100,6 +135,10 @@
           console.log(statusToggleCustomer)
           this.setShowFilterSortPanel(statusToggleCustomer)
         }
+      },
+      // В зависимости от роли выбираем мастера или клиенты в названии
+      labelFilterSort() {
+        return this.customer ? 'мастера' : 'клиенты'
       }
     },
     methods: {
@@ -107,13 +146,23 @@
         'initialCustomers',
         'setShowFilterSortPanel',
         'initialStatusToggleCustomer'
-      ])
+      ]),
+      // все лица
+      allFace() {
+        console.log('all face')
+      },
+      // лица на которых я подписан
+      followFace(){
+        console.log('follow face')
+      }
     },
     mounted() {
+      // запрос на клиентов или мастеров в зависимости от какой ролли мы заходим
       // подгрузка кастомеров
-      this.initialCustomers()
-      // инициализация состояния тогла из локалсториджа
-      this.initialStatusToggleCustomer()
+      
+      // this.initialCustomers()
+      // // инициализация состояния тогла из локалсториджа
+      // this.initialStatusToggleCustomer()
     }
   }
 </script>

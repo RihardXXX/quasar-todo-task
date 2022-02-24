@@ -38,18 +38,18 @@ const routes = [
         path: 'order/:slug/edit', // редактирование заказа автором
         component: () => import('pages/PageOrderEdit'),
       },
-      {
-        path: 'customers', // список заказчиков
-        component: () => import('pages/PageCustomers.vue')
+      { // компонент будет переиспользуемый
+        path: 'workers', // список заказчиков или клиентов
+        component: () => import('pages/PageWorkers.vue')
       },
       {
         path: 'customer/:slug', // страница с отзывами и рейтингом заказчика
         component: () => import('pages/PageCustomer.vue')
       },
-      {
-        path: 'performers', // список мастеров исполнителей
-        component: () => import('pages/PagePerformers.vue')
-      },
+      // {
+      //   path: 'performers', // список мастеров исполнителей
+      //   component: () => import('pages/PagePerformers.vue')
+      // },
       {
         path: 'performer/:id', // индивидуальная страница с отзывами и рейтингом мастера
         component: () => import('pages/PagePerformer.vue')

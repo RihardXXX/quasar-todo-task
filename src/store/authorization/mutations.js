@@ -1,4 +1,6 @@
 // мутация которая устанавливает состояние авторизации
+import {getPerformersOrCustomers} from 'src/store/authorization/actions';
+
 export const setIsLoggedIn = (state, status) => {
   state.isLoggedIn = status
 }
@@ -142,6 +144,40 @@ export function subscribeAccountSuccess(state) {
 }
 
 export function subscribeAccountFailure(state, error) {
+  state.isLoading = false
+  state.error = error
+}
+
+// Блок мутаций для списка перфомермеров
+export function getPerformersStart(state) {
+  state.isLoading = true
+  state.error = null
+}
+
+export function getPerformersSuccess(state, performers) {
+  state.isLoading = false
+  state.error = null
+  state.perforformers = [...performers]
+}
+
+export function getPerformersFailure(state, error) {
+  state.isLoading = false
+  state.error = error
+}
+
+// Блок мутаций для списка кастомеров
+export function getCustomersStart(state) {
+  state.isLoading = true
+  state.error = null
+}
+
+export function getCustomersSuccess(state, customers) {
+  state.isLoading = false
+  state.error = null
+  state.customers = [...customers]
+}
+
+export function getCustomersFailure(state, error) {
   state.isLoading = false
   state.error = error
 }

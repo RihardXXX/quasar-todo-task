@@ -173,3 +173,8 @@ export function subscribeAccount({commit}, id) {
   })
 }
 
+// Вернуть список кастомеров или перформеров в зависимости от моей роли
+export function getPerformersOrCustomers ({commit}) {
+
+}
+

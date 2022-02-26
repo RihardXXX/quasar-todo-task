@@ -10,5 +10,8 @@ export default function () {
     limit: 10,
     offset: 0,
     reviewsCount: 0,
+    // список перформеров или кастомеров
+    performers: null,
+    customers: null,
   }
 }

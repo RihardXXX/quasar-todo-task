@@ -173,8 +173,27 @@ export function subscribeAccount({commit}, id) {
   })
 }
 
-// Вернуть список кастомеров или перформеров в зависимости от моей роли
-export function getPerformersOrCustomers ({commit}) {
+// Вернуть список всех мастеров
+export function getAllPerformers ({commit}) {
+  console.log('load performers')
+  commit('getAllPerformersStart')
+  return new Promise((resolve, reject) => {
+    const urlPath = url.user.allCustomerOrPerformer('performer')
+    api.get(urlPath)
+      .then(response => {
+        const { users, usersCount } = response.data
+        console.log('performers: ', { performers: users, accountsCount: usersCount })
+        commit('getAllPerformersSuccess', { performers: users, accountsCount: usersCount })
+      })
+      .catch(error => {
+        console.log(error)
+        commit('getAllPerformersFailure')
+      })
+  })
+}
 
+// вернуть список всех клиентов
+export function getAllCustomers({commit}) {
+  console.log('load customers')
 }
 

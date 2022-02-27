@@ -1,6 +1,8 @@
 <template>
   <q-page class="q-pa-md">
-
+    accountsList: {{accountsList}}
+    <pre>{{performers}}</pre>
+    <pre>{{customers}}</pre>
     <div
       class="bg-grey-2 q-pa-sm rounded-borders q-mb-md text-center"
     >
@@ -62,53 +64,53 @@
         Общий список клиентов
       </q-item-label>
 
-      <template
-        v-if="customers.length"
-      >
+<!--      <template-->
+<!--        v-if="customers.length"-->
+<!--      >-->
 
-        <transition-group
-          appear
-          enter-active-class="animated backInUp"
-          leave-active-class="animated backInUp"
-        >
+<!--        <transition-group-->
+<!--          appear-->
+<!--          enter-active-class="animated backInUp"-->
+<!--          leave-active-class="animated backInUp"-->
+<!--        >-->
 
-          <CustomerItem
-            v-for="customer in customers"
-            :key="customer.id"
-            :slug="customer.id"
-            :rating="customer.rating"
-            :username="customer.username"
-            :reviews="customer.reviews"
-            class="customerList"
-          />
+<!--          <CustomerItem-->
+<!--            v-for="customer in customers"-->
+<!--            :key="customer.id"-->
+<!--            :slug="customer.id"-->
+<!--            :rating="customer.rating"-->
+<!--            :username="customer.username"-->
+<!--            :reviews="customer.reviews"-->
+<!--            class="customerList"-->
+<!--          />-->
 
-       </transition-group>
+<!--       </transition-group>-->
 
-      </template>
-      <q-banner
-        v-else-if="!customers.length && !isLoading"
-        class="bg-primary text-white text-center"
-      >
-        <h6 class="q-ma-none">
-          Клиентов пока нет
-        </h6>
-      </q-banner>
-      <div
-        class="flex justify-center"
-        v-else-if="isLoading"
-      >
-        <q-spinner-hourglass
-          color="purple"
-          size="4em"
-        />
-      </div>
+<!--      </template>-->
+<!--      <q-banner-->
+<!--        v-else-if="!customers.length && !isLoading"-->
+<!--        class="bg-primary text-white text-center"-->
+<!--      >-->
+<!--        <h6 class="q-ma-none">-->
+<!--          Клиентов пока нет-->
+<!--        </h6>-->
+<!--      </q-banner>-->
+<!--      <div-->
+<!--        class="flex justify-center"-->
+<!--        v-else-if="isLoading"-->
+<!--      >-->
+<!--        <q-spinner-hourglass-->
+<!--          color="purple"-->
+<!--          size="4em"-->
+<!--        />-->
+<!--      </div>-->
 
     </q-list>
   </q-page>
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
+  import { mapGetters, mapActions, mapState } from 'vuex'
   import CustomerItem from 'components/customers/CustomerItem'
   import SearchBarCustomers from 'components/customers/SearchBarCustomers'
   import SortByCustomers from 'components/customers/SortByCustomers'
@@ -123,6 +125,7 @@
     computed: {
       ...mapGetters('customers', ['customers', 'isLoading', 'showFilterSortPanel']),
       ...mapGetters('authorization', ['customer', 'performer']),
+      ...mapState('authorization', ['performers', 'customers']),
       labelToggle() {
         const message = !this.showFilterSortPanel ? 'показать' : 'спрятать'
         return `${message} фильтр поиска и сортировки клиентов`
@@ -139,6 +142,10 @@
       // В зависимости от роли выбираем мастера или клиенты в названии
       labelFilterSort() {
         return this.customer ? 'мастера' : 'клиенты'
+      },
+      // В зависимости от ролли возвращаем нудный массив
+      accountsList() {
+        return this.customer ? this.performers : this.customers
       }
     },
     methods: {
@@ -146,6 +153,10 @@
         'initialCustomers',
         'setShowFilterSortPanel',
         'initialStatusToggleCustomer'
+      ]),
+      ...mapActions('authorization', [
+        'getAllPerformers',
+        'getAllCustomers'
       ]),
       // все лица
       allFace() {
@@ -159,8 +170,14 @@
     mounted() {
       // запрос на клиентов или мастеров в зависимости от какой ролли мы заходим
       // подгрузка кастомеров
-      // если я катомер то подгружаю перформеров и наоборот
-
+      // Узнаем в какой мы роли и в зависимости от неё запускаем нужный экшен
+      console.log(this.customer)
+      console.log(this.performer)
+      if (this.customer) {
+        this.getAllPerformers()
+      } else {
+        this.getAllCustomers()
+      }
       // this.initialCustomers()
       // // инициализация состояния тогла из локалсториджа
       // this.initialStatusToggleCustomer()

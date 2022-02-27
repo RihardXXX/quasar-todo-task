@@ -1,5 +1,6 @@
 // мутация которая устанавливает состояние авторизации
 import {getPerformersOrCustomers} from 'src/store/authorization/actions';
+import performers from 'src/store/performers';
 
 export const setIsLoggedIn = (state, status) => {
   state.isLoggedIn = status
@@ -149,18 +150,19 @@ export function subscribeAccountFailure(state, error) {
 }
 
 // Блок мутаций для списка перфомермеров
-export function getPerformersStart(state) {
+export function getAllPerformersStart(state) {
   state.isLoading = true
   state.error = null
 }
 
-export function getPerformersSuccess(state, performers) {
+export function getAllPerformersSuccess(state, { performers, accountsCount }) {
   state.isLoading = false
   state.error = null
-  state.perforformers = [...performers]
+  state.performers = [...state.performers, ...performers]
+  state.accountsCount = accountsCount
 }
 
-export function getPerformersFailure(state, error) {
+export function getAllPerformersFailure(state, error) {
   state.isLoading = false
   state.error = error
 }
@@ -171,13 +173,30 @@ export function getCustomersStart(state) {
   state.error = null
 }
 
-export function getCustomersSuccess(state, customers) {
+export function getCustomersSuccess(state, { customers, accountsCount }) {
   state.isLoading = false
   state.error = null
-  state.customers = [...customers]
+  state.customers = [...state.customers,...customers]
+  state.accountsCount = accountsCount
 }
 
 export function getCustomersFailure(state, error) {
   state.isLoading = false
   state.error = error
+}
+
+// Сброс всего состояния по отзывам чтобы при переходе на роут и тп случаях не было ошибок
+export const resetStateAccounts = (state) => {
+  state.performers = []
+  state.customers = []
+  state.isLoading = false
+  state.error = null
+  state.limitAccount = 10
+  state.offsetAccount = 0
+  state.accountsCount = 0
+}
+
+// Для пагинации офссет увеличение
+export const setOffsetAccount = (state, num) => {
+  state.offsetAccount += num
 }

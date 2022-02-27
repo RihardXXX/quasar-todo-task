@@ -11,7 +11,11 @@ export default function () {
     offset: 0,
     reviewsCount: 0,
     // список перформеров или кастомеров
-    performers: null,
-    customers: null,
+    performers: [],
+    customers: [],
+    // лимит офсет и количество для мастеров и клиентов
+    limitAccount: 10,
+    offsetAccount: 0,
+    accountsCount: 0,
   }
 }

@@ -158,6 +158,8 @@
   import { mapState, mapGetters, mapActions } from 'vuex'
   import { QSpinnerGears } from 'quasar'
 
+  // тут
+
   const menu = [
     {
       id: 0,

@@ -14,7 +14,7 @@ export default function () {
     performers: [],
     customers: [],
     // лимит офсет и количество для мастеров и клиентов
-    limitAccount: 10,
+    limitAccount: 2,
     offsetAccount: 0,
     accountsCount: 0,
   }

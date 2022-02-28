@@ -174,16 +174,25 @@ export function subscribeAccount({commit}, id) {
 }
 
 // Вернуть список всех мастеров
-export function getAllPerformers ({commit}) {
+export function getAllPerformers ({commit, state}) {
   console.log('load performers')
   commit('getAllPerformersStart')
   return new Promise((resolve, reject) => {
     const urlPath = url.user.allCustomerOrPerformer('performer')
-    api.get(urlPath)
+
+    console.log('state: ', state)
+
+    const params = {
+      limit: state.limitAccount,
+      offset: state.offsetAccount
+    }
+
+    api.get(urlPath, { params })
       .then(response => {
         const { users, usersCount } = response.data
         console.log('performers: ', { performers: users, accountsCount: usersCount })
         commit('getAllPerformersSuccess', { performers: users, accountsCount: usersCount })
+        resolve()
       })
       .catch(error => {
         console.log(error)
@@ -195,5 +204,6 @@ export function getAllPerformers ({commit}) {
 // вернуть список всех клиентов
 export function getAllCustomers({commit}) {
   console.log('load customers')
+  return new Promise()
 }
 

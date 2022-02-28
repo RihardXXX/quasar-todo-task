@@ -46,7 +46,7 @@
         class="q-mt-md"
         color="primary"
         label="Подробнее о клиенте"
-        :to="{ path: `customer/${slug}`}"
+        :to="{ path: `${role}/${slug}`}"
         exact
       />
     </q-card-actions>
@@ -65,14 +65,18 @@
         type: String,
         required: true,
       },
-      rating: {
-        type: Number,
+      role : {
+        type: String,
         required: true
-      },
-      reviews: {
-        type: Array,
-        required: true,
       }
+      // rating: {
+      //   type: Number,
+      //   required: true
+      // },
+      // reviews: {
+      //   type: Array,
+      //   required: true,
+      // }
     },
     computed: {
       colorStar() {

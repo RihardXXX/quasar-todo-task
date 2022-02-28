@@ -191,7 +191,7 @@ export const resetStateAccounts = (state) => {
   state.customers = []
   state.isLoading = false
   state.error = null
-  state.limitAccount = 10
+  state.limitAccount = 2
   state.offsetAccount = 0
   state.accountsCount = 0
 }

@@ -187,6 +187,7 @@ export function getCustomersFailure(state, error) {
 
 // Сброс всего состояния по отзывам чтобы при переходе на роут и тп случаях не было ошибок
 export const resetStateAccounts = (state) => {
+  // console.log(111)
   state.performers = []
   state.customers = []
   state.isLoading = false

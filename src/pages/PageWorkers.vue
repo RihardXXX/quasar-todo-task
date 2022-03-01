@@ -1,8 +1,8 @@
 <template>
-  <q-page class="q-pa-md" :style="{ height: '100%' }">
-    <pre>
+  <q-page class="q-pa-md">
+<!--    <pre>-->
 <!--      accountsList: {{accountsList}}-->
-    </pre>
+<!--    </pre>-->
 <!--    <pre>{{performers}}</pre>-->
 <!--    <pre>{{customers}}</pre>-->
     <div
@@ -42,25 +42,26 @@
       </q-btn-dropdown>
     </div>
 
-    <transition
-      appear
-      enter-active-class="animated backInUp"
-    >
-      <div
-        v-if="true"
-        class="menu-filter"
-      >
+<!--    <transition-->
+<!--      appear-->
+<!--      enter-active-class="animated backInUp"-->
+<!--    >-->
+<!--      <div-->
+<!--        v-if="true"-->
+<!--        class="menu-filter"-->
+<!--      >-->
 <!--        <SearchBarCustomers />-->
 <!--        <SortByCustomers -->
 <!--          class="q-mb-md" -->
 <!--        />-->
-      </div>
-    </transition>
+<!--      </div>-->
+<!--    </transition>-->
 
     <q-list
       bordered
       padding
       separator
+      :style="{minHeight: '100vh'}"
     >
       <q-item-label header>
         Общий список клиентов
@@ -69,11 +70,11 @@
       <template
         v-if="accountsList.length"
       >
-        <transition-group
-          appear
-          enter-active-class="animated backInUp"
-          leave-active-class="animated backInUp"
-        >
+<!--        <transition-group-->
+<!--          appear-->
+<!--          enter-active-class="animated backInUp"-->
+<!--          leave-active-class="animated backInUp"-->
+<!--        >-->
           <CustomerItem
             v-for="account in accountsList"
             :key="account.id"
@@ -84,7 +85,7 @@
             :role="account.role"
             class="customerList"
           />
-       </transition-group>
+<!--       </transition-group>-->
       </template>
 
       <q-infinite-scroll
@@ -147,6 +148,7 @@
       },
       // В зависимости от ролли возвращаем нудный массив
       accountsList() {
+        // console.log('test: ', this.performers)
         return this.customer ? this.performers : this.customers
       }
     },
@@ -170,34 +172,36 @@
       },
       // Бесконечная загрузка метод скролла
       loadMore (index, done) {
-        console.log('load scroll')
+        // console.log('load scroll')
+        // console.log('index: ', index)
+        // console.log('done: ', done)
         // Чтобы первый раз не пролетел мимо скролл))
         if (this.accountsList.length === 0) {
+          // console.log('метка')
           this.$refs.infiniteScroll.resume()
           done()
           return
         }
 
-        console.log('load scroll112')
+        // console.log('load scroll112')
 
         // Если с количество найденных заказов больше чем прогружено то запускаем заново
         if (this.accountsCount > this.accountsList.length) {
-          console.log('this.accountsList.length1: ', this.accountsList.length)
+          // console.log('this.accountsList.length1: ', this.accountsList.length)
           this.$store.commit('authorization/setOffsetAccount', 2)
           this.loadAccounts()
             .then(() => {
-              console.log('done 1')
+              // console.log('done 1')
               done()
             })
         } else if (this.accountsList.length >= this.accountsCount) {
-          console.log('this.accountsList.length2: ', this.accountsList.length)
+          // console.log('this.accountsList.length2: ', this.accountsList.length)
+          // console.log('this.accountsList.length2: ', this.accountsList)
           this.$refs.infiniteScroll.stop()
         }
       },
       // Подгрузка данных
       loadAccounts() {
-        // console.log(this.customer)
-        // console.log(this.performer)
         if (this.customer) {
           return this.getAllPerformers()
         } else {
@@ -205,9 +209,11 @@
         }
       }
     },
-    mounted() {
+    created() {
       // Cбрасываем старые данные если переходим например с другого роута
       this.$store.commit('authorization/resetStateAccounts')
+    },
+    mounted() {
       // запрос на клиентов или мастеров в зависимости от какой ролли мы заходим
       // подгрузка кастомеров
       // Узнаем в какой мы роли и в зависимости от неё запускаем нужный экшен

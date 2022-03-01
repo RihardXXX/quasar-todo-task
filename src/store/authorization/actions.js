@@ -180,7 +180,7 @@ export function getAllPerformers ({commit, state}) {
   return new Promise((resolve, reject) => {
     const urlPath = url.user.allCustomerOrPerformer('performer')
 
-    console.log('state: ', state)
+    // console.log('state: ', state)
 
     const params = {
       limit: state.limitAccount,
@@ -190,7 +190,7 @@ export function getAllPerformers ({commit, state}) {
     api.get(urlPath, { params })
       .then(response => {
         const { users, usersCount } = response.data
-        console.log('performers: ', { performers: users, accountsCount: usersCount })
+        // console.log('performers: ', { performers: users, accountsCount: usersCount })
         commit('getAllPerformersSuccess', { performers: users, accountsCount: usersCount })
         resolve()
       })

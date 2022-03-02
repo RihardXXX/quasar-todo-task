@@ -177,7 +177,7 @@
       id: 2,
       title: 'Клиенты',
       icon: 'people',
-      path: '/customers'
+      path: '/workers'
     },
     {
       id: 3,

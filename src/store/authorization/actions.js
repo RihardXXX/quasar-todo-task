@@ -196,14 +196,38 @@ export function getAllPerformers ({commit, state}) {
       })
       .catch(error => {
         console.log(error)
-        commit('getAllPerformersFailure')
+        const message = error.response.data.message
+        commit('getAllPerformersFailure', message)
+        reject(message)
       })
   })
 }
 
 // вернуть список всех клиентов
-export function getAllCustomers({commit}) {
+export function getAllCustomers({commit, state}) {
   console.log('load customers')
-  return new Promise()
+  commit('getCustomersStart')
+  return new Promise((resolve, reject) => {
+    const urlPath = url.user.allCustomerOrPerformer('customer')
+
+    const params = {
+      limit: state.limitAccount,
+      offset: state.offsetAccount
+    }
+
+    api.get(urlPath, { params })
+      .then(response => {
+
+        const { users, usersCount } = response.data
+        commit('getCustomersSuccess', { customers: users, accountsCount: usersCount })
+        resolve()
+      })
+      .catch(error => {
+        console.log(error)
+        const message = error.response.data.message
+        commit('getCustomersFailure', message)
+        reject(message)
+      })
+  })
 }
 

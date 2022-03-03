@@ -46,7 +46,7 @@
         class="q-mt-md"
         color="primary"
         label="Подробнее о клиенте"
-        :to="{ path: `${role}/${slug}`}"
+        :to="{ path: `account/${slug}`}"
         exact
       />
     </q-card-actions>

@@ -187,7 +187,7 @@
 import {mapActions, mapGetters, mapState} from 'vuex';
 
   export default {
-    name: 'PagePerformer',
+    name: 'PageAccount',
     data() {
       return {
         text: '',

@@ -10,7 +10,7 @@
         <q-btn
           icon="send"
           label="на страницу мастера"
-          :to="{ path: `/performer/${id}` }"
+          :to="{ path: `/account/${id}` }"
         />
     </q-item>
     <q-item class="flex justify-between">

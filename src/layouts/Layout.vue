@@ -158,40 +158,6 @@
   import { mapState, mapGetters, mapActions } from 'vuex'
   import { QSpinnerGears } from 'quasar'
 
-  // тут
-
-  const menu = [
-    {
-      id: 0,
-      title: 'Главная страница',
-      icon: 'home',
-      path: '/'
-    },
-    {
-      id: 1,
-      title: 'Все заказы',
-      icon: 'work',
-      path: '/orders'
-    },
-    {
-      id: 2,
-      title: 'Клиенты',
-      icon: 'people',
-      path: '/workers'
-    },
-    {
-      id: 3,
-      title: 'Мастера',
-      icon: 'engineering',
-      path: '/workers'
-    },
-    // {
-    //   id: 4,
-    //   title: 'Чат',
-    //   icon: 'chat',
-    //   path: '/chats'
-    // },
-  ]
 
   export default {
     name: 'MainLayout',
@@ -205,41 +171,67 @@
       ...mapState('authorization', ['isLoggedIn', 'isLoading']),
       ...mapGetters('authorization', ['username', 'customer', 'performer', 'role']),
       menuBar() {
-        // тут предварительно удаляем пункт мастера или клиенты в зависимости от роли
-        // Если клиент то удаляем пункт клиенты а если мастер то удаляем пункт мастера
-        if (this.customer) {
-          menu.splice(2, 1)
-        } else {
-          menu.splice(3, 1)
-        }
+        // сделаем топорно ))
 
-        // А тут в зависимости от роли добавляем данные
-        if (this.customer) {
-          return [
-            ...menu,
-            {
-              id: Math.random(),
-              title: 'Мои заказы',
-              icon: 'work',
-              path: '/my-orders'
-            },
-            {
-              id: Math.random(),
-              title: 'Создать заказ',
-              icon: 'add',
-              path: '/order'
-            },
-          ]
-        }
-        return [
-          ...menu,
-          {
-            id: Math.random(),
-            title: 'Заказы на которые подал заявки',
-            icon: 'work',
-            path: '/my-orders'
-          },
-        ]
+       return this.customer
+         ? [
+             {
+               id: 0,
+               title: 'Главная страница',
+               icon: 'home',
+               path: '/'
+             },
+             {
+               id: 1,
+               title: 'Все заказы',
+               icon: 'work',
+               path: '/orders'
+             },
+             {
+               id: 3,
+               title: 'Мастера',
+               icon: 'engineering',
+               path: '/workers'
+             },
+             {
+               id: Math.random(),
+               title: 'Мои заказы',
+               icon: 'work',
+               path: '/my-orders'
+             },
+             {
+               id: Math.random(),
+               title: 'Создать заказ',
+               icon: 'add',
+               path: '/order'
+             },
+         ]
+         : [
+             {
+               id: 0,
+               title: 'Главная страница',
+               icon: 'home',
+               path: '/'
+             },
+             {
+               id: 1,
+               title: 'Все заказы',
+               icon: 'work',
+               path: '/orders'
+             },
+             {
+               id: 2,
+               title: 'Клиенты',
+               icon: 'people',
+               path: '/workers'
+             },
+             {
+               id: Math.random(),
+               title: 'Заказы на которые подал заявки',
+               icon: 'work',
+               path: '/my-orders'
+             },
+         ]
       },
       menuNotAuthorization() {
         return [

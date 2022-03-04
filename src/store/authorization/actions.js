@@ -174,11 +174,15 @@ export function subscribeAccount({commit}, id) {
 }
 
 // Вернуть список всех мастеров
-export function getAllPerformers ({commit, state}) {
+export function getAllPerformers ({commit, state}, { isFollowsPerformers }) {
   console.log('load performers')
   commit('getAllPerformersStart')
   return new Promise((resolve, reject) => {
-    const urlPath = url.user.allCustomerOrPerformer('performer')
+
+    // делать запрос на возврат всех мастеров или на которые имеется подписка
+    const urlPath = isFollowsPerformers
+      ? url.user.accountsFromFollows
+      : url.user.allCustomerOrPerformer('performer')
 
     // console.log('state: ', state)
 
@@ -189,6 +193,7 @@ export function getAllPerformers ({commit, state}) {
 
     api.get(urlPath, { params })
       .then(response => {
+        console.log('response: ', response)
         const { users, usersCount } = response.data
         // console.log('performers: ', { performers: users, accountsCount: usersCount })
         commit('getAllPerformersSuccess', { performers: users, accountsCount: usersCount })
@@ -230,4 +235,32 @@ export function getAllCustomers({commit, state}) {
       })
   })
 }
+
+// загрузка мастеров на которых я подписан
+// export function getPerformersFromFollows({commit, state}) {
+//   commit('getAllPerformersStart')
+//   return new Promise((resolve, reject) => {
+//     const urlPath = url.user.accountsFromFollows
+//
+//     const params = {
+//       limit: state.limitAccount,
+//       offset: state.offsetAccount
+//     }
+//
+//     api.get(urlPath, { params })
+//       .then(response => {
+//         const { users, usersCount } = response.data
+//         // console.log('performers: ', { performers: users, accountsCount: usersCount })
+//         commit('getAllPerformersSuccess', { performers: users, accountsCount: usersCount })
+//         resolve()
+//       })
+//       .catch(error => {
+//         console.log(error)
+//         const message = error.response.data.message
+//         commit('getAllPerformersFailure', message)
+//         reject(message)
+//       })
+//   })
+// }
+
 

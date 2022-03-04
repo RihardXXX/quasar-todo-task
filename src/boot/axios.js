@@ -43,7 +43,8 @@ const url = {
     reviews: id => `reviews/${id}`,
     createReview: 'reviews',
     setFollow: id => `users/follow/${id}`,
-    allCustomerOrPerformer: role => `users/role/${role}`
+    allCustomerOrPerformer: role => `users/role/${role}`,
+    accountsFromFollows: '/users/list/my/follow'
   }
 }
 

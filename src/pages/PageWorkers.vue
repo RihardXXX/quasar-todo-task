@@ -125,6 +125,12 @@
       SearchBarCustomers,
       SortByCustomers
     },
+    data() {
+      return {
+        // переключатель для загрузки всех аккаунтов или на которых ты подписан
+        isFollow: false
+      }
+    },
     computed: {
       ...mapGetters('customers', ['customers', 'isLoading', 'showFilterSortPanel']),
       ...mapGetters('authorization', ['customer', 'performer']),
@@ -165,10 +171,20 @@
       // все лица
       allFace() {
         console.log('all face')
+        this.$refs.infiniteScroll.resume()
+        this.$store.commit('authorization/resetStateAccounts')
+        this.isFollow = false
+        this.loadAccounts()
+        this.$refs.infiniteScroll.resume()
       },
       // лица на которых я подписан
       followFace(){
         console.log('follow face')
+        // сбрасываем данные и переключаем всё
+        this.$store.commit('authorization/resetStateAccounts')
+        this.isFollow = true
+        this.loadAccounts()
+        this.$refs.infiniteScroll.resume()
       },
       // Бесконечная загрузка метод скролла
       loadMore (index, done) {
@@ -203,7 +219,7 @@
       // Подгрузка данных
       loadAccounts() {
         if (this.customer) {
-          return this.getAllPerformers()
+          return this.getAllPerformers({ isFollowsPerformers: this.isFollow })
         } else {
           return this.getAllCustomers()
         }

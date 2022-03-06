@@ -36,7 +36,9 @@ const url = {
     slug: slug => `orders/${slug}`,
     submitApplication: slug => `orders/${slug}/submit`,
     victory: 'orders/victory',
-    liked: slug => `orders/${slug}/favorite`
+    liked: slug => `orders/${slug}/favorite`,
+    myOrdersForCustomer: '/orders/my/all/customer',
+    myOrdersForPerformer: '/orders/my/all/performer'
   },
   user: {
     liked: id => `/user/${id}/like`,

@@ -186,6 +186,7 @@ export const setOffset = (state, num) => {
 
 // Сброс всего состояния по заказам чтобы при переходе на роут и тп случаях не было ошибок
 export const resetStateOrders = (state) => {
+  state.myOrders = []
   state.orders = []
   state.isLoading = false
   state.error = null
@@ -238,7 +239,19 @@ export const setShowFilterSortPanel = (state, status) => {
   state.showFilterSortPanel = status
 }
 
-// установка заказов текущего кастомера клиента
-export function setMyOrders (state, myOrders) {
-  state.myOrders = myOrders
+// установка заказов текущего кастомера клиента или перформера то есть на которые я подал
+export function getMyOrdersStart (state) {
+  state.isLoading = true
+  state.error = null
+}
+
+export function getMyOrdersSuccess (state, myOrders) {
+  state.isLoading = false
+  state.error = null
+  state.myOrders = [...state.myOrders, myOrders]
+}
+
+export function getMyOrdersFailure(state, error) {
+  state.isLoading = false
+  state.error = error
 }

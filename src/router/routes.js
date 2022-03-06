@@ -63,7 +63,7 @@ const routes = [
         component: () => import('pages/PageChat.vue')
       },
       {
-        path: 'my-orders', // чат с определенным челом
+        path: 'my-orders', // мои заказы для кастомера и перформера
         component: () => import('pages/PageMyOrders')
       },
     ],

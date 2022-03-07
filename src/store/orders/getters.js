@@ -27,6 +27,10 @@ export function myOrders(state) {
   return state.myOrders.length ? state.myOrders : []
 }
 
+export function ordersCount(state){
+  return state.ordersCount ? state.ordersCount : null
+}
+
 export function isLoading (state) {
   return state ? state.isLoading : null
 }

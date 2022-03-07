@@ -231,6 +231,40 @@ export  const getAllOrders = ({ commit, state }) => {
       })
   })
 }
+
+// прогрузка моих заказов для кастомера и перформера
+export function getMyOrders({commit, state}, { isCustomer }) {
+  commit('getMyOrdersStart')
+  return new Promise((resolve, reject) => {
+
+    const pathUrl = isCustomer
+      ? url.orders.myOrdersForCustomer
+      : url.orders.myOrdersForPerformer
+
+    const params = {
+      limit: state.limit,
+      offset: state.offset
+    }
+
+    api.get(pathUrl, { params })
+      .then(response => {
+        console.log(response)
+        const { orders, ordersCount } = response.data
+        commit('getMyOrdersSuccess', {
+          myOrders: orders,
+          ordersCount
+        })
+        resolve()
+      })
+      .catch(error => {
+        console.log(error)
+        commit('getMyOrdersFailure')
+        reject()
+      })
+
+  })
+}
+
 //
 // // фильтрация заказов по поисковой строке
 // export const filteredOrders = ({ commit, state }) => {

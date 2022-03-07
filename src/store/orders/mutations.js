@@ -245,10 +245,11 @@ export function getMyOrdersStart (state) {
   state.error = null
 }
 
-export function getMyOrdersSuccess (state, myOrders) {
+export function getMyOrdersSuccess (state, {myOrders, ordersCount}) {
   state.isLoading = false
   state.error = null
-  state.myOrders = [...state.myOrders, myOrders]
+  state.ordersCount = ordersCount
+  state.myOrders = [...state.myOrders,...myOrders]
 }
 
 export function getMyOrdersFailure(state, error) {

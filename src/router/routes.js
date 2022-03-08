@@ -66,6 +66,11 @@ const routes = [
         path: 'my-orders', // мои заказы для кастомера и перформера
         component: () => import('pages/PageMyOrders')
       },
+      {
+        path: 'who-liked',
+        name: 'who-liked',
+        component: () => import ('pages/PageWhoLikedAccounts')
+      }
     ],
   },
 

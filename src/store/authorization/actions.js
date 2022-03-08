@@ -263,4 +263,11 @@ export function getAllCustomers({commit, state}) {
 //   })
 // }
 
+// Загрузка списка аккаунтов которые лайкали определнную анкету
+export function getWhoLikedAccountsList({commit, state}, id) {
+  return new Promise((resolve, reject) => {
+
+  })
+}
+
 

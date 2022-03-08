@@ -17,5 +17,7 @@ export default function () {
     limitAccount: 2,
     offsetAccount: 0,
     accountsCount: 0,
+    // список аккаунтов который лайкал анкету
+    whoLikedList: [],
   }
 }

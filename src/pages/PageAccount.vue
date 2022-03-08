@@ -7,8 +7,23 @@
     <q-card class="my-card" :style="{ width: '70%' }">
 
       <q-list>
-
         <q-item class="flex-center justify-around">
+          <q-item-section avatar>
+            <q-btn
+              round
+              color="primary"
+              icon="help_outline"
+              class="text-center"
+              @click="whoLiked"
+            >
+              <q-tooltip
+                anchor="top middle"
+                self="center middle"
+              >
+                кто лайкал
+              </q-tooltip>
+            </q-btn>
+          </q-item-section>
           <q-item-section avatar>
             <q-btn
               round
@@ -221,6 +236,13 @@ import {mapActions, mapGetters, mapState} from 'vuex';
       }
     },
     methods: {
+      // Перейти на страницу кто лайкал данную анкету
+      whoLiked() {
+        this.$router.push({
+          name: 'who-liked',
+          params: { id: this.idUser }
+        })
+      },
       // Данные того кого просматриваем
       ...mapActions('performers', ['getInfoPerformer']),
       // Данные автора

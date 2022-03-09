@@ -265,8 +265,21 @@ export function getAllCustomers({commit, state}) {
 
 // Загрузка списка аккаунтов которые лайкали определнную анкету
 export function getWhoLikedAccountsList({commit, state}, id) {
+  commit('getWhoLikedAccountsListStart')
   return new Promise((resolve, reject) => {
+    const urlPath = url.user.whoLiked(id)
 
+    api.get(urlPath)
+      .then(response => {
+        console.log(response)
+        commit('getWhoLikedAccountsListSuccess', response.data.whoLikesAccounts)
+        resolve()
+      })
+      .catch(error => {
+        console.log(error)
+        commit('getWhoLikedAccountsListFailure')
+        reject()
+      })
   })
 }
 

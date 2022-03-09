@@ -35,19 +35,19 @@
         <!--       </transition-group>-->
       </template>
 
-      <q-infinite-scroll
-        @load="loadMore"
-        ref="infiniteScroll"
-      >
-        <template v-slot:loading>
-          <div class="row justify-center q-my-md">
-            <q-spinner-dots
-              color="primary"
-              size="70px"
-            />
-          </div>
-        </template>
-      </q-infinite-scroll>
+<!--      <q-infinite-scroll-->
+<!--        @load="loadMore"-->
+<!--        ref="infiniteScroll"-->
+<!--      >-->
+<!--        <template v-slot:loading>-->
+<!--          <div class="row justify-center q-my-md">-->
+<!--            <q-spinner-dots-->
+<!--              color="primary"-->
+<!--              size="70px"-->
+<!--            />-->
+<!--          </div>-->
+<!--        </template>-->
+<!--      </q-infinite-scroll>-->
 
       <div v-if="!whoLikedList.length">
         <q-banner dense class="bg-grey-3 text-center q-ma-md">
@@ -61,22 +61,27 @@
 
 <script>
   import CustomerItem from 'components/customers/CustomerItem';
+  import {mapActions, mapState} from 'vuex';
 
   export default {
     name: 'PageWhoLikedAccounts',
     components: {
       CustomerItem,
     },
-    data() {
-      return {
-        whoLikedList: [
-          1,
-          2,
-          3
-        ]
-      }
+    // data() {
+    //   return {
+    //     whoLikedList: [
+    //       1,
+    //       2,
+    //       3
+    //     ]
+    //   }
+    // },
+    computed: {
+      ...mapState('authorization', ['isLoading', 'error', 'whoLikedList'])
     },
     methods: {
+      ...mapActions('authorization', ['getWhoLikedAccountsList']),
       // бесконечная загрузка списка
       loadMore (index, done) {
         // console.log('load scroll')
@@ -109,8 +114,10 @@
       },
     },
     mounted() {
+      this.$store.commit('authorization/resetStateAccounts')
       const { id } = this.$route.params
       console.log('id: ', id)
+      this.getWhoLikedAccountsList(id)
     }
   }
 

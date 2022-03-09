@@ -201,3 +201,20 @@ export const resetStateAccounts = (state) => {
 export const setOffsetAccount = (state, num) => {
   state.offsetAccount += num
 }
+
+// Мутации для получения анкет кто лайкал
+export function getWhoLikedAccountsListStart(state) {
+  state.isLoading = true
+  state.error = null
+}
+
+export function getWhoLikedAccountsListSuccess(state, whoLikedList) {
+  state.isLoading = false
+  state.error = null
+  state.whoLikedList = [...whoLikedList]
+}
+
+export function getWhoLikedAccountsListFailure(state, error) {
+  state.isLoading = false
+  state.error = error
+}

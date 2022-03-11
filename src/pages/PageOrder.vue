@@ -1,6 +1,5 @@
 <template>
   <q-page class="q-pa-md">
-
     <template v-if="currentOrder">
       <OrderHeader
         :customer="currentOrder.user.username"

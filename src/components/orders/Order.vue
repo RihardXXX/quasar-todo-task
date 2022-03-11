@@ -2,7 +2,7 @@
   <q-item
     clickable
     exact
-    :class="selectedPerformer ? 'bg-light-green-3' : 'bg-grey-1'"
+    :class="backgroundOrder"
     :to="{ path: `orders/${slug}`}"
   >
     <q-item-section top avatar>
@@ -79,9 +79,25 @@
         required: true
       }
     },
+    data() {
+      return {
+        colorPaletteStatus: new Map([
+          ['свободен', 'bg-grey-1'],
+          ['в работе', 'bg-indigo-2'],
+          ['выполнено', 'bg-light-green-3'],
+        ])
+      }
+    },
     computed: {
       colorBadge() {
         return this.selectedPerformer ? 'positive' : 'purple'
+      },
+      // динамическая установка класса для заказа в зависимости от статуса
+      backgroundOrder() {
+        console.log(this.status)
+        // 'bg-light-green-3' : 'bg-grey-1', 'bg-purple-11'
+        // Здесь мы генерируем определенный класс согласно статусу заказа
+        return this.colorPaletteStatus.get(this.status)
       }
     }
   }

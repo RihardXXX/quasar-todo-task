@@ -169,6 +169,16 @@
          </q-item-section>
        </q-item>
 
+       <q-item>
+         <q-btn
+           v-if="isAuthor"
+           outline
+           rounded
+           color="primary"
+           label="сменить статус заказа на выполнено"
+         />
+       </q-item>
+
      </q-list>
 
    </q-card>
@@ -247,6 +257,10 @@ import {mapActions, mapGetters, mapState} from 'vuex';
           ? Object.keys(statusObject).find(key => statusObject[key] === this.status)
           : null
       },
+      // являетесь ли вы автором заказа
+      isAuthor() {
+        return true
+      }
     },
     methods: {
       ...mapActions('orders', ['likedOrder', 'dislikedOrder']),

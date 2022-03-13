@@ -1,3 +1,5 @@
+
+
 // Получение текущего заказа
 export const getCurrentOrderStart = (state) => {
   state.isLoading = true
@@ -253,6 +255,24 @@ export function getMyOrdersSuccess (state, {myOrders, ordersCount}) {
 }
 
 export function getMyOrdersFailure(state, error) {
+  state.isLoading = false
+  state.error = error
+}
+
+// мутации по изменнию статуса заказа на выполненно
+export function changeStatusOrderByDoneStart(state) {
+  console.log('start')
+  state.isLoading = true
+  state.error = null
+}
+
+export function changeStatusOrderByDoneSuccess(state, currentOrder) {
+  state.isLoading = false
+  state.error = null
+  state.currentOrder = currentOrder
+}
+
+export function changeStatusOrderByDoneFailure(state, error) {
   state.isLoading = false
   state.error = error
 }

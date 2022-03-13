@@ -1,6 +1,8 @@
 <template>
   <q-page class="q-pa-md">
     <template v-if="currentOrder">
+      <!-- 112
+      <pre>{{currentOrder}}</pre> -->
       <OrderHeader
         :customer="currentOrder.user.username"
         :body="currentOrder.body"
@@ -13,6 +15,7 @@
         :status="currentOrder.status"
         :favorites-count="currentOrder.favoritesCount"
         :slug="currentOrder.slug"
+        :userId="currentOrder.user.id"
       />
     </template>
 

@@ -258,10 +258,33 @@ export function getMyOrders({commit, state}, { isCustomer }) {
       })
       .catch(error => {
         console.log(error)
-        commit('getMyOrdersFailure')
+        const { message } = error.response.data;
+        commit('getMyOrdersFailure', message)
         reject()
       })
 
+  })
+}
+
+// Функция которая меняет статус заказа на выполнено
+export function changeStatusOrderByDone({commit}, slug) {
+  commit('changeStatusOrderByDoneStart')
+  // console.log(112, slug)
+  return new Promise((resolve, reject) => {
+    const urlPath = url.orders.setStatusDone(slug)
+
+    api.patch(urlPath)
+      .then(response => {
+        // console.log(response);
+        commit('changeStatusOrderByDoneSuccess', response.data)
+        resolve()
+    })
+      .catch(error => {
+        // console.log(error)
+        const { message } = error.response.data;
+        commit('changeStatusOrderByDoneFailure', message)
+        reject(message)
+      })
   })
 }
 

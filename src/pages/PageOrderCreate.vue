@@ -40,6 +40,10 @@
           :rules="[fnValidateTitle, fnValidateLength]"
         />
 
+        <div class="map">
+          тут нужно будет установить карту лифлет с выбором адреса
+        </div>
+
         <div class="q-pa-md">
           <q-option-group
             :options="options"
@@ -188,4 +192,12 @@
     }
   }
 </script>
+
+<style scoped>
+
+  .map {
+    width: 100%;
+  }
+
+</style>
 

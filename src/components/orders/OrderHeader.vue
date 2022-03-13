@@ -1,6 +1,9 @@
 <template>
 
  <div>
+   <!-- userId: {{typeof userId}}
+   <br>
+   idUser: {{typeof idUser}} -->
    <q-banner
      inline-actions
      class="bg-primary text-white"
@@ -176,6 +179,7 @@
            rounded
            color="primary"
            label="сменить статус заказа на выполнено"
+           @click="changeStatusOrderDone"
          />
        </q-item>
 
@@ -241,6 +245,10 @@ import {mapActions, mapGetters, mapState} from 'vuex';
         type: String,
         required: true
       },
+      userId: {
+        type: Number,
+        required: true
+      }
     },
     computed: {
       ...mapState('orders', ['isLoading']),
@@ -257,19 +265,30 @@ import {mapActions, mapGetters, mapState} from 'vuex';
           ? Object.keys(statusObject).find(key => statusObject[key] === this.status)
           : null
       },
-      // являетесь ли вы автором заказа
+      // являетесь ли вы автором заказа и то что заказ в работе
       isAuthor() {
-        return true
+        const { idUser, userId } = this
+        // console.log(112, this.status)
+        return idUser === userId && this.status === 'в работе'
       }
     },
     methods: {
-      ...mapActions('orders', ['likedOrder', 'dislikedOrder']),
+      ...mapActions('orders', [
+        'likedOrder',
+        'dislikedOrder',
+        'changeStatusOrderByDone'
+        ]),
       liked() {
         // console.log(112, this.slug)
         this.likedOrder(this.slug)
       },
       disliked() {
         this.dislikedOrder(this.slug)
+      },
+      // Сменить статус заказа на выполнено
+      changeStatusOrderDone() {
+        console.log('done', this.slug)
+        this.changeStatusOrderByDone(this.slug)
       }
     }
   }

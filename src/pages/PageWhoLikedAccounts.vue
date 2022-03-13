@@ -84,6 +84,7 @@
       ...mapActions('authorization', ['getWhoLikedAccountsList']),
       // бесконечная загрузка списка
       loadMore (index, done) {
+
         // console.log('load scroll')
         // console.log('index: ', index)
         // console.log('done: ', done)

@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import 'leaflet/dist/leaflet.css';
+
 import orders from './orders'
 import authorization from './authorization'
 import customers from './customers'

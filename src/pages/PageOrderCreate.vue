@@ -40,9 +40,23 @@
           :rules="[fnValidateTitle, fnValidateLength]"
         />
 
-        <div class="map">
-          тут нужно будет установить карту лифлет с выбором адреса
-        </div>
+        <template v-if="center.length && markerLatLng.length">
+          <l-map
+            style="height: 400px"
+            :zoom="zoom"
+            :center="center"
+            :options="leafletMapOptions"
+          >
+            <l-tile-layer
+              :url="url"
+              :attribution="attribution"
+            ></l-tile-layer>
+            <l-marker
+              :lat-lng="markerLatLng"
+            ></l-marker>
+          </l-map>
+        </template>
+
 
         <div class="q-pa-md">
           <q-option-group
@@ -97,9 +111,18 @@
   import { mapActions, mapState } from 'vuex'
   import {QSpinnerGears} from 'quasar';
   import { categoryList } from 'boot/staticData';
+  // import 'leaflet/dist/leaflet.css';
+  import L from 'leaflet';
+  delete L.Icon.Default.prototype._getIconUrl;
+  import {LMap, LTileLayer, LMarker} from 'vue2-leaflet';
 
   export default {
     name: 'OrderCreate',
+    components: {
+      LMap,
+      LTileLayer,
+      LMarker
+    },
     data() {
       return {
         category: ['сантехника', 'электрика', 'общестроительные'],
@@ -116,6 +139,21 @@
           dueTime: '',
         },
         options: [...categoryList],
+        // данные для карты
+        // куда делаем запрос
+        url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        attribution:
+          '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        // зум карты
+        zoom: 20,
+        // текущее положение
+        center: [],
+        // местоположение маркера
+        markerLatLng: [],
+        leafletMapOptions: {
+          closePopupOnClick: false,
+          doubleClickZoom: 'center',
+        }
       }
     },
     computed: {
@@ -181,6 +219,33 @@
         }
 
       },
+    },
+    created() {
+      // промис для работы с картой
+      new Promise((resolve, reject) => {
+        // Эта хуйня нужна чтобы маркер импортировался ормально
+          L.Icon.Default.mergeOptions({
+            iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+            iconUrl: require('leaflet/dist/images/marker-icon.png'),
+            shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+          });
+
+          if(!("geolocation" in navigator)) {
+            reject(new Error('Geolocation is not available.'));
+          }
+
+          navigator.geolocation.getCurrentPosition((position) => {
+            resolve(position.coords);
+          }, (err) => {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+          });
+      })
+        .then(coords => {
+          const { latitude, longitude } = coords;
+          const position = [latitude, longitude]
+          this.center = position;
+          this.markerLatLng = position;
+        })
     },
     mounted() {
       const idOrder = this.$route.params.idOrder

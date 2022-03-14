@@ -15,10 +15,12 @@
     "axios": "^0.21.1",
     "connect-history-api-fallback": "^1.6.0",
     "core-js": "^3.6.5",
+    "leaflet": "^1.7.1",
     "material-icons": "^1.10.4",
     "quasar": "^1.0.0",
     "socket.io-client": "^4.4.1",
-    "vue-recaptcha": "^2.0.1"
+    "vue-recaptcha": "^2.0.1",
+    "vue2-leaflet": "^2.7.1"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0"

@@ -31,29 +31,60 @@
           lazy-rules
           :rules="[fnValidateTitle, fnValidateBody]"
         />
+
+        <q-banner dense class="bg-grey-3 text-center">
+          установите на карте адрес куда должен приехать мастер
+        </q-banner>
+
+        <div class="mapButtons">
+          <q-btn
+            :outline="false"
+            color="primary"
+            label="установить адрес заказа на карте"
+            class="active"
+            @click="setAddressOrder"
+          />
+          <q-btn
+            outline
+            color="primary"
+            label="изменить адрес заказа на карте"
+            @click="changeAddressOrder"
+          />
+        </div>
+
         <q-input
           filled
           v-model="order.address"
           label="адрес"
           clearable
           lazy-rules
+          :disable="savedAddress"
           :rules="[fnValidateTitle, fnValidateLength]"
         />
 
         <template v-if="center.length && markerLatLng.length">
           <l-map
+            ref="map"
             style="height: 400px"
             :zoom="zoom"
             :center="center"
-            :options="leafletMapOptions"
+            @ready="doSomethingOnReady()"
           >
             <l-tile-layer
               :url="url"
               :attribution="attribution"
             ></l-tile-layer>
             <l-marker
+              ref="marker"
               :lat-lng="markerLatLng"
-            ></l-marker>
+            >
+              <l-popup
+                ref="popup"
+                :options="optionsPopup"
+              >
+                Адрес заказа установлен
+              </l-popup>
+            </l-marker>
           </l-map>
         </template>
 
@@ -114,14 +145,15 @@
   // import 'leaflet/dist/leaflet.css';
   import L from 'leaflet';
   delete L.Icon.Default.prototype._getIconUrl;
-  import {LMap, LTileLayer, LMarker} from 'vue2-leaflet';
+  import {LMap, LTileLayer, LMarker, LPopup} from 'vue2-leaflet';
 
   export default {
     name: 'OrderCreate',
     components: {
       LMap,
       LTileLayer,
-      LMarker
+      LMarker,
+      LPopup
     },
     data() {
       return {
@@ -153,7 +185,19 @@
         leafletMapOptions: {
           closePopupOnClick: false,
           doubleClickZoom: 'center',
-        }
+        },
+        // карта
+        map: null,
+        marker: null,
+        // Попап
+        popup: null,
+        // Эта переменная с широтой и долготой адреса выполнения заказа
+        savedAddress: false,
+        // настройки для попапа маркера
+        optionsPopup: {
+          closeButton: false,
+          closeOnClick: false
+        },
       }
     },
     computed: {
@@ -219,6 +263,52 @@
         }
 
       },
+
+      // колбек устанавливающий маркер и карту согласно координатам
+      setMapAndMarkerPosition(e) {
+          const { lat, lng } = e.latlng;
+          const coords = [lat, lng];
+          this.center = coords;
+          this.markerLatLng = coords;
+      },
+
+      // устанавливаем слушатель события клик для карты
+      addEventListenerMap() {
+        this.map.on('click', (e) => this.setMapAndMarkerPosition(e));
+      },
+
+      // отменяем слушателя событий для карты
+      removeEventListenerMap() {
+        this.map.off('click');
+      },
+
+      // инициализация всего
+      doSomethingOnReady() {
+        // инициализация карты маркера и попапа
+        this.map = this.$refs.map.mapObject;
+        this.marker = this.$refs.marker.mapObject;
+        this.popup = this.$refs.popup.mapObject;
+        // установка обработчика события карты
+        this.addEventListenerMap();
+        // удаляем событие клик с маркера
+        this.marker.off('click');
+      },
+
+      // Устанавливаем адрес для заказа отключив слушателя карты
+      setAddressOrder() {
+        // удаляем обработчик с карты
+        this.removeEventListenerMap();
+        this.savedAddress = true;
+        this.marker.openPopup();
+      },
+
+      // Изменить адрес выполнения заказа
+      changeAddressOrder() {
+        // добавляем обработчик
+        this.addEventListenerMap();
+        this.marker.closePopup();
+        this.savedAddress = false;
+      }
     },
     created() {
       // промис для работы с картой
@@ -245,15 +335,22 @@
           const position = [latitude, longitude]
           this.center = position;
           this.markerLatLng = position;
+          //  console.log(this.$refs)
         })
     },
     mounted() {
       const idOrder = this.$route.params.idOrder
+
       if (this.$route.params.hasOwnProperty('idOrder')) {
         this.order = {...this.orders.find(order => order.id === idOrder)}
         this.create = false
         this.edit = true
       }
+
+      // DO
+      // this.$nextTick(() => {
+      //   this.map = this.$refs.map.mapObject // work as expected
+      // })
     }
   }
 </script>
@@ -262,6 +359,11 @@
 
   .map {
     width: 100%;
+  }
+
+  .mapButtons {
+    display: flex;
+    justify-content: space-between;
   }
 
 </style>

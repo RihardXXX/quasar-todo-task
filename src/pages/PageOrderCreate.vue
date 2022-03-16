@@ -1,5 +1,6 @@
 <template>
   <q-page class="container">
+
     <h5 class="text-center q-mb-none">Создать заказ</h5>
     <div class="q-pa-md">
       <q-form
@@ -32,20 +33,32 @@
           :rules="[fnValidateTitle, fnValidateBody]"
         />
 
-        <q-banner dense class="bg-grey-3 text-center">
+        <q-banner
+          ref="banner"
+          dense
+          class="bg-grey-3 text-center"
+        >
           установите на карте адрес куда должен приехать мастер
+        </q-banner>
+
+
+        <q-banner
+          v-if="isWarningAddress"
+          dense
+          class="bg-red-4   text-center"
+        >
+          установите адрес заказа перед его созданием
         </q-banner>
 
         <div class="mapButtons">
           <q-btn
-            :outline="false"
+            :outline="!savedAddress"
             color="primary"
             label="установить адрес заказа на карте"
-            class="active"
             @click="setAddressOrder"
           />
           <q-btn
-            outline
+            :outline="savedAddress"
             color="primary"
             label="изменить адрес заказа на карте"
             @click="changeAddressOrder"
@@ -135,6 +148,7 @@
       </q-form>
 
     </div>
+
   </q-page>
 </template>
 
@@ -146,15 +160,20 @@
   import L from 'leaflet';
   delete L.Icon.Default.prototype._getIconUrl;
   import {LMap, LTileLayer, LMarker, LPopup} from 'vue2-leaflet';
+  import { scroll } from 'quasar';
+  const { getScrollTarget, setVerticalScrollPosition } = scroll
 
   export default {
+
     name: 'OrderCreate',
+
     components: {
       LMap,
       LTileLayer,
       LMarker,
       LPopup
     },
+
     data() {
       return {
         category: ['сантехника', 'электрика', 'общестроительные'],
@@ -198,8 +217,13 @@
           closeButton: false,
           closeOnClick: false
         },
+        // показываем предупреждение если создается заказ не установив адрес
+        isWarningAddress: false,
+        // баннер куда будет прокручивать при ошибке окно
+        banner: null,
       }
     },
+
     computed: {
       ...mapState('orders', ['currentOrder', 'orders']),
       buttonLabel() {
@@ -208,6 +232,7 @@
           : 'создать заказ'
       }
     },
+
     methods: {
       ...mapActions('orders', ['createOrder', 'editOrder']),
       fnValidateTitle(val) {
@@ -227,40 +252,51 @@
 
       onSubmit() {
 
-        if (this.create) {
-
-          this.$q.loading.show({
-            spinner: QSpinnerGears,
-            spinnerColor: 'red',
-            message: 'Идёт загрузка'
-          })
-
-          // запрос на сервер
-          this.createOrder(this.order)
-            .then(() => {
-              // успешный ответ
-              this.$q.loading.hide()
-              this.$router.push({name: 'index'})
-            })
-            .catch((error) => {
-              const items = error.map(er => `<li>${er}</li>`).join('')
-              const listErrors = `<ul>${items}</ul>`
-              this.$q.loading.hide()
-              this.$q.dialog({
-                title: 'Ошибка',
-                message: listErrors,
-                html: true,
-                ok: 'ок',
-                persistent: true
-              }).onOk(() => {
-                console.log(112)
-              })
-            })
-        } else {
-          console.log('редактирование')
-          this.editOrder(order)
-          this.$router.push('/orders')
+        // проверка установлен ли адрес заказа
+        if(!this.savedAddress) {
+          this.isWarningAddress = true;
+          // скролим для того чтобы установить скрол к карте
+          this.banner.scrollIntoView({behavior: 'smooth'});
+          return;
         }
+
+        this.isWarningAddress = false;
+
+        // Создание заказа
+        // if (this.create) {
+
+        //   this.$q.loading.show({
+        //     spinner: QSpinnerGears,
+        //     spinnerColor: 'red',
+        //     message: 'Идёт загрузка'
+        //   })
+
+        //   // запрос на сервер
+        //   this.createOrder(this.order)
+        //     .then(() => {
+        //       // успешный ответ
+        //       this.$q.loading.hide()
+        //       this.$router.push({name: 'index'})
+        //     })
+        //     .catch((error) => {
+        //       const items = error.map(er => `<li>${er}</li>`).join('')
+        //       const listErrors = `<ul>${items}</ul>`
+        //       this.$q.loading.hide()
+        //       this.$q.dialog({
+        //         title: 'Ошибка',
+        //         message: listErrors,
+        //         html: true,
+        //         ok: 'ок',
+        //         persistent: true
+        //       }).onOk(() => {
+        //         console.log(112)
+        //       })
+        //     })
+        // } else {
+        //   console.log('редактирование')
+        //   this.editOrder(order)
+        //   this.$router.push('/orders')
+        // }
 
       },
 
@@ -310,6 +346,7 @@
         this.savedAddress = false;
       }
     },
+
     created() {
       // промис для работы с картой
       new Promise((resolve, reject) => {
@@ -338,6 +375,7 @@
           //  console.log(this.$refs)
         })
     },
+
     mounted() {
       const idOrder = this.$route.params.idOrder
 
@@ -347,12 +385,17 @@
         this.edit = true
       }
 
+
+      this.banner = this.$refs.banner.$el;
+
+
       // DO
       // this.$nextTick(() => {
       //   this.map = this.$refs.map.mapObject // work as expected
       // })
     }
   }
+
 </script>
 
 <style scoped>

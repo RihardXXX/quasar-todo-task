@@ -8,6 +8,7 @@
         class="q-gutter-md"
       >
         <q-input
+          ref="nameOrder"
           filled
           v-model="order.title"
           label="имя заказа"
@@ -16,6 +17,7 @@
           :rules="[fnValidateTitle, fnValidateLength]"
         />
         <q-input
+          ref="description"
           filled
           v-model="order.description"
           label="краткое описание"
@@ -24,6 +26,7 @@
           :rules="[fnValidateTitle, fnValidateLength]"
         />
         <q-input
+          ref="body"
           type="textarea"
           filled
           v-model="order.body"
@@ -66,6 +69,7 @@
         </div>
 
         <q-input
+          ref="address"
           filled
           v-model="order.address"
           label="адрес"
@@ -110,7 +114,17 @@
           />
         </div>
 
-        <div class="q-pa-md text-center">
+        <div
+          ref="timeSection"
+          class="q-pa-md text-center"
+        >
+          <q-banner
+            v-if="isWarningDateOrTime"
+            dense
+            class="q-mb-md bg-red-4   text-center"
+          >
+            дата или время выполнения заказа не установлены
+          </q-banner>
           <q-date
             v-model="order.dueDate"
             title="дата выполнения"
@@ -221,6 +235,13 @@
         isWarningAddress: false,
         // баннер куда будет прокручивать при ошибке окно
         banner: null,
+        // дата и время выполения заказа маркер прохождения проверки
+        isWarningDateOrTime: false,
+        // секция с датой и временем, куда будем возвращаться в случае ошибки
+        timeSection: null,
+        // // секция для слежки за измненными компонетами ошибок для скролла
+        // inputInError: null,
+        refValues: null,
       }
     },
 
@@ -245,58 +266,92 @@
         return val.length > 0 && val.length < 300 || 'длина символов до 300'
       },
       fnValidatePrice(val) {
-        console.log(val)
         val = String(val)
         return val.length > 0 && val.length < 10 || 'длина символов до 10'
       },
 
+      // метод общей валидации инпутов и прокрутки к нужному
+      // находим элемент в котором ошибка и прокручиваем скрол к нему
+      validateScrollInput() {
+        // берем все значения инпутов и референсов
+        const refValues = Object.values(this.$refs);
+        // находим инпут в котором произошла ошибка
+        const inputInError = refValues.find(input => input.innerError);
+        // скроллимся к этому инпуту
+        console.log('inputInError: ', inputInError);
+        if (inputInError) {
+          inputInError.$el.scrollIntoView({behavior: 'smooth'});
+        }
+      },
+
       onSubmit() {
 
-        // проверка установлен ли адрес заказа
-        if(!this.savedAddress) {
-          this.isWarningAddress = true;
-          // скролим для того чтобы установить скрол к карте
-          this.banner.scrollIntoView({behavior: 'smooth'});
-          return;
-        }
-
-        this.isWarningAddress = false;
-
         // Создание заказа
-        // if (this.create) {
+        if (this.create) {
 
-        //   this.$q.loading.show({
-        //     spinner: QSpinnerGears,
-        //     spinnerColor: 'red',
-        //     message: 'Идёт загрузка'
-        //   })
+          // тут будут проверки
+          // проверка установлен ли адрес заказа
+          if(!this.savedAddress) {
+            this.isWarningAddress = true;
+            // скролим для того чтобы установить скрол к карте
+            this.banner.scrollIntoView({behavior: 'smooth'});
+            return;
+          }
 
-        //   // запрос на сервер
-        //   this.createOrder(this.order)
-        //     .then(() => {
-        //       // успешный ответ
-        //       this.$q.loading.hide()
-        //       this.$router.push({name: 'index'})
-        //     })
-        //     .catch((error) => {
-        //       const items = error.map(er => `<li>${er}</li>`).join('')
-        //       const listErrors = `<ul>${items}</ul>`
-        //       this.$q.loading.hide()
-        //       this.$q.dialog({
-        //         title: 'Ошибка',
-        //         message: listErrors,
-        //         html: true,
-        //         ok: 'ок',
-        //         persistent: true
-        //       }).onOk(() => {
-        //         console.log(112)
-        //       })
-        //     })
-        // } else {
-        //   console.log('редактирование')
-        //   this.editOrder(order)
-        //   this.$router.push('/orders')
-        // }
+          this.isWarningAddress = false;
+
+          // проверка установлена ли дата и время выполнения заказа
+          if (!this.order.dueDate || !this.order.dueTime) {
+            this.isWarningDateOrTime = true;
+            // console.log(this.timeSection);
+            this.timeSection.scrollIntoView({behavior: 'smooth'});
+            return;
+          }
+
+          this.isWarningDateOrTime = false;
+
+          // если установлен адрес то его мерджим с другими параметрами в запросе
+          const order = {
+            ...this.order,
+            coords: this.center
+          };
+
+          console.log('order: ', order);
+
+
+
+          this.$q.loading.show({
+            spinner: QSpinnerGears,
+            spinnerColor: 'red',
+            message: 'Идёт загрузка'
+          })
+
+          // запрос на сервер
+          this.createOrder(order)
+            .then(() => {
+              // успешный ответ
+              this.$q.loading.hide()
+              this.$router.push({name: 'index'})
+            })
+            .catch((error) => {
+              const items = error.map(er => `<li>${er}</li>`).join('')
+              const listErrors = `<ul>${items}</ul>`
+              this.$q.loading.hide()
+              this.$q.dialog({
+                title: 'Ошибка',
+                message: listErrors,
+                html: true,
+                ok: 'ок',
+                persistent: true
+              }).onOk(() => {
+                console.log(112)
+              })
+            })
+        } else {
+          console.log('редактирование')
+          this.editOrder(order)
+          this.$router.push('/orders')
+        }
 
       },
 
@@ -347,6 +402,16 @@
       }
     },
 
+    watch: {
+      refValues: {
+        handler: function (val, oldVal) {
+          console.log('val: ', val);
+          console.log('oldValue: ', oldVal);
+        },
+        deep: true
+      },
+    },
+
     created() {
       // промис для работы с картой
       new Promise((resolve, reject) => {
@@ -386,12 +451,17 @@
       }
 
 
+      // Секции куда будем возрвщаться в случае ошибки
       this.banner = this.$refs.banner.$el;
+      this.timeSection = this.$refs.timeSection;
 
 
       // DO
       // this.$nextTick(() => {
-      //   this.map = this.$refs.map.mapObject // work as expected
+      //   // this.map = this.$refs.map.mapObject // work as expected
+      //         this.refValues = this.$refs;
+
+      // console.log(this.$refs);
       // })
     }
   }

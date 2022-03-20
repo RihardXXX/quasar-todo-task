@@ -82,7 +82,7 @@
         <template v-if="center.length && markerLatLng.length">
           <l-map
             ref="map"
-            style="height: 400px"
+            style="height: 300px"
             :zoom="zoom"
             :center="center"
             @ready="doSomethingOnReady()"
@@ -175,7 +175,6 @@
   delete L.Icon.Default.prototype._getIconUrl;
   import {LMap, LTileLayer, LMarker, LPopup} from 'vue2-leaflet';
   import { scroll } from 'quasar';
-  const { getScrollTarget, setVerticalScrollPosition } = scroll
 
   export default {
 
@@ -215,10 +214,6 @@
         center: [],
         // местоположение маркера
         markerLatLng: [],
-        leafletMapOptions: {
-          closePopupOnClick: false,
-          doubleClickZoom: 'center',
-        },
         // карта
         map: null,
         marker: null,

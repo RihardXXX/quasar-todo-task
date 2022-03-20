@@ -3,7 +3,43 @@
     <template v-if="currentOrder">
       <!-- 112
       <pre>{{currentOrder}}</pre> -->
+      <!-- {{this.markers}} -->
+      <template v-if="currentOrder.coords.length">
+        <q-banner
+          dense
+          class="q-mb-md bg-primary text-white text-center"
+        >
+          Адрес заказа на карте
+        </q-banner>
+        <template v-if="center.length && markers.length">
+        <l-map
+          ref="map"
+          style="height: 300px"
+          :zoom="zoom"
+          :center="center"
+          @ready="doSomethingOnReady()"
+        >
+          <l-tile-layer
+            :url="url"
+            :attribution="attribution"
+          ></l-tile-layer>
+            <l-marker
+              v-for="marker in markers"
+              :key="marker.name"
+              :ref="marker.name"
+              :lat-lng="marker.coords"
+            >
+              <l-popup
+                :options="optionsPopup"
+              >
+                {{ marker.popup }}
+              </l-popup>
+            </l-marker>
+        </l-map>
+        </template>
+      </template>
       <OrderHeader
+        class="q-mt-md"
         :customer="currentOrder.user.username"
         :body="currentOrder.body"
         :price="currentOrder.price"
@@ -128,19 +164,51 @@
   import OrderHeader from "components/orders/OrderHeader"
   import PerformerInfoBlock from "components/customers/PerformerInfoBlock"
   import {QSpinnerGears} from 'quasar';
+  // импорты для работы с а картой
+  import L from 'leaflet';
+  delete L.Icon.Default.prototype._getIconUrl;
+  import {LMap, LTileLayer, LMarker, LPopup} from 'vue2-leaflet';
+
 
   export default {
     name: 'PageOrder',
     components: {
       PerformerInfoBlock,
       ConfirmModal,
-      OrderHeader
+      OrderHeader,
+      LMap,
+      LTileLayer,
+      LMarker,
+      LPopup
     },
     data() {
       return {
         idPerformer: 0,
         showModal: false,
         slugOrder: '',
+        // данные для карты
+        // куда делаем запрос
+        url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        attribution:
+          '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        // зум карты
+        zoom: 12,
+        // текущее положение
+        center: [],
+        // местоположение заказа маркер
+        orderLatLng: [],
+        // карта
+        map: null,
+        // маркеры местонахождения заказа и моего местонахождения
+        markers: [],
+        marker: null,
+        // Эта переменная с широтой и долготой адреса выполнения заказа
+        savedAddress: false,
+        // настройки для попапа маркера
+        optionsPopup: {
+          closeButton: false,
+          closeOnClick: false
+        },
       }
     },
     computed: {
@@ -218,6 +286,27 @@
           console.log('>>>> Cancel')
         })
       },
+      // инициализация карты
+            // инициализация всего
+      doSomethingOnReady() {
+        // инициализация карты маркера и попапа
+        this.map = this.$refs.map.mapObject;
+        // console.log(this.$refs);
+        // console.log(this.map);
+        // this.map.openPopup;
+        // когда карта будет готова то цепляем к списку координат имена маркеров
+        const user = this.$refs.user[0].mapObject;
+        const order = this.$refs.order[0].mapObject;
+        // console.log('order: ', order);
+        // console.log('user: ', user);
+        // console.log(1);
+        // user.openPopup();
+        // console.log(2);
+        order.openPopup();
+        // order.off('click');
+        // console.log(user.isOpen())
+        // console.log(order.isOpen())
+      },
       // отклонение заявки определённого мастера
       // rejectApplication(slug) {
       //   console.log('slug: rejectApplication', slug);
@@ -235,10 +324,51 @@
       //   })
       // },
     },
-    mounted() {
+    created() {
+      L.Icon.Default.mergeOptions({
+        iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+        iconUrl: require('leaflet/dist/images/marker-icon.png'),
+        shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+      });
       const { slug } = this.$route.params
       this.slugOrder = slug;
       this.getCurrentOrder(slug)
+        .then(() => {
+          // получаем координаты заказа
+          this.center = this.currentOrder.coords;
+          // Получаем координаты текущего местоположения пользователя
+          return new Promise((resolve, reject) => {
+            if(!("geolocation" in navigator)) {
+              reject(new Error('Geolocation is not available.'));
+            }
+
+            navigator.geolocation.getCurrentPosition((position) => {
+              // console.log(112, position);
+              resolve(position.coords);
+            }, (err) => {
+              console.warn(`ERROR(${err.code}): ${err.message}`);
+              reject(err)
+            });
+          })
+        })
+        .then(user => {
+          // Создаём объекты с маркерами координатами для заказа и мастера
+          // чтобы пользователь знал на каком расстоянии находится заказ
+          // console.log('user: ', user);
+          // console.log('this.currentOrder.coords: ', this.currentOrder.coords);
+          this.markers = [
+            {
+              name: 'user',
+              coords: [user.latitude, user.longitude],
+              popup: 'ваше текущее положение'
+            },
+            {
+              name: 'order',
+              coords: this.currentOrder.coords,
+              popup: 'адрес заказа'
+            },
+          ]
+        })
     }
   }
 </script>

@@ -10,6 +10,7 @@ import performers from './performers'
 
 Vue.use(Vuex)
 Vue.config.devtools = true
+
 /*
  * If not building with SSR mode, you can
  * directly export the Store instantiation;

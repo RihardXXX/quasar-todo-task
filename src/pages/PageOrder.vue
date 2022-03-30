@@ -52,6 +52,7 @@
         :favorites-count="currentOrder.favoritesCount"
         :slug="currentOrder.slug"
         :userId="currentOrder.user.id"
+        :selectedPerformer="currentOrder.selectedPerformer"
       />
     </template>
 

@@ -56,6 +56,7 @@ const routes = [
       },
       {
         path: 'chats', // список чатов
+        name: 'chats',
         component: () => import('pages/PageChats.vue')
       },
       {

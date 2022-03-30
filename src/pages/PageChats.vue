@@ -5,7 +5,12 @@
 </template>
 
 <script>
-export default {
-  name: 'PageChats'
-}
+  export default {
+    name: 'PageChats',
+
+    mounted() {
+      const { userId } = this.$route.params;
+      console.log('userId: ', userId);
+    }
+  }
 </script>

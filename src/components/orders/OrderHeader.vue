@@ -183,6 +183,16 @@
          />
        </q-item>
 
+       <q-item v-if="isNotAuthorAndSelectedPerformer">
+         <q-btn
+          color="red"
+          icon="mail"
+          icon-right="send"
+          label="создать чат"
+          @click="createChat"
+         />
+       </q-item>
+
      </q-list>
 
    </q-card>
@@ -248,11 +258,23 @@ import {mapActions, mapGetters, mapState} from 'vuex';
       userId: {
         type: Number,
         required: true
+      },
+      selectedPerformer: {
+        type: Boolean,
+        required: true,
       }
     },
     computed: {
       ...mapState('orders', ['isLoading']),
       ...mapGetters('authorization', ['idUser']),
+      // Для того чтобы создать чат мы проверяем
+      // Чтобы на заказ не было выбранного мастера а также вы не являлись автором заказа
+      isNotAuthorAndSelectedPerformer() {
+        // console.log(this.userId);
+        // console.log(this.idUser);
+        return this.userId !== this.idUser && !this.selectedPerformer;
+      },
+
       // В зависимости от статуса даём разын цвета
       statusCurrentOrder() {
         const statusObject = {
@@ -278,6 +300,11 @@ import {mapActions, mapGetters, mapState} from 'vuex';
         'dislikedOrder',
         'changeStatusOrderByDone'
         ]),
+      // Создать чат
+      createChat() {
+        // прокидываем айдишник пользователя с кем будет создаваться чат
+        this.$router.push({ name: 'chats', params: { userId: this.userId } });
+      },
       liked() {
         // console.log(112, this.slug)
         this.likedOrder(this.slug)

@@ -205,6 +205,12 @@
                icon: 'add',
                path: '/order'
              },
+             {
+               id: Math.random(),
+               title: 'чаты',
+               icon: 'chat',
+               path: '/chats'
+             },
          ]
          : [
              {
@@ -230,6 +236,12 @@
                title: 'Заказы на которые подал заявки',
                icon: 'work',
                path: '/my-orders'
+             },
+             {
+               id: Math.random(),
+               title: 'чаты',
+               icon: 'chat',
+               path: '/chats'
              },
          ]
       },
